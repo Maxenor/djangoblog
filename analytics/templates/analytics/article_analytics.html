@@ -1,0 +1,290 @@
+{% extends 'blog/base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans "Article Analytics" %} - {% trans "Mon Blog Django" %}{% endblock %}
+
+{% block content %}
+<style>
+    /* Fix navbar overlap */
+    body {
+        padding-top: 70px;
+    }
+    
+    .analytics-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 15px;
+        padding: 20px;
+        text-align: center;
+        transition: transform 0.3s ease;
+        margin-bottom: 20px;
+    }
+    .analytics-card:hover {
+        transform: translateY(-5px);
+    }
+    .chart-container {
+        background: white;
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+    }
+    .article-stats-row {
+        border-bottom: 1px solid #eee;
+        padding: 10px 0;
+    }
+    .article-stats-row:last-child {
+        border-bottom: none;
+    }
+    .reading-time-badge {
+        background: linear-gradient(45deg, #667eea, #764ba2);
+        color: white;
+    }
+</style>
+
+<!-- Main Header -->
+<header class="main-header py-5 text-white text-center" style="background: linear-gradient(135deg, #fa7c91 0%, #c471f5 100%); border-radius: 15px; margin-bottom: 30px;">
+    <div class="container">
+        <h1 class="display-4">
+            <i class="fas fa-newspaper me-3"></i>
+            {% trans "Article Analytics" %}
+        </h1>
+        <p class="lead">{% trans "Detailed performance metrics for your articles" %}</p>
+    </div>
+</header>
+
+<div class="container-fluid">
+    <!-- Navigation Pills -->
+    <ul class="nav nav-pills mb-4">
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'analytics:overview' %}">
+                <i class="fas fa-tachometer-alt"></i> {% trans "Overview" %}
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link active" href="{% url 'analytics:articles' %}">
+                <i class="fas fa-newspaper"></i> {% trans "Articles" %}
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'analytics:users' %}">
+                <i class="fas fa-users"></i> {% trans "Users" %}
+            </a>
+        </li>
+    </ul>
+
+    <!-- Top Performing Articles -->
+    <div class="row">
+        <div class="col-12">
+            <div class="chart-container">
+                <h4 class="mb-3">
+                    <i class="fas fa-trophy text-warning me-2"></i>
+                    {% trans "Top Performing Articles" %}
+                </h4>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>{% trans "Article" %}</th>
+                                <th>{% trans "Total Views" %}</th>
+                                <th>{% trans "Unique Visitors" %}</th>
+                                <th>{% trans "Avg Reading Time" %}</th>
+                                <th>{% trans "Comments" %}</th>
+                                <th>{% trans "Likes" %}</th>
+                                <th>{% trans "Engagement Score" %}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for article in articles_with_stats %}
+                            <tr class="article-stats-row">
+                                <td>
+                                    <a href="{% url 'article_detail' article.id %}" class="text-decoration-none">
+                                        <strong>{{ article.titre|truncatechars:40 }}</strong>
+                                    </a>
+                                    <br>
+                                    <small class="text-muted">
+                                        {% trans "by" %} {{ article.auteur.username }} • 
+                                        {{ article.date_creation|date:"d/m/Y" }}
+                                    </small>
+                                </td>
+                                <td>
+                                    <span class="badge bg-primary">{{ article.total_views|default:0 }}</span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-info">{{ article.unique_visitors|default:0 }}</span>
+                                </td>
+                                <td>
+                                    <span class="badge reading-time-badge">
+                                        {{ article.avg_reading_time|floatformat:0|default:0 }}s
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-success">{{ article.total_comments|default:0 }}</span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-danger">{{ article.total_likes|default:0 }}</span>
+                                </td>
+                                <td>
+                                    {% with engagement=article.total_views|add:article.total_comments|add:article.total_likes %}
+                                    <div class="progress" style="height: 20px;">
+                                        <div class="progress-bar bg-gradient" 
+                                             style="width: {% if engagement > 100 %}100{% else %}{{ engagement }}{% endif %}%;">
+                                            {{ engagement }}
+                                        </div>
+                                    </div>
+                                    {% endwith %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="7" class="text-center text-muted py-4">
+                                    <i class="fas fa-chart-line fa-3x mb-3"></i>
+                                    <br>
+                                    {% trans "No article analytics data available yet" %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reading Time Distribution -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="chart-container">
+                <h4 class="mb-3">
+                    <i class="fas fa-clock text-primary me-2"></i>
+                    {% trans "Reading Time Distribution" %}
+                </h4>
+                <canvas id="readingTimeChart" height="200"></canvas>
+            </div>
+        </div>
+
+        <!-- Article Views Timeline -->
+        <div class="col-md-6">
+            <div class="chart-container">
+                <h4 class="mb-3">
+                    <i class="fas fa-chart-line text-success me-2"></i>
+                    {% trans "Views Timeline" %}
+                </h4>
+                <canvas id="viewsTimelineChart" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Weekly Top Articles -->
+    <div class="row">
+        <div class="col-12">
+            <div class="chart-container">
+                <h4 class="mb-3">
+                    <i class="fas fa-fire text-danger me-2"></i>
+                    {% trans "This Week's Top Articles" %}
+                </h4>
+                <canvas id="weeklyTopChart" height="100"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Chart.js and Custom Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Reading Time Distribution Chart
+    const readingTimeData = {{ reading_time_stats|safe }};
+    if (readingTimeData && readingTimeData.length > 0) {
+        const ctx1 = document.getElementById('readingTimeChart').getContext('2d');
+        new Chart(ctx1, {
+            type: 'bar',
+            data: {
+                labels: readingTimeData.map(item => item.reading_time + 's'),
+                datasets: [{
+                    label: '{% trans "Number of Reads" %}',
+                    data: readingTimeData.map(item => item.count),
+                    backgroundColor: 'rgba(102, 126, 234, 0.8)',
+                    borderColor: 'rgba(102, 126, 234, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+
+    // Views Timeline Chart
+    const timelineData = {{ article_views_timeline|safe }};
+    if (timelineData && timelineData.length > 0) {
+        const ctx2 = document.getElementById('viewsTimelineChart').getContext('2d');
+        new Chart(ctx2, {
+            type: 'line',
+            data: {
+                labels: timelineData.map(item => item.date),
+                datasets: [{
+                    label: '{% trans "Daily Views" %}',
+                    data: timelineData.map(item => item.views),
+                    borderColor: 'rgb(34, 197, 94)',
+                    backgroundColor: 'rgba(34, 197, 94, 0.1)',
+                    tension: 0.4,
+                    fill: true
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    }
+
+    // Weekly Top Articles Chart
+    fetch('{% url "analytics:api_data" %}?type=top_articles_weekly')
+        .then(response => response.json())
+        .then(data => {
+            const ctx3 = document.getElementById('weeklyTopChart').getContext('2d');
+            new Chart(ctx3, {
+                type: 'horizontalBar',
+                data: {
+                    labels: data.labels,
+                    datasets: [{
+                        label: '{% trans "Views This Week" %}',
+                        data: data.data,
+                        backgroundColor: [
+                            'rgba(239, 68, 68, 0.8)',
+                            'rgba(245, 158, 11, 0.8)',
+                            'rgba(34, 197, 94, 0.8)',
+                            'rgba(59, 130, 246, 0.8)',
+                            'rgba(139, 92, 246, 0.8)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    scales: {
+                        x: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        })
+        .catch(error => {
+            console.error('Error loading weekly chart data:', error);
+        });
+});
+</script>
+{% endblock %}

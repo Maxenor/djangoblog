@@ -1,0 +1,707 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-06-03 08:59+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: isitechdjango/forms.py:12
+msgid "Category name"
+msgstr "Category name"
+
+#: isitechdjango/forms.py:13
+msgid "Category description"
+msgstr "Category description"
+
+#: isitechdjango/forms.py:22
+msgid "Article title"
+msgstr "Article title"
+
+#: isitechdjango/forms.py:23
+msgid "Article content"
+msgstr "Article content"
+
+#: isitechdjango/forms.py:34
+#, fuzzy
+#| msgid "Your comment"
+msgid "Your Name"
+msgstr "Your comment"
+
+#: isitechdjango/forms.py:35
+msgid "Your Email"
+msgstr ""
+
+#: isitechdjango/forms.py:36
+msgid "Your comment"
+msgstr "Your comment"
+
+#: isitechdjango/forms.py:54
+msgid "Choose a username"
+msgstr "Choose a username"
+
+#: isitechdjango/forms.py:55
+msgid "Enter your email address"
+msgstr "Enter your email address"
+
+#: isitechdjango/forms.py:56
+msgid "Create a password"
+msgstr "Create a password"
+
+#: isitechdjango/forms.py:57
+msgid "Confirm your password"
+msgstr "Confirm your password"
+
+#: isitechdjango/forms.py:73
+msgid "Enter your username"
+msgstr "Enter your username"
+
+#: isitechdjango/forms.py:74
+msgid "Enter your password"
+msgstr "Enter your password"
+
+#: isitechdjango/templates/blog/ajouter_article.html:44
+#: isitechdjango/templates/blog/ajouter_article.html:54
+#: isitechdjango/templates/blog/ajouter_article.html:109
+#, fuzzy
+#| msgid "Add Article"
+msgid "Edit Article"
+msgstr "Add Article"
+
+#: isitechdjango/templates/blog/ajouter_article.html:44
+#: isitechdjango/templates/blog/ajouter_article.html:54
+#: isitechdjango/templates/blog/home.html:106
+msgid "Add New Article"
+msgstr "Add New Article"
+
+#: isitechdjango/templates/blog/ajouter_article.html:62
+#, fuzzy
+#| msgid "Article title"
+msgid "Article Title"
+msgstr "Article title"
+
+#: isitechdjango/templates/blog/ajouter_article.html:69
+msgid "Author"
+msgstr ""
+
+#: isitechdjango/templates/blog/ajouter_article.html:76
+#, fuzzy
+#| msgid "Add Category"
+msgid "Category"
+msgstr "Add Category"
+
+#: isitechdjango/templates/blog/ajouter_article.html:80
+#, fuzzy
+#| msgid "Create new account"
+msgid "Create a new category"
+msgstr "Create new account"
+
+#: isitechdjango/templates/blog/ajouter_article.html:86
+#, fuzzy
+#| msgid "Article title"
+msgid "Article Image"
+msgstr "Article title"
+
+#: isitechdjango/templates/blog/ajouter_article.html:89
+msgid "Accepted formats: JPG, PNG, GIF"
+msgstr ""
+
+#: isitechdjango/templates/blog/ajouter_article.html:92
+msgid "Image Preview:"
+msgstr ""
+
+#: isitechdjango/templates/blog/ajouter_article.html:93
+msgid "Preview"
+msgstr ""
+
+#: isitechdjango/templates/blog/ajouter_article.html:99
+#, fuzzy
+#| msgid "Article content"
+msgid "Article Content"
+msgstr "Article content"
+
+#: isitechdjango/templates/blog/ajouter_article.html:106
+#: isitechdjango/templates/blog/ajouter_categorie.html:84
+msgid "Cancel"
+msgstr ""
+
+#: isitechdjango/templates/blog/ajouter_article.html:109
+msgid "Save"
+msgstr ""
+
+#: isitechdjango/templates/blog/ajouter_categorie.html:44
+#: isitechdjango/templates/blog/ajouter_categorie.html:54
+#: isitechdjango/templates/blog/ajouter_categorie.html:87
+#, fuzzy
+#| msgid "Add Category"
+msgid "Edit Category"
+msgstr "Add Category"
+
+#: isitechdjango/templates/blog/ajouter_categorie.html:44
+#: isitechdjango/templates/blog/ajouter_categorie.html:54
+#: isitechdjango/templates/blog/categories.html:73
+#, fuzzy
+#| msgid "Add Category"
+msgid "Add New Category"
+msgstr "Add Category"
+
+#: isitechdjango/templates/blog/ajouter_categorie.html:62
+#, fuzzy
+#| msgid "Category name"
+msgid "Category Name"
+msgstr "Category name"
+
+#: isitechdjango/templates/blog/ajouter_categorie.html:69
+msgid "Description"
+msgstr "Description"
+
+#: isitechdjango/templates/blog/ajouter_categorie.html:76
+#, fuzzy
+#| msgid "Category name"
+msgid "Category Color"
+msgstr "Category name"
+
+#: isitechdjango/templates/blog/ajouter_categorie.html:79
+msgid "Choose a color to visually identify this category"
+msgstr ""
+
+#: isitechdjango/templates/blog/ajouter_categorie.html:87
+#, fuzzy
+#| msgid "Add Category"
+msgid "Create Category"
+msgstr "Add Category"
+
+#: isitechdjango/templates/blog/article_detail.html:5
+#, fuzzy
+#| msgid " - Mon Blog Django"
+msgid "Mon Blog Django"
+msgstr " - My Django Blog"
+
+#: isitechdjango/templates/blog/article_detail.html:46
+#, fuzzy
+#| msgid "Article title"
+msgid "Article Details"
+msgstr "Article Details"
+
+#: isitechdjango/templates/blog/article_detail.html:47
+msgid "Explore the full content of the article."
+msgstr "Explore the full content of the article."
+
+#: isitechdjango/templates/blog/article_detail.html:71
+#, fuzzy
+#| msgid "Aucune image pour cet article"
+msgid "No image for this article"
+msgstr "No image for this article"
+
+#: isitechdjango/templates/blog/article_detail.html:80
+#, python-format
+msgid "By %(author_name)s on %(creation_date)s"
+msgstr "By %(author_name)s on %(creation_date)s"
+
+#: isitechdjango/templates/blog/article_detail.html:96
+#, fuzzy
+#| msgid "Quick Actions"
+msgid "Admin Actions"
+msgstr "Quick Actions"
+
+#: isitechdjango/templates/blog/article_detail.html:99
+#, fuzzy
+#| msgid "Voir les articles"
+msgid "Edit this article"
+msgstr "View articles"
+
+#: isitechdjango/templates/blog/article_detail.html:102
+#, fuzzy
+#| msgid "Create First Article"
+msgid "Delete this article"
+msgstr "Create First Article"
+
+#: isitechdjango/templates/blog/article_detail.html:113
+#, fuzzy, python-format
+#| msgid "💬 Commentaires ({{ comments.count }})"
+msgid "💬 Comment (%(comments_count)s)"
+msgid_plural "💬 Comments (%(comments_count)s)"
+msgstr[0] "💬 Comments ({{ comments.count }})"
+msgstr[1] "💬 Comments ({{ comments.count }})"
+
+#: isitechdjango/templates/blog/article_detail.html:129
+msgid "No comments yet. Be the first to comment!"
+msgstr "No comments yet. Be the first to comment!"
+
+#: isitechdjango/templates/blog/article_detail.html:137
+#, fuzzy
+#| msgid "Your comment"
+msgid "Add a comment"
+msgstr "Add a comment"
+
+#: isitechdjango/templates/blog/article_detail.html:145
+msgid "Name"
+msgstr "Name"
+
+#: isitechdjango/templates/blog/article_detail.html:152
+#, fuzzy
+#| msgid "Email *"
+msgid "Email"
+msgstr "Email"
+
+#: isitechdjango/templates/blog/article_detail.html:155
+msgid "Your email will not be published"
+msgstr "Your email will not be published"
+
+#: isitechdjango/templates/blog/article_detail.html:160
+#, fuzzy
+#| msgid "Commentaire *"
+msgid "Comment"
+msgstr "Comment"
+
+#: isitechdjango/templates/blog/article_detail.html:166
+#, fuzzy
+#| msgid "Publier le commentaire"
+msgid "Publish comment"
+msgstr "Publish comment"
+
+#: isitechdjango/templates/blog/base.html:7
+#: isitechdjango/templates/blog/base.html:16
+#: isitechdjango/templates/blog/base.html:18
+msgid "Isitech Blog"
+msgstr "Isitech Blog"
+
+#: isitechdjango/templates/blog/base.html:20
+msgid "Toggle navigation"
+msgstr ""
+
+#: isitechdjango/templates/blog/base.html:26
+msgid "Home"
+msgstr "Home"
+
+#: isitechdjango/templates/blog/base.html:27
+msgid "Categories"
+msgstr "Categories"
+
+#: isitechdjango/templates/blog/base.html:31
+#: isitechdjango/templates/blog/base.html:47
+msgid "Admin"
+msgstr "Admin"
+
+#: isitechdjango/templates/blog/base.html:34
+msgid "Add Article"
+msgstr "Add Article"
+
+#: isitechdjango/templates/blog/base.html:35
+msgid "Add Category"
+msgstr "Add Category"
+
+#: isitechdjango/templates/blog/base.html:49
+msgid "User"
+msgstr "User"
+
+#: isitechdjango/templates/blog/base.html:52
+msgid "Logout"
+msgstr "Logout"
+
+#: isitechdjango/templates/blog/base.html:54
+msgid "Login"
+msgstr "Login"
+
+#: isitechdjango/templates/blog/base.html:55
+msgid "Register"
+msgstr "Register"
+
+#: isitechdjango/templates/blog/categories.html:50
+#, fuzzy
+#| msgid "Category name"
+msgid "Category Management"
+msgstr "Category name"
+
+#: isitechdjango/templates/blog/categories.html:71
+#: isitechdjango/templates/blog/home.html:104
+msgid "Quick Actions"
+msgstr "Quick Actions"
+
+#: isitechdjango/templates/blog/categories.html:82
+#, fuzzy, python-format
+#| msgid "Catégories ({{ categories.count }})"
+msgid "Category (%(categories_count)s)"
+msgid_plural "Categories (%(categories_count)s)"
+msgstr[0] "Categories ({{ categories.count }})"
+msgstr[1] "Categories ({{ categories.count }})"
+
+#: isitechdjango/templates/blog/categories.html:97
+#, fuzzy
+#| msgid "Description"
+msgid "No description"
+msgstr "Description"
+
+#: isitechdjango/templates/blog/categories.html:101
+#, python-format
+msgid "%(articles_count)s article"
+msgid_plural "%(articles_count)s articles"
+msgstr[0] ""
+msgstr[1] ""
+
+#: isitechdjango/templates/blog/categories.html:104
+#, fuzzy
+#| msgid "Voir les articles"
+msgid "View Articles"
+msgstr "View articles"
+
+#: isitechdjango/templates/blog/categories.html:110
+#: isitechdjango/templates/blog/home.html:180
+msgid "Edit"
+msgstr "Edit"
+
+#: isitechdjango/templates/blog/categories.html:113
+#: isitechdjango/templates/blog/home.html:183
+msgid "Delete"
+msgstr "Delete"
+
+#: isitechdjango/templates/blog/categories.html:125
+#, fuzzy
+#| msgid "Categories"
+msgid "No categories yet"
+msgstr "Categories"
+
+#: isitechdjango/templates/blog/categories.html:127
+msgid "Start by"
+msgstr ""
+
+#: isitechdjango/templates/blog/categories.html:127
+msgid "adding your first category"
+msgstr ""
+
+#: isitechdjango/templates/blog/categories.html:129
+#, fuzzy
+#| msgid "No articles are available at the moment. Check back later!"
+msgid "No categories are available at the moment."
+msgstr "No articles are available at the moment. Check back later!"
+
+#: isitechdjango/templates/blog/home.html:80
+msgid "Welcome to Isitech Blog"
+msgstr "Welcome to Isitech Blog"
+
+#: isitechdjango/templates/blog/home.html:83
+#, fuzzy, python-format
+#| msgid "Hello, {{ user.username }}! Ready to share your thoughts?"
+msgid "Hello, %(user.username)s! Ready to share your thoughts?"
+msgstr "Hello, {{ user.username }}! Ready to share your thoughts?"
+
+#: isitechdjango/templates/blog/home.html:109
+msgid "Manage Categories"
+msgstr "Manage Categories"
+
+#: isitechdjango/templates/blog/home.html:119
+msgid "Filter by Category:"
+msgstr "Filter by Category:"
+
+#: isitechdjango/templates/blog/home.html:122
+msgid "All Categories"
+msgstr "All Categories"
+
+#: isitechdjango/templates/blog/home.html:137
+#, fuzzy, python-format
+#| msgid "Articles ({{ articles.count }})"
+msgid "Article (%(articles_count)s)"
+msgid_plural "Articles (%(articles_count)s)"
+msgstr[0] "Articles ({{ articles.count }})"
+msgstr[1] "Articles ({{ articles.count }})"
+
+#: isitechdjango/templates/blog/home.html:151
+msgid "No image available"
+msgstr "No image available"
+
+#: isitechdjango/templates/blog/home.html:171
+msgid "Read More"
+msgstr "Read More"
+
+#: isitechdjango/templates/blog/home.html:174
+#, python-format
+msgid "%(comment_count)s comment"
+msgid_plural "%(comment_count)s comments"
+msgstr[0] ""
+msgstr[1] ""
+
+#: isitechdjango/templates/blog/home.html:195
+#, fuzzy
+#| msgid "Voir les articles"
+msgid "No articles yet"
+msgstr "View articles"
+
+#: isitechdjango/templates/blog/home.html:197
+msgid "Start sharing your thoughts by creating your first article!"
+msgstr "Start sharing your thoughts by creating your first article!"
+
+#: isitechdjango/templates/blog/home.html:199
+msgid "Create First Article"
+msgstr "Create First Article"
+
+#: isitechdjango/templates/blog/home.html:202
+msgid "No articles are available at the moment. Check back later!"
+msgstr "No articles are available at the moment. Check back later!"
+
+#: isitechdjango/templates/registration/logged_out.html:106
+msgid "Successfully Logged Out!"
+msgstr "Successfully Logged Out!"
+
+#: isitechdjango/templates/registration/logged_out.html:108
+msgid ""
+"Thank you for using our platform. You have been safely logged out of your "
+"account."
+msgstr ""
+"Thank you for using our platform. You have been safely logged out of your "
+"account."
+
+#: isitechdjango/templates/registration/logged_out.html:111
+msgid "Sign In Again"
+msgstr "Sign In Again"
+
+#: isitechdjango/templates/registration/login.html:379
+msgid "Welcome Back!"
+msgstr "Welcome Back!"
+
+#: isitechdjango/templates/registration/login.html:380
+msgid "Please sign in to your account to continue"
+msgstr "Please sign in to your account to continue"
+
+#: isitechdjango/templates/registration/login.html:397
+#: isitechdjango/templates/registration/register.html:398
+msgid "Username"
+msgstr "Username"
+
+#: isitechdjango/templates/registration/login.html:410
+#: isitechdjango/templates/registration/register.html:437
+msgid "Password"
+msgstr "Password"
+
+#: isitechdjango/templates/registration/login.html:420
+msgid "Password reset functionality will be implemented soon!"
+msgstr ""
+
+#: isitechdjango/templates/registration/login.html:421
+msgid "Forgot Password?"
+msgstr "Forgot Password?"
+
+#: isitechdjango/templates/registration/login.html:435
+#: isitechdjango/templates/registration/login.html:482
+msgid "Sign In"
+msgstr "Sign In"
+
+#: isitechdjango/templates/registration/login.html:440
+msgid "Don't have an account?"
+msgstr "Don't have an account?"
+
+#: isitechdjango/templates/registration/login.html:445
+msgid "Create new account"
+msgstr "Create new account"
+
+#: isitechdjango/templates/registration/login.html:477
+msgid "Signing In..."
+msgstr "Signing In..."
+
+#: isitechdjango/templates/registration/register.html:411
+msgid "Email Address"
+msgstr "Email Address"
+
+#: isitechdjango/templates/registration/register.html:424
+msgid "User Role"
+msgstr "User Role"
+
+#: isitechdjango/templates/registration/register.html:456
+msgid "Confirm Password"
+msgstr "Confirm Password"
+
+#: isitechdjango/templates/registration/register.html:476
+#: isitechdjango/templates/registration/register.html:571
+msgid "Create Account"
+msgstr "Create Account"
+
+#: isitechdjango/templates/registration/register.html:481
+msgid "Already have an account?"
+msgstr "Already have an account?"
+
+#: isitechdjango/templates/registration/register.html:486
+msgid "Sign in here"
+msgstr "Sign in here"
+
+#: isitechdjango/templates/registration/register.html:507
+msgid "at least 8 characters"
+msgstr ""
+
+#: isitechdjango/templates/registration/register.html:510
+msgid "lowercase letters"
+msgstr ""
+
+#: isitechdjango/templates/registration/register.html:513
+msgid "uppercase letters"
+msgstr ""
+
+#: isitechdjango/templates/registration/register.html:516
+msgid "numbers"
+msgstr ""
+
+#: isitechdjango/templates/registration/register.html:519
+msgid "special characters"
+msgstr ""
+
+#: isitechdjango/templates/registration/register.html:521
+msgid "Very Weak"
+msgstr ""
+
+#: isitechdjango/templates/registration/register.html:521
+msgid "Weak"
+msgstr ""
+
+#: isitechdjango/templates/registration/register.html:521
+msgid "Fair"
+msgstr ""
+
+#: isitechdjango/templates/registration/register.html:521
+msgid "Good"
+msgstr ""
+
+#: isitechdjango/templates/registration/register.html:521
+msgid "Strong"
+msgstr ""
+
+#: isitechdjango/templates/registration/register.html:551
+msgid "Missing"
+msgstr ""
+
+#: isitechdjango/templates/registration/register.html:554
+#, fuzzy
+#| msgid "Password"
+msgid "password"
+msgstr "Password"
+
+#: isitechdjango/templates/registration/register.html:566
+#, fuzzy
+#| msgid "Create Account"
+msgid "Creating Account..."
+msgstr "Create Account"
+
+#~ msgid "Join Our Community!"
+#~ msgstr "Join Our Community!"
+
+#~ msgid "Create your account to get started on your journey"
+#~ msgstr "Create your account to get started on your journey"
+
+#~ msgid "{{ article.titre }} - Mon Blog Django"
+#~ msgstr "{{ article.titre }} - My Django Blog"
+
+#~ msgid "← Retour à l'accueil"
+#~ msgstr "← Back to home"
+
+#~ msgid ""
+#~ "Par {{ article.auteur }} le {{ article.date_creation|date:\"d/m/Y à "
+#~ "H:i\" }}"
+#~ msgstr ""
+#~ "By {{ article.auteur }} on {{ article.date_creation|date:\"d/m/Y at "
+#~ "H:i\" }}"
+
+#~ msgid "✏️ Modifier cet article"
+#~ msgstr "✏️ Edit this article"
+
+#~ msgid "🗑️ Supprimer cet article"
+#~ msgstr "🗑️ Delete this article"
+
+#~ msgid "Aucun commentaire pour le moment. Soyez le premier à commenter !"
+#~ msgstr "No comments yet. Be the first to comment!"
+
+#~ msgid "✍️ Ajouter un commentaire"
+#~ msgstr "✍️ Add a comment"
+
+#~ msgid "Nom *"
+#~ msgstr "Name *"
+
+#~ msgid "Votre email ne sera pas publié"
+#~ msgstr "Your email will not be published"
+
+#~ msgid "Modifier la Catégorie"
+#~ msgstr "Modify Category"
+
+#~ msgid "Ajouter une Catégorie"
+#~ msgstr "Add Category"
+
+#~ msgid "← Retour aux catégories"
+#~ msgstr "← Back to categories"
+
+#~ msgid "Modifier la Catégorie \"{{ categorie.nom }}\""
+#~ msgstr "Modify Category \"{{ categorie.nom }}\""
+
+#~ msgid "Ajouter une Nouvelle Catégorie"
+#~ msgstr "Add New Category"
+
+#~ msgid "Nom de la catégorie *"
+#~ msgstr "Category Name *"
+
+#~ msgid "Couleur de la catégorie"
+#~ msgstr "Category Color"
+
+#~ msgid "Choisissez une couleur pour identifier visuellement cette catégorie"
+#~ msgstr "Choose a color to visually identify this category"
+
+#~ msgid "Annuler"
+#~ msgstr "Cancel"
+
+#~ msgid "Modifier la catégorie"
+#~ msgstr "Modify category"
+
+#~ msgid "Créer la catégorie"
+#~ msgstr "Create category"
+
+#~ msgid "Catégories - Mon Blog Django"
+#~ msgstr "Categories - My Django Blog"
+
+#~ msgid "🗂️ Gestion des Catégories"
+#~ msgstr "🗂️ Category Management"
+
+#~ msgid "➕ Ajouter une catégorie"
+#~ msgstr "➕ Add category"
+
+#~ msgid ""
+#~ "📄 {{ categorie.articles.count }} article{{ categorie.articles.count|"
+#~ "pluralize }}"
+#~ msgstr ""
+#~ "📄 {{ categorie.articles.count }} article{{ categorie.articles.count|"
+#~ "pluralize }}"
+
+#~ msgid "✏️ Modifier"
+#~ msgstr "✏️ Edit"
+
+#~ msgid "🗑️ Supprimer"
+#~ msgstr "🗑️ Delete"
+
+#~ msgid "Aucune catégorie pour le moment"
+#~ msgstr "No categories yet"
+
+#~ msgid ""
+#~ "Commencez par <a href=\"{% url 'ajouter_categorie' %}\">ajouter votre "
+#~ "première catégorie</a>!"
+#~ msgstr ""
+#~ "Start by <a href=\"{% url 'ajouter_categorie' %}\">adding your first "
+#~ "category</a>!"
+
+#~ msgid "Aucune catégorie n'est disponible pour le moment."
+#~ msgstr "No categories are available at the moment."
+
+#~ msgid "{{ article.auteur }}"
+#~ msgstr "{{ article.auteur }}"
+
+#~ msgid "{{ article.date_creation|date:\"M d, Y\" }}"
+#~ msgstr "{{ article.date_creation|date:\"M d, Y\" }}"
+
+#~ msgid ""
+#~ "{{ article.comments.count }} comment{{ article.comments.count|pluralize }}"
+#~ msgstr ""
+#~ "{{ article.comments.count }} comment{{ article.comments.count|pluralize }}"

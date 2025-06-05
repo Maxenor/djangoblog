@@ -1,0 +1,295 @@
+{% extends 'blog/base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans "AI Article Generator" %} - {% trans "Isitech Blog" %}{% endblock %}
+
+{% block extra_css %}
+<style>
+    .ai-generator-container {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 60px 0;
+        margin-bottom: 30px;
+    }
+    
+    .generator-card {
+        background: white;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        overflow: hidden;
+        transition: transform 0.3s ease;
+    }
+    
+    .generator-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .card-header-ai {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 20px;
+        border: none;
+    }
+    
+    .generated-article {
+        background: #f8f9fa;
+        border-left: 4px solid #667eea;
+        padding: 20px;
+        margin: 20px 0;
+        border-radius: 5px;
+    }
+    
+    .article-title {
+        color: #333;
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 15px;
+    }
+    
+    .article-excerpt {
+        color: #666;
+        font-style: italic;
+        margin-bottom: 15px;
+        padding: 10px;
+        background: #e9ecef;
+        border-radius: 5px;
+    }
+    
+    .article-content {
+        color: #333;
+        line-height: 1.6;
+        white-space: pre-wrap;
+    }
+    
+    .btn-ai {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        color: white;
+        padding: 12px 30px;
+        border-radius: 25px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-ai:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        color: white;
+    }
+    
+    .loading-animation {
+        display: none;
+        text-align: center;
+        margin: 20px 0;
+    }
+    
+    .spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #667eea;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto 10px;
+    }
+    
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="ai-generator-container">
+    <div class="container">
+        <div class="row justify-content-center text-center">
+            <div class="col-lg-8">
+                <h1 class="display-4 fw-bold mb-4">
+                    <i class="fas fa-robot me-3"></i>{% trans "AI Article Generator" %}
+                </h1>
+                <p class="lead mb-0">
+                    {% trans "Generate high-quality articles using advanced AI technology. Simply enter a topic and let our AI create engaging content for your blog." %}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <!-- Article Generation Form -->
+            <div class="generator-card mb-4">
+                <div class="card-header-ai">
+                    <h3 class="mb-0">
+                        <i class="fas fa-magic me-2"></i>{% trans "Generate New Article" %}
+                    </h3>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post" id="generateForm">
+                        {% csrf_token %}
+                        <div class="mb-4">
+                            <label for="subject" class="form-label fs-5 fw-semibold">
+                                <i class="fas fa-lightbulb me-2 text-warning"></i>{% trans "Article Topic" %}
+                            </label>
+                            <input type="text" class="form-control form-control-lg" id="subject" name="subject" 
+                                   placeholder="{% trans 'Enter the topic for your article (e.g., Artificial Intelligence, Climate Change, Web Development...)' %}"
+                                   required>
+                            <div class="form-text">
+                                {% trans "Be specific about your topic to get better results. The AI will create a complete article with title, introduction, content, and conclusion." %}
+                            </div>
+                        </div>
+                        
+                        <div class="text-center">
+                            <button type="submit" name="generate" class="btn btn-ai btn-lg">
+                                <i class="fas fa-cogs me-2"></i>{% trans "Generate Article" %}
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <!-- Loading Animation -->
+                    <div class="loading-animation" id="loadingAnimation">
+                        <div class="spinner"></div>
+                        <p class="text-muted">{% trans "Generating your article..." %}</p>
+                        <small class="text-muted">{% trans "This may take a few moments" %}</small>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Generated Article Display -->
+            {% if generated_article %}
+            <div class="generator-card">
+                <div class="card-header-ai">
+                    <h3 class="mb-0">
+                        <i class="fas fa-file-alt me-2"></i>{% trans "Generated Article" %}
+                    </h3>
+                </div>
+                <div class="card-body p-4">
+                    <div class="generated-article">
+                        <div class="article-title">
+                            {{ generated_article.title }}
+                        </div>
+                        
+                        {% if generated_article.excerpt %}
+                        <div class="article-excerpt">
+                            <strong>{% trans "Excerpt:" %}</strong><br>
+                            {{ generated_article.excerpt }}
+                        </div>
+                        {% endif %}
+                        
+                        <div class="article-content">
+                            {{ generated_article.content }}
+                        </div>
+                    </div>
+                    
+                    <!-- Publish Form -->
+                    <div class="mt-4 p-4 bg-light rounded">
+                        <h4 class="text-dark mb-3">
+                            <i class="fas fa-publish me-2"></i>{% trans "Publish Article" %}
+                        </h4>
+                        
+                        <form method="post" id="publishForm">
+                            {% csrf_token %}
+                            
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="edit_title" class="form-label fw-semibold">{% trans "Title" %}</label>
+                                        <input type="text" class="form-control" id="edit_title" name="title" 
+                                               value="{{ generated_article.title }}" required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="category" class="form-label fw-semibold">{% trans "Category" %}</label>
+                                        <select class="form-select" id="category" name="category">
+                                            <option value="">{% trans "Select a category" %}</option>
+                                            {% for category in categories %}
+                                                <option value="{{ category.id }}">{{ category.nom }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="edit_excerpt" class="form-label fw-semibold">{% trans "Excerpt" %}</label>
+                                <textarea class="form-control" id="edit_excerpt" name="excerpt" rows="3">{{ generated_article.excerpt }}</textarea>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <label for="edit_content" class="form-label fw-semibold">{% trans "Content" %}</label>
+                                <textarea class="form-control" id="edit_content" name="content" rows="10" required>{{ generated_article.content }}</textarea>
+                            </div>
+                            
+                            <div class="text-center">
+                                <button type="submit" name="publish" class="btn btn-success btn-lg">
+                                    <i class="fas fa-paper-plane me-2"></i>{% trans "Publish Article" %}
+                                </button>
+                                <a href="{% url 'ai_article_generator' %}" class="btn btn-outline-secondary btn-lg ms-2">
+                                    <i class="fas fa-redo me-2"></i>{% trans "Generate New" %}
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            
+            <!-- Help Section -->
+            <div class="mt-5 p-4 bg-info bg-opacity-10 rounded">
+                <h5 class="text-info mb-3">
+                    <i class="fas fa-info-circle me-2"></i>{% trans "How it works" %}
+                </h5>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <div class="text-center">
+                            <i class="fas fa-edit fa-2x text-info mb-2"></i>
+                            <h6>{% trans "1. Enter Topic" %}</h6>
+                            <small class="text-muted">{% trans "Provide a clear and specific topic for your article" %}</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="text-center">
+                            <i class="fas fa-robot fa-2x text-info mb-2"></i>
+                            <h6>{% trans "2. AI Generation" %}</h6>
+                            <small class="text-muted">{% trans "Our AI creates a complete article with title, content, and excerpt" %}</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <div class="text-center">
+                            <i class="fas fa-check fa-2x text-info mb-2"></i>
+                            <h6>{% trans "3. Review & Publish" %}</h6>
+                            <small class="text-muted">{% trans "Edit if needed and publish directly to your blog" %}</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const generateForm = document.getElementById('generateForm');
+    const loadingAnimation = document.getElementById('loadingAnimation');
+    
+    generateForm.addEventListener('submit', function() {
+        loadingAnimation.style.display = 'block';
+        generateForm.style.display = 'none';
+    });
+    
+    // Auto-resize textareas
+    const textareas = document.querySelectorAll('textarea');
+    textareas.forEach(function(textarea) {
+        textarea.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,372 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}{% trans "Profil de" %} {{ profile_user.get_full_name|default:profile_user.username }}{% endblock %}
+
+{% block content %}
+<!-- Modern Profile Hero Section -->
+<div class="profile-hero">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-3 col-md-4 text-center text-md-start">
+                <div class="profile-avatar-container">
+                    {% if profile_user.profile.avatar %}
+                        <img src="{{ profile_user.profile.avatar.url }}" class="profile-avatar" alt="{% trans 'Avatar de' %} {{ profile_user.get_full_name|default:profile_user.username }}">
+                    {% else %}
+                        <div class="profile-avatar profile-avatar-default">
+                            <i data-feather="user"></i>
+                        </div>
+                    {% endif %}
+                    <div class="profile-status-badge">
+                        <i data-feather="check-circle"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9 col-md-8 mt-3 mt-md-0">
+                <div class="profile-info">
+                    <h1 class="profile-name">{{ profile_user.get_full_name|default:profile_user.username }}</h1>
+                    <div class="profile-role">
+                        <i data-feather="shield"></i>
+                        <span>{{ profile_user.profile.get_role_display }}</span>
+                    </div>
+                    {% if profile_user.profile.bio %}
+                        <p class="profile-bio">{{ profile_user.profile.bio }}</p>
+                    {% endif %}
+                    
+                    <div class="profile-social-links">
+                        {% if profile_user.profile.website %}
+                            <a href="{{ profile_user.profile.website }}" target="_blank" class="social-link" rel="noopener">
+                                <i data-feather="globe"></i>
+                                <span>{% trans "Site web" %}</span>
+                            </a>
+                        {% endif %}
+                        {% if profile_user.profile.twitter %}
+                            <a href="https://twitter.com/{{ profile_user.profile.twitter }}" target="_blank" class="social-link" rel="noopener">
+                                <i data-feather="twitter"></i>
+                                <span>@{{ profile_user.profile.twitter }}</span>
+                            </a>
+                        {% endif %}
+                    </div>
+                    
+                    {% if is_own_profile %}
+                        <div class="profile-actions">
+                            <a href="{% url 'dashboard' %}" class="btn btn-primary btn-modern">
+                                <i data-feather="layout"></i>
+                                {% trans "Mon Dashboard" %}
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container profile-content">
+    <div class="row">
+        <!-- Sidebar with Statistics -->
+        <div class="col-lg-4 col-md-5">
+            <div class="profile-sidebar">
+                <!-- Statistics Card -->
+                <div class="card stats-card">
+                    <div class="card-header">
+                        <h5 class="card-title">
+                            <i data-feather="bar-chart-3"></i>
+                            {% trans "Statistiques" %}
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="stats-grid">
+                            <div class="stat-item articles-stat">
+                                <div class="stat-icon">
+                                    <i data-feather="file-text"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="stat-number">{{ total_articles }}</div>
+                                    <div class="stat-label">{% trans "Articles" %}</div>
+                                </div>
+                            </div>
+                            <div class="stat-item views-stat">
+                                <div class="stat-icon">
+                                    <i data-feather="eye"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="stat-number">{{ total_views }}</div>
+                                    <div class="stat-label">{% trans "Vues" %}</div>
+                                </div>
+                            </div>
+                            <div class="stat-item likes-stat">
+                                <div class="stat-icon">
+                                    <i data-feather="heart"></i>
+                                </div>
+                                <div class="stat-content">
+                                    <div class="stat-number">{{ total_likes }}</div>
+                                    <div class="stat-label">{% trans "Likes" %}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Bookmarked Articles (Own Profile Only) -->
+                {% if is_own_profile and bookmarked_articles %}
+                <div class="card bookmarks-card">
+                    <div class="card-header">
+                        <h5 class="card-title">
+                            <i data-feather="bookmark"></i>
+                            {% trans "Articles sauvegardés" %}
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="bookmarks-list">
+                            {% for article in bookmarked_articles %}
+                                <a href="{% url 'article_detail' article.id %}" class="bookmark-item">
+                                    <div class="bookmark-content">
+                                        <div class="bookmark-title">{{ article.titre|truncatechars:35 }}</div>
+                                        <div class="bookmark-meta">
+                                            <span class="bookmark-date">{{ article.date_creation|date:"d M Y" }}</span>
+                                            <span class="bookmark-views">
+                                                <i data-feather="eye"></i>
+                                                {{ article.vues }}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="bookmark-arrow">
+                                        <i data-feather="chevron-right"></i>
+                                    </div>
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Main Content Area -->
+        <div class="col-lg-8 col-md-7">
+            <div class="articles-section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        {% trans "Articles de" %} {{ profile_user.get_full_name|default:profile_user.username }}
+                    </h2>
+                    {% if user_articles %}
+                        <div class="section-meta">
+                            <span class="article-count">{{ user_articles.paginator.count }} {% trans "article" %}{{ user_articles.paginator.count|pluralize:"s" }}</span>
+                        </div>
+                    {% endif %}
+                </div>
+                
+                {% if user_articles %}
+                    <div class="articles-grid">
+                        {% for article in user_articles %}
+                            <article class="article-card fade-in-up" style="animation-delay: {{ forloop.counter0|floatformat:1 }}00ms;">
+                                <div class="card h-100">
+                                    {% if article.image %}
+                                        <div class="card-image-container">
+                                            <img src="{{ article.image.url }}" class="card-img-top" alt="{{ article.titre }}">
+                                            <div class="card-image-overlay">
+                                                <a href="{% url 'article_detail' article.id %}" class="btn btn-light btn-sm">
+                                                    <i data-feather="external-link"></i>
+                                                    {% trans "Lire l'article" %}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    {% else %}
+                                        <div class="card-image-placeholder">
+                                            <i data-feather="file-text"></i>
+                                        </div>
+                                    {% endif %}
+                                    
+                                    <div class="card-body">
+                                        <h5 class="card-title">
+                                            <a href="{% url 'article_detail' article.id %}" class="article-link">
+                                                {{ article.titre }}
+                                            </a>
+                                        </h5>
+                                        <p class="card-text">{{ article.extrait|truncatechars:120 }}</p>
+                                        
+                                        <div class="article-meta">
+                                            <div class="meta-date">
+                                                <i data-feather="calendar"></i>
+                                                <span>{{ article.date_creation|date:"d M Y" }}</span>
+                                            </div>
+                                            <div class="meta-stats">
+                                                <span class="stat-item">
+                                                    <i data-feather="eye"></i>
+                                                    {{ article.vues }}
+                                                </span>
+                                                <span class="stat-item">
+                                                    <i data-feather="heart"></i>
+                                                    {{ article.likes_count }}
+                                                </span>
+                                            </div>
+                                        </div>
+                                        
+                                        {% if article.categorie %}
+                                            <div class="article-category">
+                                                <span class="category-badge" style="--category-color: {{ article.categorie.couleur|default:'#007bff' }}">
+                                                    {{ article.categorie.nom }}
+                                                </span>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </article>
+                        {% endfor %}
+                    </div>
+                    
+                    <!-- Modern Pagination -->
+                    {% if user_articles.has_other_pages %}
+                        <nav aria-label="{% trans 'Navigation des pages' %}" class="pagination-nav">
+                            <ul class="pagination">
+                                {% if user_articles.has_previous %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ user_articles.previous_page_number }}">
+                                            <i data-feather="chevron-left"></i>
+                                            {% trans "Précédent" %}
+                                        </a>
+                                    </li>
+                                {% endif %}
+                                
+                                {% for num in user_articles.paginator.page_range %}
+                                    {% if user_articles.number == num %}
+                                        <li class="page-item active">
+                                            <span class="page-link">{{ num }}</span>
+                                        </li>
+                                    {% elif num > user_articles.number|add:'-3' and num < user_articles.number|add:'3' %}
+                                        <li class="page-item">
+                                            <a class="page-link" href="?page={{ num }}">{{ num }}</a>
+                                        </li>
+                                    {% endif %}
+                                {% endfor %}
+                                
+                                {% if user_articles.has_next %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?page={{ user_articles.next_page_number }}">
+                                            {% trans "Suivant" %}
+                                            <i data-feather="chevron-right"></i>
+                                        </a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                    {% endif %}
+                {% else %}
+                    <div class="empty-state">
+                        <div class="empty-icon">
+                            <i data-feather="edit-3"></i>
+                            <div class="floating-dots">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </div>
+                        <h3 class="empty-title">{% trans "Aucun article publié" %}</h3>
+                        <p class="empty-description">
+                            {{ profile_user.get_full_name|default:profile_user.username }} 
+                            {% trans "n'a pas encore publié d'articles." %}
+                        </p>
+                        {% if is_own_profile %}
+                            <div class="empty-actions">
+                                <a href="{% url 'ajouter_article' %}" class="btn btn-primary btn-modern">
+                                    <i data-feather="plus"></i>
+                                    {% trans "Créer votre premier article" %}
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Modern Profile Page Interactions
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize Feather Icons
+    if (typeof feather !== 'undefined') {
+        feather.replace();
+    }
+    
+    // Animate statistics on scroll
+    const observerOptions = {
+        threshold: 0.3,
+        rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const statsObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const statNumbers = entry.target.querySelectorAll('.stat-number');
+                statNumbers.forEach((stat, index) => {
+                    setTimeout(() => {
+                        stat.style.animation = 'countUp 0.8s ease-out forwards';
+                    }, index * 100);
+                });
+                statsObserver.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+    
+    const statsCard = document.querySelector('.stats-card');
+    if (statsCard) {
+        statsObserver.observe(statsCard);
+    }
+    
+    // Animate article cards on scroll
+    const articleObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.animation = entry.target.style.animation.replace('paused', 'running');
+                articleObserver.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+    
+    document.querySelectorAll('.article-card').forEach(card => {
+        card.style.animationPlayState = 'paused';
+        articleObserver.observe(card);
+    });
+    
+    // Social link interactions
+    document.querySelectorAll('.social-link').forEach(link => {
+        link.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-2px) scale(1.05)';
+        });
+        
+        link.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0) scale(1)';
+        });
+    });
+    
+    // Bookmark item click animations
+    document.querySelectorAll('.bookmark-item').forEach(item => {
+        item.addEventListener('click', function(e) {
+            // Add ripple effect
+            const ripple = document.createElement('span');
+            ripple.classList.add('ripple');
+            this.appendChild(ripple);
+            
+            setTimeout(() => {
+                ripple.remove();
+            }, 600);
+        });
+    });
+    
+    // Profile avatar hover effect
+    const avatarContainer = document.querySelector('.profile-avatar-container');
+    if (avatarContainer) {
+        avatarContainer.addEventListener('mouseenter', function() {
+            this.style.transform = 'scale(1.05)';
+        });
+        
+        avatarContainer.addEventListener('mouseleave', function() {
+            this.style.transform = 'scale(1)';
+        });
+    }
+});
+</script>
+{% endblock %}

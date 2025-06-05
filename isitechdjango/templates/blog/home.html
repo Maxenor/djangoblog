@@ -1,0 +1,561 @@
+{% extends "blog/base.html" %}
+{% load i18n %}
+{% load date_filters %}
+{% load math_filters %}
+
+{% block extra_css %}
+<style>
+/* Home Page Specific Enhancements */
+.main-content-wrapper {
+    position: relative;
+    z-index: 1;
+}
+
+.modern-alert {
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(10px);
+    border: none !important;
+    border-left: 4px solid #28a745 !important;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+.hero-section {
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+    backdrop-filter: blur(1px);
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+.category-filter-section .card,
+.articles-grid .article-card {
+    background: rgba(251, 252, 254, 0.95) !important;
+    backdrop-filter: blur(15px) !important;
+    border: 1px solid rgba(226, 232, 240, 0.6) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06) !important;
+    transition: all 0.3s ease !important;
+}
+
+[data-theme="dark"] .category-filter-section .card,
+[data-theme="dark"] .articles-grid .article-card {
+    background: rgba(30, 30, 30, 0.9) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.category-filter-section .card:hover,
+.articles-grid .article-card:hover {
+    transform: translateY(-5px) !important;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15) !important;
+}
+
+.quick-actions .card {
+    background: rgba(248, 250, 252, 0.95) !important;
+    backdrop-filter: blur(15px) !important;
+    border: 1px solid rgba(226, 232, 240, 0.6) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06) !important;
+}
+
+[data-theme="dark"] .quick-actions .card {
+    background: rgba(30, 30, 30, 0.95) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+.empty-state {
+    background: rgba(248, 250, 252, 0.95) !important;
+    backdrop-filter: blur(10px) !important;
+    border-radius: 20px !important;
+    padding: 3rem !important;
+    margin: 2rem 0 !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06) !important;
+    border: 1px solid rgba(226, 232, 240, 0.6) !important;
+}
+
+[data-theme="dark"] .empty-state {
+    background: rgba(30, 30, 30, 0.8) !important;
+}
+
+/* Enhanced category pills */
+.category-pill {
+    background: rgba(248, 250, 252, 0.95) !important;
+    backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(102, 126, 234, 0.2) !important;
+    transition: all 0.3s ease !important;
+    color: #4a5568 !important;
+}
+
+.category-pill:hover,
+.category-pill.active {
+    background: rgba(102, 126, 234, 0.1) !important;
+    border-color: rgba(102, 126, 234, 0.4) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.2) !important;
+}
+
+/* Article Card Structure Fixes */
+.articles-grid .article-card {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100% !important;
+    overflow: hidden !important;
+    border-radius: 16px !important;
+    position: relative !important;
+}
+
+.article-image-wrapper {
+    border-radius: 12px 12px 0 0 !important;
+    overflow: hidden !important;
+    flex-shrink: 0 !important;
+    height: 250px !important;
+    position: relative !important;
+}
+
+.article-image {
+    width: 100% !important;
+    height: 250px !important;
+    object-fit: cover !important;
+    transition: transform 0.3s ease !important;
+}
+
+.article-card:hover .article-image {
+    transform: scale(1.05) !important;
+}
+
+.article-placeholder-image {
+    border-radius: 12px 12px 0 0 !important;
+    background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%) !important;
+    height: 250px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+[data-theme="dark"] .article-placeholder-image {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%) !important;
+}
+
+.article-content {
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 1.5rem !important;
+    overflow: hidden !important;
+}
+
+.article-title {
+    margin-bottom: 1rem !important;
+    line-height: 1.4 !important;
+}
+
+.article-meta {
+    margin-bottom: 1rem !important;
+    flex-shrink: 0 !important;
+}
+
+.article-excerpt {
+    flex-grow: 1 !important;
+    margin-bottom: 1.5rem !important;
+    overflow: hidden !important;
+}
+
+.article-excerpt p {
+    margin-bottom: 0 !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 3 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}
+
+.article-actions {
+    margin-top: auto !important;
+    flex-shrink: 0 !important;
+    padding-top: 1rem !important;
+    border-top: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+[data-theme="dark"] .article-actions {
+    border-top-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.admin-actions {
+    margin-top: 1rem !important;
+    padding-top: 1rem !important;
+    border-top: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+[data-theme="dark"] .admin-actions {
+    border-top-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Overlay effects */
+.article-overlay {
+    background: rgba(0, 0, 0, 0.7) !important;
+    opacity: 0 !important;
+    transition: opacity 0.3s ease !important;
+    border-radius: 12px 12px 0 0 !important;
+}
+
+.article-card:hover .article-overlay {
+    opacity: 1 !important;
+}
+
+.article-read-btn {
+    opacity: 0 !important;
+    transform: translateY(20px) !important;
+    transition: all 0.3s ease !important;
+}
+
+.article-card:hover .article-read-btn {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+}
+
+.category-badge {
+    font-size: 0.75rem !important;
+    padding: 0.5rem 0.75rem !important;
+    border-radius: 20px !important;
+    font-weight: 600 !important;
+    backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+/* Improved button styling */
+.btn-light {
+    background: rgba(248, 250, 252, 0.95) !important;
+    backdrop-filter: blur(10px) !important;
+    border: 1px solid rgba(226, 232, 240, 0.6) !important;
+    color: #667eea !important;
+    font-weight: 500 !important;
+}
+
+.btn-light:hover {
+    background: rgba(255, 255, 255, 1) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.25) !important;
+    color: #667eea !important;
+}
+
+.btn-outline-light:hover {
+    background: rgba(255, 255, 255, 0.2) !important;
+    backdrop-filter: blur(10px) !important;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- Modern Hero Section -->
+<section class="hero-section bg-gradient-primary text-white py-5 mb-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <div class="hero-content animate__animated animate__fadeInLeft">
+                    <h1 class="display-4 fw-bold mb-3">
+                        <i class="fas fa-blog me-3"></i>{% trans "Welcome to Isitech Blog" %}
+                    </h1>
+                    {% if user.is_authenticated %}
+                        <p class="lead mb-4">{% blocktrans with username=user.username %}Hello, {{ username }}! Ready to share your thoughts with the world?{% endblocktrans %}</p>
+                        {% if user.profile.is_superadmin %}
+                        <div class="hero-actions">
+                            <a href="{% url 'ajouter_article' %}" class="btn btn-light btn-lg me-3 shadow-sm">
+                                <i class="fas fa-plus me-2"></i>{% trans "Create Article" %}
+                            </a>
+                            <a href="{% url 'ai_article_generator' %}" class="btn btn-light btn-lg me-3 shadow-sm">
+                                <i class="fas fa-robot me-2"></i>{% trans "AI Generator" %}
+                            </a>
+                            <a href="{% url 'dashboard' %}" class="btn btn-outline-light btn-lg shadow-sm">
+                                <i class="fas fa-tachometer-alt me-2"></i>{% trans "Dashboard" %}
+                            </a>
+                        </div>
+                        {% endif %}
+                    {% else %}
+                        <p class="lead mb-4">{% trans "Discover amazing content, insights, and stories from our community of writers." %}</p>
+                        <div class="hero-actions">
+                            <a href="{% url 'login' %}" class="btn btn-light btn-lg me-3 shadow-sm">
+                                <i class="fas fa-sign-in-alt me-2"></i>{% trans "Join the Community" %}
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-lg-4 text-center">
+                <div class="hero-illustration animate__animated animate__fadeInRight">
+                    <i class="fas fa-feather-alt fa-8x opacity-75"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container main-content-wrapper">
+    <!-- Messages de succès -->
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success alert-dismissible fade show modern-alert" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+    
+    <!-- Quick Actions Card for Admins -->
+    {% if user.profile.is_superadmin %}
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm bg-light">
+                <div class="card-body">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <h5 class="card-title mb-2 text-primary">
+                                <i class="fas fa-tools me-2"></i>{% trans "Quick Actions" %}
+                            </h5>
+                            <p class="card-text text-muted mb-3">{% trans "Manage your blog content efficiently" %}</p>
+                        </div>
+                        <div class="action-buttons">
+                            <a href="{% url 'categories' %}" class="btn btn-outline-primary me-2">
+                                <i class="fas fa-folder me-2"></i>{% trans "Categories" %}
+                            </a>
+                            <a href="{% url 'ai_article_generator' %}" class="btn btn-outline-info me-2">
+                                <i class="fas fa-robot me-2"></i>{% trans "AI Generator" %}
+                            </a>
+                            <a href="{% url 'analytics:overview' %}" class="btn btn-outline-success">
+                                <i class="fas fa-chart-line me-2"></i>{% trans "Analytics" %}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Modern Category Filter -->
+    {% if categories %}
+    <div class="category-filter-section mb-5">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-white border-0 pb-0">
+                <h5 class="card-title mb-0">
+                    <i class="fas fa-filter me-2 text-primary"></i>{% trans "Explore by Category" %}
+                </h5>
+            </div>
+            <div class="card-body pt-3">
+                <div class="category-pills">
+                    <a href="{% url 'home' %}" 
+                       class="category-pill {% if not categorie_selectionnee %}active{% endif %}"
+                       data-category="all">
+                        <i class="fas fa-globe me-2"></i>{% trans "All Categories" %}
+                    </a>
+                    {% for categorie in categories %}
+                        <a href="{% url 'home' %}?categorie={{ categorie.id }}" 
+                           class="category-pill {% if categorie_selectionnee == categorie.id|stringformat:'s' %}active{% endif %}"
+                           data-category="{{ categorie.id }}"
+                           style="--category-color: {{ categorie.couleur }};">
+                            <i class="fas fa-tag me-2"></i>{{ categorie.nom }}
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+    <!-- Articles Section Header -->
+    <div class="articles-header mb-4">
+        <div class="d-flex justify-content-between align-items-start">
+            <div class="articles-title">
+                <h2 class="display-6 fw-bold text-dark mb-2">
+                    {% if search_filter.query %}
+                        <i class="fas fa-search me-3 text-primary"></i>
+                        {% blocktrans with query=search_filter.query %}Search Results for "{{ query }}"{% endblocktrans %}
+                    {% else %}
+                        <i class="fas fa-newspaper me-3 text-primary"></i>
+                        {% trans "Latest Articles" %}
+                    {% endif %}
+                </h2>
+                <p class="text-muted mb-0">
+                    {% if search_filter.query %}
+                        {% blocktrans count articles_count=articles.paginator.count %}Found {{ articles_count }} article{% plural %}Found {{ articles_count }} articles{% endblocktrans %}
+                    {% else %}
+                        {% blocktrans count articles_count=articles.paginator.count %}{{ articles_count }} article published{% plural %}{{ articles_count }} articles published{% endblocktrans %}
+                    {% endif %}
+                </p>
+            </div>
+            {% if search_filter.query %}
+            <div class="search-actions">
+                <a href="{% url 'search_results' %}?search={{ search_filter.query }}" class="btn btn-outline-primary">
+                    <i class="fas fa-search-plus me-2"></i>{% trans "Advanced Search" %}
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    {% if articles %}
+        <!-- Modern Articles Grid -->
+        <div class="articles-grid">
+            <div class="row g-4">
+                {% for article in articles %}
+                    <div class="col-lg-6 col-xl-4">
+                        <article class="article-card h-100 animate__animated animate__fadeInUp" style="animation-delay: {{ forloop.counter0|mul:0.1 }}s;">
+                            <!-- Image Section with Overlay -->
+                            <div class="article-image-wrapper position-relative overflow-hidden">
+                                {% if article.image %}
+                                    <img src="{{ article.image.url }}" 
+                                         class="article-image w-100" 
+                                         alt="{{ article.titre }}"
+                                         loading="lazy">
+                                {% else %}
+                                    <div class="article-placeholder-image d-flex align-items-center justify-content-center bg-gradient-light">
+                                        <div class="text-center">
+                                            <i class="fas fa-image fa-3x text-muted mb-2"></i>
+                                            <p class="text-muted mb-0 small">{% trans "No image available" %}</p>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                                
+                                <!-- Category Badge Overlay -->
+                                {% if article.categorie %}
+                                <div class="article-category-overlay position-absolute top-0 start-0 m-3">
+                                    <span class="badge category-badge shadow-sm" 
+                                          style="background-color: {{ article.categorie.couleur }};">
+                                        <i class="fas fa-tag me-1"></i>{{ article.categorie.nom }}
+                                    </span>
+                                </div>
+                                {% endif %}
+                                
+                                <!-- Read More Overlay -->
+                                <div class="article-overlay position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center">
+                                    <a href="{% url 'article_detail' article.id %}" 
+                                       class="btn btn-primary btn-lg shadow-lg opacity-0 article-read-btn">
+                                        <i class="fas fa-book-open me-2"></i>{% trans "Read Article" %}
+                                    </a>
+                                </div>
+                            </div>
+                            
+                            <!-- Article Content -->
+                            <div class="article-content p-4 d-flex flex-column h-100">
+                                <!-- Title -->
+                                <h3 class="article-title h5 fw-bold mb-3 text-dark">
+                                    <a href="{% url 'article_detail' article.id %}" class="text-decoration-none text-dark article-title-link">
+                                        {% if search_filter.query and article.highlighted_title %}
+                                            {{ article.highlighted_title|safe }}
+                                        {% else %}
+                                            {{ article.titre }}
+                                        {% endif %}
+                                    </a>
+                                </h3>
+                                
+                                <!-- Article Meta -->
+                                <div class="article-meta mb-3">
+                                    <div class="d-flex align-items-center text-muted small">
+                                        <div class="author-info me-3">
+                                            <i class="fas fa-user-circle me-1"></i>{{ article.auteur }}
+                                        </div>
+                                        <div class="date-info me-3">
+                                            <i class="fas fa-calendar-alt me-1"></i>{{ article.date_creation|humanize_date }}
+                                        </div>
+                                        <div class="comments-info">
+                                            <i class="fas fa-comments me-1"></i>{{ article.comments.count }}
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Article Excerpt -->
+                                <div class="article-excerpt flex-grow-1 mb-3">
+                                    <p class="text-muted mb-0">
+                                        {% if search_filter.query and article.highlighted_excerpt %}
+                                            {{ article.highlighted_excerpt|safe }}
+                                        {% else %}
+                                            {{ article.contenu|truncatewords:20 }}
+                                        {% endif %}
+                                    </p>
+                                </div>
+                                
+                                <!-- Article Actions -->
+                                <div class="article-actions mt-auto">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <a href="{% url 'article_detail' article.id %}" 
+                                           class="btn btn-outline-primary btn-sm">
+                                            <i class="fas fa-arrow-right me-1"></i>{% trans "Continue Reading" %}
+                                        </a>
+                                        
+                                        <div class="article-stats text-muted small">
+                                            {% blocktrans count comment_count=article.comments.count %}{{ comment_count }} comment{% plural %}{{ comment_count }} comments{% endblocktrans %}
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Admin Actions -->
+                                    {% if user.profile.is_superadmin %}
+                                    <div class="admin-actions mt-3 pt-3 border-top">
+                                        <div class="d-flex gap-2">
+                                            <a href="{% url 'modifier_article' article.id %}" 
+                                               class="btn btn-warning btn-sm">
+                                                <i class="fas fa-edit me-1"></i>{% trans "Edit" %}
+                                            </a>
+                                            <a href="{% url 'supprimer_article' article.id %}" 
+                                               class="btn btn-outline-danger btn-sm">
+                                                <i class="fas fa-trash me-1"></i>{% trans "Delete" %}
+                                            </a>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% else %}
+        <!-- Empty State with Modern Design -->
+        <div class="empty-state py-5">
+            <div class="row justify-content-center">
+                <div class="col-lg-6 text-center">
+                    <div class="empty-state-content">
+                        <div class="empty-state-icon mb-4">
+                            <i class="fas fa-newspaper fa-4x text-muted opacity-50"></i>
+                        </div>
+                        <h3 class="h4 fw-bold text-dark mb-3">{% trans "No Articles Yet" %}</h3>
+                        {% if user.profile.is_superadmin %}
+                        <p class="text-muted mb-4 lead">{% trans "Ready to share your thoughts with the world? Create your first article and start building your blog!" %}</p>
+                        <div class="empty-state-actions">
+                            <a href="{% url 'ajouter_article' %}" class="btn btn-primary btn-lg me-3 shadow-sm">
+                                <i class="fas fa-plus me-2"></i>{% trans "Create Your First Article" %}
+                            </a>
+                            <a href="{% url 'ai_article_generator' %}" class="btn btn-primary btn-lg me-3 shadow-sm">
+                                <i class="fas fa-robot me-2"></i>{% trans "AI Generator" %}
+                            </a>
+                            <a href="{% url 'categories' %}" class="btn btn-outline-secondary btn-lg shadow-sm">
+                                <i class="fas fa-folder me-2"></i>{% trans "Set Up Categories" %}
+                            </a>
+                        </div>
+                        {% else %}
+                        <p class="text-muted mb-4 lead">{% trans "We're working on bringing you amazing content. Check back soon for fresh articles and insights!" %}</p>
+                        <div class="empty-state-actions">
+                            <a href="{% url 'login' %}" class="btn btn-outline-primary btn-lg shadow-sm">
+                                <i class="fas fa-bell me-2"></i>{% trans "Get Notified" %}
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock content %}

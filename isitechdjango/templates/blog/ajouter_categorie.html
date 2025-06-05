@@ -1,0 +1,96 @@
+{% extends "blog/base.html" %}
+{% load i18n %}
+{% load widget_tweaks %}
+
+{% block content %}
+<style>
+    body {
+        padding-top: 70px; /* Account for fixed navbar */
+    }
+    .main-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 40px 0;
+        margin-bottom: 30px;
+        border-radius: 15px;
+        text-align: center;
+    }
+    .btn-primary {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border: none;
+        border-radius: 8px;
+        padding: 10px 20px;
+        font-weight: 500;
+    }
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #5a6fd8, #6a4190);
+        transform: translateY(-1px);
+    }
+    .card {
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+</style>
+
+<div class="main-header">
+    <div class="container">
+        <h1 class="mb-3">
+            🗂️ {% if mode == 'modification' %}{% trans "Edit Category" %}{% else %}{% trans "Add New Category" %}{% endif %}
+        </h1>
+    </div>
+</div>
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="mb-0">{% if mode == 'modification' %}{% trans "Edit Category" %} "{{ categorie.nom }}"{% else %}{% trans "Add New Category" %}{% endif %}</h2>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.nom.id_for_label }}" class="form-label">
+                                {% trans "Category Name" %} *
+                            </label>
+                            {{ form.nom|add_class:"form-control" }}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.description.id_for_label }}" class="form-label">
+                                {% trans "Description" %}
+                            </label>
+                            {{ form.description|add_class:"form-control" }}
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="{{ form.couleur.id_for_label }}" class="form-label">
+                                {% trans "Category Color" %}
+                            </label>
+                            {{ form.couleur|add_class:"form-control" }}
+                            <div class="form-text">{% trans "Choose a color to visually identify this category" %}</div>
+                        </div>
+                        
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{% url 'categories' %}" class="btn btn-secondary me-md-2">
+                                ❌ {% trans "Cancel" %}
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                {% if mode == 'modification' %}✏️ {% trans "Edit Category" %}{% else %}➕ {% trans "Create Category" %}{% endif %}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

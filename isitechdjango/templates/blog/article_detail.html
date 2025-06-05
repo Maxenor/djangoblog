@@ -1,0 +1,1394 @@
+{% extends 'blog/base.html' %}
+{% load i18n %}
+{% load widget_tweaks %}
+{% load date_filters %}
+{% load static %}
+
+{% block title %}{{ article.titre }} - {% trans "Mon Blog Django" %}{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section with Article Header -->
+<div class="article-hero-section">
+    <div class="hero-gradient-overlay"></div>
+    {% if article.image %}
+        <div class="hero-image" style="background-image: url('{{ article.image.url }}');"></div>
+    {% else %}
+        <div class="hero-image hero-placeholder">
+            <i data-feather="file-text" class="hero-placeholder-icon"></i>
+        </div>
+    {% endif %}
+    
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="hero-content">
+                    {% if article.categorie %}
+                        <span class="category-badge" style="--category-color: {{ article.categorie.couleur }};">
+                            {{ article.categorie.nom }}
+                        </span>
+                    {% endif %}
+                    <h1 class="hero-title">{{ article.titre }}</h1>
+                    <div class="hero-meta">
+                        <div class="author-info">
+                            <div class="author-avatar">
+                                <i data-feather="user"></i>
+                            </div>
+                            <div class="author-details">
+                                <span class="author-name">{{ article.auteur }}</span>
+                                <span class="publish-date">{{ article.date_creation|humanize_date }}</span>
+                            </div>
+                        </div>
+                        <div class="article-stats">
+                            <span class="stat-item">
+                                <i data-feather="clock"></i>
+                                {{ article.get_reading_time }} {% trans "min read" %}
+                            </span>
+                            <span class="stat-item">
+                                <i data-feather="eye"></i>
+                                {{ article.vues }} {% trans "views" %}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container article-container">
+    <!-- Messages -->
+    {% if messages %}
+        <div class="messages-container">
+            {% for message in messages %}
+                <div class="alert alert-success alert-dismissible fade show modern-alert" role="alert">
+                    <i data-feather="check-circle" class="alert-icon"></i>
+                    <div class="alert-content">{{ message }}</div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="row">
+        <!-- Main Article Content -->
+        <div class="col-lg-8">
+            <article class="article-content">
+                <div class="article-body">
+                    {{ article.contenu|linebreaks }}
+                </div>
+                
+                <!-- Tags Section -->
+                {% if article.tags.all %}
+                <div class="article-tags">
+                    <h6 class="tags-title">{% trans "Tags" %}</h6>
+                    <div class="tags-container">
+                        {% for tag in article.tags.all %}
+                            <span class="article-tag">
+                                <i data-feather="tag"></i>
+                                {{ tag.nom }}
+                            </span>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Interaction Section -->
+                {% if user.is_authenticated %}
+                <div class="article-interactions">
+                    <div class="interaction-buttons">
+                        <button class="interaction-btn like-btn {% if user_liked %}active{% endif %}" data-article-id="{{ article.id }}">
+                            <i data-feather="heart" class="{% if user_liked %}filled{% endif %}"></i>
+                            <span class="btn-text">
+                                <span class="like-count">{{ article.likes_count }}</span>
+                                <span class="like-text">{% if user_liked %}{% trans "Liked" %}{% else %}{% trans "Like" %}{% endif %}</span>
+                            </span>
+                        </button>
+                        
+                        <button class="interaction-btn bookmark-btn {% if user_bookmarked %}active{% endif %}" data-article-id="{{ article.id }}">
+                            <i data-feather="bookmark" class="{% if user_bookmarked %}filled{% endif %}"></i>
+                            <span class="btn-text">{% if user_bookmarked %}{% trans "Saved" %}{% else %}{% trans "Save" %}{% endif %}</span>
+                        </button>
+                        
+                        <button class="interaction-btn share-btn" onclick="shareArticle()">
+                            <i data-feather="share-2"></i>
+                            <span class="btn-text">{% trans "Share" %}</span>
+                        </button>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Admin Actions -->
+                {% if user.profile.is_superadmin %}
+                <div class="admin-actions">
+                    <h6 class="admin-title">
+                        <i data-feather="settings"></i>
+                        {% trans "Admin Actions" %}
+                    </h6>
+                    <div class="admin-buttons">
+                        <a href="{% url 'modifier_article' article.id %}" class="admin-btn edit-btn">
+                            <i data-feather="edit"></i>
+                            {% trans "Edit Article" %}
+                        </a>
+                        <a href="{% url 'supprimer_article' article.id %}" class="admin-btn delete-btn">
+                            <i data-feather="trash-2"></i>
+                            {% trans "Delete Article" %}
+                        </a>
+                    </div>
+                </div>
+                {% endif %}
+            </article>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <div class="article-sidebar">
+                <!-- Comment Form -->
+                <div class="sidebar-widget comment-widget">
+                    <h5 class="widget-title">
+                        <i data-feather="message-circle"></i>
+                        {% trans "Leave a Comment" %}
+                    </h5>
+                    <form method="post" class="comment-form">
+                        {% csrf_token %}
+                        
+                        <div class="form-group">
+                            <label for="{{ comment_form.nom.id_for_label }}" class="form-label">
+                                {% trans "Name" %} *
+                            </label>
+                            {{ comment_form.nom|add_class:"form-control" }}
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="{{ comment_form.email.id_for_label }}" class="form-label">
+                                {% trans "Email" %} *
+                            </label>
+                            {{ comment_form.email|add_class:"form-control" }}
+                            <small class="form-text">{% trans "Your email will not be published" %}</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="{{ comment_form.contenu.id_for_label }}" class="form-label">
+                                {% trans "Comment" %} *
+                            </label>
+                            {{ comment_form.contenu|add_class:"form-control" }}
+                        </div>
+                        
+                        <button type="submit" class="submit-comment">
+                            <i data-feather="send"></i>
+                            {% trans "Publish Comment" %}
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Comments Section -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="comments-section">
+                <h4 class="comments-title">
+                    <i data-feather="message-square"></i>
+                    {% with comments_count=comments|length %}
+                        {% blocktrans count comments_count=comments_count %}Comment ({{ comments_count }}){% plural %}Comments ({{ comments_count }}){% endblocktrans %}
+                    {% endwith %}
+                </h4>
+                
+                {% if comments %}
+                    <div class="comments-list">
+                        {% for comment in comments %}
+                            <div class="comment-item">
+                                <div class="comment-avatar">
+                                    <i data-feather="user"></i>
+                                </div>
+                                <div class="comment-content">
+                                    <div class="comment-header">
+                                        <h6 class="comment-author">{{ comment.nom }}</h6>
+                                        <span class="comment-date">{{ comment.date_creation|date:"d/m/Y à H:i" }}</span>
+                                    </div>
+                                    <p class="comment-text">{{ comment.contenu|linebreaks }}</p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="no-comments">
+                        <i data-feather="message-circle" class="no-comments-icon"></i>
+                        <p>{% trans "No comments yet. Be the first to comment!" %}</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Similar Articles Recommendations -->
+    {% if similar_articles %}
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="recommendations-section">
+                <h4 class="recommendations-title">
+                    <i data-feather="compass"></i>
+                    {% trans "You might also like" %}
+                </h4>
+                <p class="recommendations-subtitle">{% trans "Based on your interests and this article's content" %}</p>
+                
+                <div class="recommendations-grid">
+                    {% for recommended in similar_articles %}
+                    <div class="recommendation-card">
+                        <div class="recommendation-image">
+                            {% if recommended.image %}
+                                <img src="{{ recommended.image.url }}" alt="{{ recommended.titre }}">
+                            {% else %}
+                                <div class="image-placeholder">
+                                    <i data-feather="image"></i>
+                                </div>
+                            {% endif %}
+                            <div class="image-overlay">
+                                <a href="{% url 'article_detail' recommended.id %}" class="read-btn">
+                                    <i data-feather="arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <div class="recommendation-content">
+                            {% if recommended.categorie %}
+                                <span class="rec-category" style="--category-color: {{ recommended.categorie.couleur }};">
+                                    {{ recommended.categorie.nom }}
+                                </span>
+                            {% endif %}
+                            
+                            <h6 class="rec-title">
+                                <a href="{% url 'article_detail' recommended.id %}">
+                                    {{ recommended.titre|truncatechars:60 }}
+                                </a>
+                            </h6>
+                            
+                            <p class="rec-excerpt">
+                                {{ recommended.extrait|default:recommended.contenu|truncatechars:100 }}
+                            </p>
+                            
+                            <div class="rec-meta">
+                                <span class="meta-item">
+                                    <i data-feather="eye"></i>
+                                    {{ recommended.vues }}
+                                </span>
+                                <span class="meta-item">
+                                    <i data-feather="heart"></i>
+                                    {{ recommended.likes_count }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                {% if similar_articles|length >= 3 %}
+                <div class="recommendations-footer">
+                    <a href="{% url 'home' %}?categorie={{ article.categorie.id }}" class="more-articles-btn">
+                        <i data-feather="plus"></i>
+                        {% trans "Discover more articles in this category" %}
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Article Detail Styles -->
+<style>
+/* Hero Section */
+.article-hero-section {
+    position: relative;
+    height: 60vh;
+    min-height: 500px;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    margin-bottom: 3rem;
+}
+
+.hero-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.hero-placeholder {
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero-placeholder-icon {
+    width: 80px;
+    height: 80px;
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.hero-gradient-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.3));
+    z-index: 1;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    color: white;
+    text-align: center;
+}
+
+.category-badge {
+    display: inline-block;
+    background: var(--category-color, var(--accent-color));
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.hero-title {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    line-height: 1.2;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.hero-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.author-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.author-avatar {
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+}
+
+.author-avatar i {
+    width: 24px;
+    height: 24px;
+    color: white;
+}
+
+.author-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.author-name {
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.publish-date {
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+.article-stats {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.stat-item i {
+    width: 18px;
+    height: 18px;
+}
+
+/* Article Content */
+.article-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.article-content {
+    background: rgba(251, 252, 254, 0.95);
+    border-radius: 16px;
+    padding: 2.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    margin-bottom: 2rem;
+    border: 1px solid rgba(226, 232, 240, 0.6);
+}
+
+.article-body {
+    font-size: 1.15rem;
+    line-height: 1.9;
+    color: #2d3748;
+    margin-bottom: 2rem;
+    letter-spacing: 0.01em;
+    font-weight: 400;
+}
+
+.article-body p {
+    margin-bottom: 1.5rem;
+}
+
+.article-body h1, .article-body h2, .article-body h3, .article-body h4, .article-body h5, .article-body h6 {
+    color: #1a202c;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+/* Tags */
+.article-tags {
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.tags-title {
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--text-color);
+}
+
+.tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.article-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--surface-color);
+    color: var(--primary-color);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.article-tag:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: translateY(-2px);
+}
+
+.article-tag i {
+    width: 14px;
+    height: 14px;
+}
+
+/* Interactions */
+.article-interactions {
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.interaction-buttons {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.interaction-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--surface-color);
+    border: 2px solid transparent;
+    color: var(--text-secondary);
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.interaction-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.interaction-btn.like-btn:hover,
+.interaction-btn.like-btn.active {
+    background: #ff6b6b;
+    color: white;
+    border-color: #ff6b6b;
+}
+
+.interaction-btn.bookmark-btn:hover,
+.interaction-btn.bookmark-btn.active {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.interaction-btn.share-btn:hover {
+    background: var(--accent-color);
+    color: white;
+    border-color: var(--accent-color);
+}
+
+.interaction-btn i {
+    width: 18px;
+    height: 18px;
+}
+
+.interaction-btn.active i.filled {
+    fill: currentColor;
+}
+
+/* Admin Actions */
+.admin-actions {
+    margin-bottom: 2rem;
+}
+
+.admin-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: var(--text-color);
+}
+
+.admin-title i {
+    width: 20px;
+    height: 20px;
+    color: var(--primary-color);
+}
+
+.admin-buttons {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.admin-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.admin-btn i {
+    width: 16px;
+    height: 16px;
+}
+
+.edit-btn {
+    background: #ffc107;
+    color: #212529;
+}
+
+.edit-btn:hover {
+    background: #e0a800;
+    color: #212529;
+    transform: translateY(-2px);
+}
+
+.delete-btn {
+    background: #dc3545;
+    color: white;
+}
+
+.delete-btn:hover {
+    background: #c82333;
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Sidebar */
+.article-sidebar {
+    position: sticky;
+    top: 2rem;
+}
+
+.sidebar-widget {
+    background: rgba(251, 252, 254, 0.95);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    margin-bottom: 2rem;
+    border: 1px solid rgba(226, 232, 240, 0.6);
+}
+
+.widget-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: var(--text-color);
+}
+
+.widget-title i {
+    width: 20px;
+    height: 20px;
+    color: var(--primary-color);
+}
+
+/* Comment Form */
+.comment-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.comment-form .form-label {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+}
+
+.comment-form .form-control {
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.comment-form .form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+.comment-form .form-text {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-top: 0.5rem;
+}
+
+.submit-comment {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+    background: var(--primary-color) !important;
+    color: white !important;
+    border: none !important;
+    padding: 0.75rem 2rem !important;
+    border-radius: 25px !important;
+    font-weight: 500 !important;
+    transition: all 0.3s ease !important;
+    cursor: pointer !important;
+    width: 100% !important;
+    justify-content: center !important;
+    text-decoration: none !important;
+}
+
+.submit-comment:hover {
+    background: var(--primary-dark) !important;
+    color: white !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3) !important;
+    text-decoration: none !important;
+}
+
+.submit-comment i {
+    width: 16px;
+    height: 16px;
+}
+
+/* Comments Section */
+.comments-section {
+    background: rgba(251, 252, 254, 0.95);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    border: 1px solid rgba(226, 232, 240, 0.6);
+    margin-top: 2rem;
+}
+
+/* Override comment visibility issue from modern-ui.css */
+.comments-section .comment-item {
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+}
+
+.comments-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    color: var(--text-color, #212529);
+    font-size: 1.5rem;
+}
+
+.comments-title i,
+.comments-title svg {
+    width: 24px;
+    height: 24px;
+    color: var(--primary-color, #6366f1);
+}
+
+.comments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.comment-item {
+    display: flex;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: white;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(226, 232, 240, 0.6);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.comment-item:hover {
+    background: rgba(247, 250, 252, 0.9);
+    transform: translateX(5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.comment-avatar {
+    width: 50px;
+    height: 50px;
+    background: var(--primary-color, #6366f1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.comment-avatar i,
+.comment-avatar svg {
+    width: 24px;
+    height: 24px;
+    color: white;
+}
+
+.comment-content {
+    flex: 1;
+}
+
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.comment-author {
+    font-weight: 600;
+    color: var(--text-color, #212529);
+    margin: 0;
+    font-size: 1rem;
+}
+
+.comment-date {
+    font-size: 0.875rem;
+    color: var(--text-secondary, #6c757d);
+}
+
+.comment-text {
+    color: var(--text-color, #212529);
+    line-height: 1.6;
+    margin: 0;
+    font-size: 0.95rem;
+}
+
+.comment-text p {
+    margin: 0;
+    margin-bottom: 0.5rem;
+}
+
+.comment-text p:last-child {
+    margin-bottom: 0;
+}
+
+.no-comments {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: var(--text-secondary, #6c757d);
+}
+
+.no-comments-icon {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+/* Recommendations */
+.recommendations-section {
+    background: rgba(251, 252, 254, 0.95);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    border: 1px solid rgba(226, 232, 240, 0.6);
+}
+
+.recommendations-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+}
+
+.recommendations-title i {
+    width: 24px;
+    height: 24px;
+    color: var(--primary-color);
+}
+
+.recommendations-subtitle {
+    color: var(--text-secondary);
+    margin-bottom: 2rem;
+}
+
+.recommendations-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.recommendation-card {
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(226, 232, 240, 0.6);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.recommendation-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    border-color: var(--primary-color);
+}
+
+.recommendation-image {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+}
+
+.recommendation-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.recommendation-card:hover .recommendation-image img {
+    transform: scale(1.05);
+}
+
+.image-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.image-placeholder i {
+    width: 48px;
+    height: 48px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.recommendation-card:hover .image-overlay {
+    opacity: 1;
+}
+
+.read-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    background: white;
+    border-radius: 50%;
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.read-btn:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: scale(1.1);
+}
+
+.read-btn i {
+    width: 20px;
+    height: 20px;
+}
+
+.recommendation-content {
+    padding: 1.5rem;
+}
+
+.rec-category {
+    display: inline-block;
+    background: var(--category-color, var(--accent-color));
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.rec-title {
+    margin-bottom: 1rem;
+}
+
+.rec-title a {
+    color: var(--text-color);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.rec-title a:hover {
+    color: var(--primary-color);
+}
+
+.rec-excerpt {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+}
+
+.rec-meta {
+    display: flex;
+    gap: 1rem;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.meta-item i {
+    width: 14px;
+    height: 14px;
+}
+
+.recommendations-footer {
+    text-align: center;
+    padding-top: 2rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.more-articles-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--primary-color);
+    color: white;
+    padding: 0.75rem 2rem;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.more-articles-btn:hover {
+    background: var(--primary-dark);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+}
+
+.more-articles-btn i {
+    width: 16px;
+    height: 16px;
+}
+
+/* Messages */
+.messages-container {
+    margin-bottom: 2rem;
+}
+
+.modern-alert {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border: none;
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    border-left: 4px solid #28a745;
+    animation: slideInDown 0.5s ease;
+}
+
+.alert-icon {
+    width: 20px;
+    height: 20px;
+    color: #28a745;
+}
+
+.alert-content {
+    flex: 1;
+}
+
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    .hero-meta {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .article-content {
+        padding: 1.5rem;
+    }
+    
+    .interaction-buttons {
+        justify-content: center;
+    }
+    
+    .admin-buttons {
+        justify-content: center;
+    }
+    
+    .recommendations-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 576px) {
+    .article-hero-section {
+        height: 50vh;
+        min-height: 400px;
+    }
+    
+    .hero-title {
+        font-size: 1.75rem;
+    }
+    
+    .article-content {
+        padding: 1rem;
+    }
+    
+    .sidebar-widget {
+        padding: 1.5rem;
+    }
+    
+    .comments-section {
+        padding: 1.5rem;
+    }
+    
+    .recommendations-section {
+        padding: 1.5rem;
+    }
+}
+</style>
+
+<!-- Modern JavaScript for Article Interactions -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize Feather icons
+    if (typeof feather !== 'undefined') {
+        feather.replace();
+    }
+    
+    // Get current language prefix for API calls
+    const currentPath = window.location.pathname;
+    const langPrefix = currentPath.startsWith('/en/') ? '/en' : (currentPath.startsWith('/fr/') ? '/fr' : '');
+    
+    // Enhanced Like functionality
+    const likeBtn = document.querySelector('.like-btn');
+    if (likeBtn) {
+        const articleId = likeBtn.dataset.articleId;
+        
+        likeBtn.addEventListener('click', function() {
+            // Add loading state
+            const originalContent = likeBtn.innerHTML;
+            likeBtn.style.pointerEvents = 'none';
+            
+            fetch(`${langPrefix}/article/${articleId}/like/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    const likeCount = likeBtn.querySelector('.like-count');
+                    const likeText = likeBtn.querySelector('.like-text');
+                    const heartIcon = likeBtn.querySelector('i');
+                    
+                    // Update count
+                    likeCount.textContent = data.likes_count;
+                    
+                    // Toggle states with smooth transitions
+                    if (data.liked) {
+                        likeBtn.classList.add('active');
+                        heartIcon.classList.add('filled');
+                        likeText.textContent = '{% trans "Liked" %}';
+                        
+                        // Add heart animation
+                        likeBtn.style.transform = 'scale(1.1)';
+                        setTimeout(() => {
+                            likeBtn.style.transform = '';
+                        }, 200);
+                    } else {
+                        likeBtn.classList.remove('active');
+                        heartIcon.classList.remove('filled');
+                        likeText.textContent = '{% trans "Like" %}';
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Restore original state on error
+                likeBtn.innerHTML = originalContent;
+            })
+            .finally(() => {
+                likeBtn.style.pointerEvents = '';
+                feather.replace();
+            });
+        });
+    }
+    
+    // Enhanced Bookmark functionality
+    const bookmarkBtn = document.querySelector('.bookmark-btn');
+    if (bookmarkBtn) {
+        const articleId = bookmarkBtn.dataset.articleId;
+        
+        bookmarkBtn.addEventListener('click', function() {
+            const originalContent = bookmarkBtn.innerHTML;
+            bookmarkBtn.style.pointerEvents = 'none';
+            
+            fetch(`${langPrefix}/article/${articleId}/bookmark/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value,
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    const bookmarkIcon = bookmarkBtn.querySelector('i');
+                    const btnText = bookmarkBtn.querySelector('.btn-text');
+                    
+                    // Toggle states
+                    if (data.bookmarked) {
+                        bookmarkBtn.classList.add('active');
+                        bookmarkIcon.classList.add('filled');
+                        btnText.textContent = '{% trans "Saved" %}';
+                        
+                        // Add bookmark animation
+                        bookmarkBtn.style.transform = 'scale(1.05)';
+                        setTimeout(() => {
+                            bookmarkBtn.style.transform = '';
+                        }, 200);
+                    } else {
+                        bookmarkBtn.classList.remove('active');
+                        bookmarkIcon.classList.remove('filled');
+                        btnText.textContent = '{% trans "Save" %}';
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                bookmarkBtn.innerHTML = originalContent;
+            })
+            .finally(() => {
+                bookmarkBtn.style.pointerEvents = '';
+                feather.replace();
+            });
+        });
+    }
+    
+    // Smooth scroll for internal links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+    
+    // Loading animations for recommendation cards
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, index) => {
+            if (entry.isIntersecting) {
+                setTimeout(() => {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }, index * 100);
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+    
+    // Observe recommendation cards for staggered animation
+    document.querySelectorAll('.recommendation-card').forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(card);
+    });
+    
+    // Observe comment items for staggered animation
+    document.querySelectorAll('.comment-item').forEach((comment, index) => {
+        setTimeout(() => {
+            comment.style.opacity = '1';
+            comment.style.transform = 'translateY(0)';
+        }, index * 100);
+    });
+});
+
+// Share functionality
+function shareArticle() {
+    const url = window.location.href;
+    const title = document.querySelector('.hero-title').textContent;
+    
+    // Check if native sharing is available
+    if (navigator.share) {
+        navigator.share({
+            title: title,
+            url: url
+        }).catch(console.error);
+    } else {
+        // Fallback: copy to clipboard
+        navigator.clipboard.writeText(url).then(() => {
+            // Show a temporary notification
+            const notification = document.createElement('div');
+            notification.textContent = '{% trans "Link copied to clipboard!" %}';
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: var(--primary-color);
+                color: white;
+                padding: 1rem 2rem;
+                border-radius: 8px;
+                z-index: 1000;
+                animation: slideInRight 0.3s ease;
+            `;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOutRight 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 2000);
+        }).catch(() => {
+            // Ultimate fallback: show share URL in prompt
+            prompt('{% trans "Copy this link to share:" %}', url);
+        });
+    }
+}
+
+// Add slide animations for notifications
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes slideInRight {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+    @keyframes slideOutRight {
+        from { transform: translateX(0); opacity: 1; }
+        to { transform: translateX(100%); opacity: 0; }
+    }
+`;
+document.head.appendChild(style);
+</script>
+
+<!-- Analytics Tracking -->
+<script src="{% static 'js/analytics.js' %}"></script>
+{% endblock %}

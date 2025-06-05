@@ -1,0 +1,2153 @@
+# SPANISH TRANSLATION FILE
+# Spanish translations for Django Blog
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-06-05 12:47+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: SPANISH <LL@li.org>\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? "
+"1 : 2;\n"
+
+#: analytics/templates/analytics/article_analytics.html:5
+#: analytics/templates/analytics/article_analytics.html:51
+msgid "Article Analytics"
+msgstr "Analíticas de artículos"
+
+#: analytics/templates/analytics/article_analytics.html:5
+#: analytics/templates/analytics/overview.html:5
+#: analytics/templates/analytics/user_analytics.html:5
+#: isitechdjango/templates/blog/analytics_dashboard.html:6
+#: isitechdjango/templates/blog/article_detail.html:7
+#: isitechdjango/templates/blog/categories.html:4
+#: isitechdjango/templates/blog/dashboard.html:5
+#: isitechdjango/templates/blog/search_results.html:4
+msgid "Mon Blog Django"
+msgstr "Mi Blog Django"
+
+#: analytics/templates/analytics/article_analytics.html:53
+msgid "Detailed performance metrics for your articles"
+msgstr "Métricas detalladas de rendimiento para sus artículos"
+
+#: analytics/templates/analytics/article_analytics.html:62
+#: analytics/templates/analytics/overview.html:63
+#: analytics/templates/analytics/user_analytics.html:73
+msgid "Overview"
+msgstr "Resumen"
+
+#: analytics/templates/analytics/article_analytics.html:67
+#: analytics/templates/analytics/overview.html:68
+#: analytics/templates/analytics/user_analytics.html:78
+#: isitechdjango/templates/blog/analytics_dashboard.html:168
+#: isitechdjango/templates/blog/analytics_dashboard.html:205
+#: isitechdjango/templates/blog/user_profile.html:87
+msgid "Articles"
+msgstr "Artículos"
+
+#: analytics/templates/analytics/article_analytics.html:72
+#: analytics/templates/analytics/overview.html:73
+#: analytics/templates/analytics/user_analytics.html:83
+msgid "Users"
+msgstr "Usuarios"
+
+#: analytics/templates/analytics/article_analytics.html:83
+#: isitechdjango/templates/blog/analytics_dashboard.html:121
+msgid "Top Performing Articles"
+msgstr "Artículos de mejor rendimiento"
+
+#: analytics/templates/analytics/article_analytics.html:89
+#: isitechdjango/templates/blog/analytics_dashboard.html:127
+#: isitechdjango/templates/blog/categories.html:101
+#: isitechdjango/templates/blog/comment_moderation.html:98
+#, fuzzy
+#| msgid "Article"
+msgid "Article"
+msgid_plural "Articles"
+msgstr[0] "Artículo"
+msgstr[1] "Artículo"
+msgstr[2] "Artículo"
+
+#: analytics/templates/analytics/article_analytics.html:90
+#: isitechdjango/templates/blog/analytics_dashboard.html:72
+#: isitechdjango/templates/blog/analytics_dashboard.html:169
+#: isitechdjango/templates/blog/analytics_dashboard.html:206
+#: isitechdjango/templates/blog/categories.html:152
+#: isitechdjango/templates/blog/dashboard.html:87
+msgid "Total Views"
+msgstr "Total de visualizaciones"
+
+#: analytics/templates/analytics/article_analytics.html:91
+#: analytics/templates/analytics/overview.html:108
+msgid "Unique Visitors"
+msgstr "Visitantes únicos"
+
+#: analytics/templates/analytics/article_analytics.html:92
+msgid "Avg Reading Time"
+msgstr "Tiempo de lectura promedio"
+
+#: analytics/templates/analytics/article_analytics.html:93
+#: isitechdjango/templates/blog/analytics_dashboard.html:86
+msgid "Comments"
+msgstr "Comentarios"
+
+#: analytics/templates/analytics/article_analytics.html:94
+#: isitechdjango/templates/blog/analytics_dashboard.html:129
+#: isitechdjango/templates/blog/user_profile.html:105
+msgid "Likes"
+msgstr "Me gusta"
+
+#: analytics/templates/analytics/article_analytics.html:95
+msgid "Engagement Score"
+msgstr "Puntuación de compromiso"
+
+#: analytics/templates/analytics/article_analytics.html:107
+#: isitechdjango/templates/blog/analytics_dashboard.html:274
+msgid "by"
+msgstr "por"
+
+#: analytics/templates/analytics/article_analytics.html:144
+msgid "No article analytics data available yet"
+msgstr "Aún no hay datos de análisis de artículos disponibles"
+
+#: analytics/templates/analytics/article_analytics.html:161
+msgid "Reading Time Distribution"
+msgstr "Distribución del tiempo de lectura"
+
+#: analytics/templates/analytics/article_analytics.html:172
+msgid "Views Timeline"
+msgstr "Cronología de visualizaciones"
+
+#: analytics/templates/analytics/article_analytics.html:185
+msgid "This Week's Top Articles"
+msgstr "Artículos principales de esta semana"
+
+#: analytics/templates/analytics/article_analytics.html:206
+msgid "Number of Reads"
+msgstr "Número de lecturas"
+
+#: analytics/templates/analytics/article_analytics.html:233
+msgid "Daily Views"
+msgstr "Visualizaciones diarias"
+
+#: analytics/templates/analytics/article_analytics.html:262
+msgid "Views This Week"
+msgstr "Visualizaciones esta semana"
+
+#: analytics/templates/analytics/overview.html:5
+#: analytics/templates/analytics/overview.html:52
+msgid "Analytics Overview"
+msgstr "Resumen de analíticas"
+
+#: analytics/templates/analytics/overview.html:54
+msgid "Comprehensive website traffic and engagement analytics"
+msgstr "Análisis completo de tráfico web y compromiso"
+
+#: analytics/templates/analytics/overview.html:79
+msgid "Export"
+msgstr "Exportar"
+
+#: analytics/templates/analytics/overview.html:82
+#: analytics/templates/analytics/overview.html:257
+#: analytics/templates/analytics/user_analytics.html:126
+msgid "Page Views"
+msgstr "Visualizaciones de página"
+
+#: analytics/templates/analytics/overview.html:83
+#: analytics/templates/analytics/overview.html:101
+msgid "Article Views"
+msgstr "Visualizaciones de artículos"
+
+#: analytics/templates/analytics/overview.html:94
+msgid "Total Page Views"
+msgstr "Total de visualizaciones de página"
+
+#: analytics/templates/analytics/overview.html:95
+msgid "this week"
+msgstr "esta semana"
+
+#: analytics/templates/analytics/overview.html:102
+msgid "avg reading time"
+msgstr "tiempo de lectura promedio"
+
+#: analytics/templates/analytics/overview.html:109
+#: analytics/templates/analytics/overview.html:116
+msgid "This month"
+msgstr "Este mes"
+
+#: analytics/templates/analytics/overview.html:115
+msgid "New Users"
+msgstr "Nuevos usuarios"
+
+#: analytics/templates/analytics/overview.html:128
+msgid "Most Popular Pages"
+msgstr "Páginas más populares"
+
+#: analytics/templates/analytics/overview.html:134
+msgid "Page"
+msgstr "Página"
+
+#: analytics/templates/analytics/overview.html:135
+#: isitechdjango/templates/blog/analytics_dashboard.html:128
+#: isitechdjango/templates/blog/categories.html:107
+msgid "Views"
+msgstr "Visualizaciones"
+
+#: analytics/templates/analytics/overview.html:136
+msgid "Percentage"
+msgstr "Porcentaje"
+
+#: analytics/templates/analytics/overview.html:167
+msgid "Top Traffic Sources"
+msgstr "Principales fuentes de tráfico"
+
+#: analytics/templates/analytics/overview.html:173
+msgid "Source"
+msgstr "Fuente"
+
+#: analytics/templates/analytics/overview.html:174
+msgid "Visits"
+msgstr "Visitas"
+
+#: analytics/templates/analytics/overview.html:190
+msgid "No referrer data available"
+msgstr "No hay datos de referencia disponibles"
+
+#: analytics/templates/analytics/overview.html:207
+msgid "Browser Usage Statistics"
+msgstr "Estadísticas de uso del navegador"
+
+#: analytics/templates/analytics/overview.html:215
+msgid "Browser"
+msgstr "Navegador"
+
+#: analytics/templates/analytics/overview.html:235
+msgid "Page Views Today"
+msgstr "Visualizaciones de página hoy"
+
+#: analytics/templates/analytics/user_analytics.html:5
+#: analytics/templates/analytics/user_analytics.html:62
+msgid "User Analytics"
+msgstr "Analíticas de usuarios"
+
+#: analytics/templates/analytics/user_analytics.html:64
+msgid "User behavior and engagement insights"
+msgstr "Información sobre comportamiento y compromiso del usuario"
+
+#: analytics/templates/analytics/user_analytics.html:93
+msgid "Daily Active Users"
+msgstr "Usuarios activos diarios"
+
+#: analytics/templates/analytics/user_analytics.html:94
+msgid "Last 24 hours"
+msgstr "Últimas 24 horas"
+
+#: analytics/templates/analytics/user_analytics.html:100
+msgid "Weekly Active Users"
+msgstr "Usuarios activos semanales"
+
+#: analytics/templates/analytics/user_analytics.html:101
+msgid "Last 7 days"
+msgstr "Últimos 7 días"
+
+#: analytics/templates/analytics/user_analytics.html:107
+msgid "Monthly Active Users"
+msgstr "Usuarios activos mensuales"
+
+#: analytics/templates/analytics/user_analytics.html:108
+msgid "Last 30 days"
+msgstr "Últimos 30 días"
+
+#: analytics/templates/analytics/user_analytics.html:119
+msgid "Most Active Users"
+msgstr "Usuarios más activos"
+
+#: analytics/templates/analytics/user_analytics.html:125
+msgid "User"
+msgstr "Usuario"
+
+#: analytics/templates/analytics/user_analytics.html:127
+msgid "Activity Level"
+msgstr "Nivel de actividad"
+
+#: analytics/templates/analytics/user_analytics.html:158
+msgid "Very High"
+msgstr "Muy alto"
+
+#: analytics/templates/analytics/user_analytics.html:160
+msgid "High"
+msgstr "Alto"
+
+#: analytics/templates/analytics/user_analytics.html:162
+msgid "Medium"
+msgstr "Medio"
+
+#: analytics/templates/analytics/user_analytics.html:164
+msgid "Low"
+msgstr "Bajo"
+
+#: analytics/templates/analytics/user_analytics.html:172
+msgid "No user activity data available"
+msgstr "No hay datos de actividad de usuario disponibles"
+
+#: analytics/templates/analytics/user_analytics.html:187
+msgid "Session Statistics"
+msgstr "Estadísticas de sesión"
+
+#: analytics/templates/analytics/user_analytics.html:193
+msgid "Session"
+msgstr "Sesión"
+
+#: analytics/templates/analytics/user_analytics.html:198
+msgid "pages"
+msgstr "páginas"
+
+#: analytics/templates/analytics/user_analytics.html:206
+msgid "No session data available"
+msgstr "No hay datos de sesión disponibles"
+
+#: analytics/templates/analytics/user_analytics.html:219
+msgid "User Registration Trends"
+msgstr "Tendencias de registro de usuarios"
+
+#: analytics/templates/analytics/user_analytics.html:232
+msgid "User Engagement Overview"
+msgstr "Resumen de compromiso del usuario"
+
+#: analytics/templates/analytics/user_analytics.html:238
+msgid "Active Today"
+msgstr "Activos hoy"
+
+#: analytics/templates/analytics/user_analytics.html:244
+msgid "Active This Week"
+msgstr "Activos esta semana"
+
+#: analytics/templates/analytics/user_analytics.html:250
+msgid "Active This Month"
+msgstr "Activos este mes"
+
+#: analytics/templates/analytics/user_analytics.html:262
+msgid "Weekly Retention"
+msgstr "Retención semanal"
+
+#: analytics/templates/analytics/user_analytics.html:284
+msgid "New Registrations"
+msgstr "Nuevos registros"
+
+#: analytics/templates/analytics/user_analytics.html:310
+msgid "No registration trend data available"
+msgstr "No hay datos de tendencia de registro disponibles"
+
+#: isitechdjango/forms.py:12
+msgid "Category name"
+msgstr "Nombre de categoría"
+
+#: isitechdjango/forms.py:13
+msgid "Category description"
+msgstr "Descripción de categoría"
+
+#: isitechdjango/forms.py:22
+msgid "Article title"
+msgstr "Título del artículo"
+
+#: isitechdjango/forms.py:23
+msgid "Article content"
+msgstr "Contenido del artículo"
+
+#: isitechdjango/forms.py:34
+msgid "Your Name"
+msgstr "Su nombre"
+
+#: isitechdjango/forms.py:35
+msgid "Your Email"
+msgstr "Su correo electrónico"
+
+#: isitechdjango/forms.py:36
+msgid "Your comment"
+msgstr "Su comentario"
+
+#: isitechdjango/forms.py:54
+msgid "Choose a username"
+msgstr "Elija un nombre de usuario"
+
+#: isitechdjango/forms.py:55
+msgid "Enter your email address"
+msgstr "Ingrese su dirección de correo electrónico"
+
+#: isitechdjango/forms.py:56
+msgid "Create a password"
+msgstr "Cree una contraseña"
+
+#: isitechdjango/forms.py:57
+msgid "Confirm your password"
+msgstr "Confirme su contraseña"
+
+#: isitechdjango/forms.py:73
+msgid "Enter your username"
+msgstr "Ingrese su nombre de usuario"
+
+#: isitechdjango/forms.py:74
+msgid "Enter your password"
+msgstr "Ingrese su contraseña"
+
+#: isitechdjango/forms.py:79
+msgid "Relevance"
+msgstr "Relevancia"
+
+#: isitechdjango/forms.py:80
+msgid "Most Recent"
+msgstr "Más reciente"
+
+#: isitechdjango/forms.py:81
+msgid "Most Popular"
+msgstr "Más popular"
+
+#: isitechdjango/forms.py:82
+msgid "Alphabetical"
+msgstr "Alfabético"
+
+#: isitechdjango/forms.py:90
+msgid "Search articles, titles, content..."
+msgstr "Buscar artículos, títulos, contenido..."
+
+#: isitechdjango/forms.py:99 isitechdjango/templates/blog/home.html:357
+msgid "All Categories"
+msgstr "Todas las categorías"
+
+#: isitechdjango/forms.py:109
+msgid "All Authors"
+msgstr "Todos los autores"
+
+#: isitechdjango/templates/blog/ai_article_generator.html:5
+#: isitechdjango/templates/blog/ai_article_generator.html:111
+msgid "AI Article Generator"
+msgstr "Generador de Artículos IA"
+
+#: isitechdjango/templates/blog/ai_article_generator.html:5
+#: isitechdjango/templates/blog/base.html:11
+#: isitechdjango/templates/blog/base.html:35
+#: isitechdjango/templates/blog/base.html:39
+msgid "Isitech Blog"
+msgstr "Blog Isitech"
+
+#: isitechdjango/templates/blog/ai_article_generator.html:114
+msgid ""
+"Generate high-quality articles using advanced AI technology. Simply enter a "
+"topic and let our AI create engaging content for your blog."
+msgstr ""
+"Genere artículos de alta calidad utilizando tecnología de IA avanzada. "
+"Simplemente ingrese un tema y deje que nuestra IA cree contenido atractivo "
+"para su blog."
+
+#: isitechdjango/templates/blog/ai_article_generator.html:128
+msgid "Generate New Article"
+msgstr "Generar Nuevo Artículo"
+
+#: isitechdjango/templates/blog/ai_article_generator.html:136
+msgid "Article Topic"
+msgstr "Tema del Artículo"
+
+#: isitechdjango/templates/blog/ai_article_generator.html:139
+msgid ""
+"Enter the topic for your article (e.g., Artificial Intelligence, Climate "
+"Change, Web Development...)"
+msgstr ""
+"Ingrese el tema para su artículo (ej: Inteligencia Artificial, Cambio "
+"Climático, Desarrollo Web...)"
+
+#: isitechdjango/templates/blog/ai_article_generator.html:142
+msgid ""
+"Be specific about your topic to get better results. The AI will create a "
+"complete article with title, introduction, content, and conclusion."
+msgstr ""
+"Sea específico sobre su tema para obtener mejores resultados. La IA creará "
+"un artículo completo con título, introducción, contenido y conclusión."
+
+#: isitechdjango/templates/blog/ai_article_generator.html:148
+msgid "Generate Article"
+msgstr "Generar Artículo"
+
+#: isitechdjango/templates/blog/ai_article_generator.html:156
+msgid "Generating your article..."
+msgstr "Generando su artículo..."
+
+#: isitechdjango/templates/blog/ai_article_generator.html:157
+msgid "This may take a few moments"
+msgstr "Esto puede tomar unos momentos"
+
+#: isitechdjango/templates/blog/ai_article_generator.html:167
+msgid "Generated Article"
+msgstr "Artículo Generado"
+
+#: isitechdjango/templates/blog/ai_article_generator.html:178
+msgid "Excerpt:"
+msgstr "Extracto:"
+
+#: isitechdjango/templates/blog/ai_article_generator.html:191
+#: isitechdjango/templates/blog/ai_article_generator.html:230
+msgid "Publish Article"
+msgstr "Publicar Artículo"
+
+#: isitechdjango/templates/blog/ai_article_generator.html:200
+msgid "Title"
+msgstr "Título"
+
+#: isitechdjango/templates/blog/ai_article_generator.html:207
+#: isitechdjango/templates/blog/ajouter_article.html:76
+#: isitechdjango/templates/blog/analytics_dashboard.html:167
+#: isitechdjango/templates/blog/search_results.html:83
+#: isitechdjango/templates/blog/search_results.html:176
+msgid "Category"
+msgstr "Categoría"
+
+#: isitechdjango/templates/blog/ai_article_generator.html:209
+msgid "Select a category"
+msgstr "Seleccionar una categoría"
+
+#: isitechdjango/templates/blog/ai_article_generator.html:219
+msgid "Excerpt"
+msgstr "Extracto"
+
+#: isitechdjango/templates/blog/ai_article_generator.html:224
+msgid "Content"
+msgstr "Contenido"
+
+#: isitechdjango/templates/blog/ai_article_generator.html:233
+msgid "Generate New"
+msgstr "Generar Nuevo"
+
+#: isitechdjango/templates/blog/ai_article_generator.html:245
+msgid "How it works"
+msgstr "Cómo funciona"
+
+#: isitechdjango/templates/blog/ai_article_generator.html:251
+msgid "1. Enter Topic"
+msgstr "1. Ingresar Tema"
+
+#: isitechdjango/templates/blog/ai_article_generator.html:252
+msgid "Provide a clear and specific topic for your article"
+msgstr "Proporcione un tema claro y específico para su artículo"
+
+#: isitechdjango/templates/blog/ai_article_generator.html:258
+msgid "2. AI Generation"
+msgstr "2. Generación IA"
+
+#: isitechdjango/templates/blog/ai_article_generator.html:259
+msgid "Our AI creates a complete article with title, content, and excerpt"
+msgstr "Nuestra IA crea un artículo completo con título, contenido y extracto"
+
+#: isitechdjango/templates/blog/ai_article_generator.html:265
+msgid "3. Review & Publish"
+msgstr "3. Revisar y Publicar"
+
+#: isitechdjango/templates/blog/ai_article_generator.html:266
+msgid "Edit if needed and publish directly to your blog"
+msgstr "Edite si es necesario y publique directamente en su blog"
+
+#: isitechdjango/templates/blog/ajouter_article.html:44
+#: isitechdjango/templates/blog/ajouter_article.html:54
+#: isitechdjango/templates/blog/ajouter_article.html:109
+#: isitechdjango/templates/blog/article_detail.html:131
+msgid "Edit Article"
+msgstr "Editar artículo"
+
+#: isitechdjango/templates/blog/ajouter_article.html:44
+#: isitechdjango/templates/blog/ajouter_article.html:54
+msgid "Add New Article"
+msgstr "Agregar nuevo artículo"
+
+#: isitechdjango/templates/blog/ajouter_article.html:62
+msgid "Article Title"
+msgstr "Título del artículo"
+
+#: isitechdjango/templates/blog/ajouter_article.html:69
+#: isitechdjango/templates/blog/analytics_dashboard.html:204
+#: isitechdjango/templates/blog/base.html:120
+#: isitechdjango/templates/blog/search_results.html:92
+#: isitechdjango/templates/blog/search_results.html:186
+msgid "Author"
+msgstr "Autor"
+
+#: isitechdjango/templates/blog/ajouter_article.html:80
+msgid "Create a new category"
+msgstr "Crear una nueva categoría"
+
+#: isitechdjango/templates/blog/ajouter_article.html:86
+msgid "Article Image"
+msgstr "Imagen del artículo"
+
+#: isitechdjango/templates/blog/ajouter_article.html:89
+msgid "Accepted formats: JPG, PNG, GIF"
+msgstr "Formatos aceptados: JPG, PNG, GIF"
+
+#: isitechdjango/templates/blog/ajouter_article.html:92
+msgid "Image Preview:"
+msgstr "Vista previa de imagen:"
+
+#: isitechdjango/templates/blog/ajouter_article.html:93
+msgid "Preview"
+msgstr "Vista previa"
+
+#: isitechdjango/templates/blog/ajouter_article.html:99
+msgid "Article Content"
+msgstr "Contenido del artículo"
+
+#: isitechdjango/templates/blog/ajouter_article.html:106
+#: isitechdjango/templates/blog/ajouter_categorie.html:84
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: isitechdjango/templates/blog/ajouter_article.html:109
+#: isitechdjango/templates/blog/article_detail.html:110
+#: isitechdjango/templates/blog/article_detail.html:1224
+msgid "Save"
+msgstr "Guardar"
+
+#: isitechdjango/templates/blog/ajouter_categorie.html:44
+#: isitechdjango/templates/blog/ajouter_categorie.html:54
+#: isitechdjango/templates/blog/ajouter_categorie.html:87
+#: isitechdjango/templates/blog/categories.html:121
+msgid "Edit Category"
+msgstr "Editar categoría"
+
+#: isitechdjango/templates/blog/ajouter_categorie.html:44
+#: isitechdjango/templates/blog/ajouter_categorie.html:54
+#: isitechdjango/templates/blog/categories.html:24
+msgid "Add New Category"
+msgstr "Agregar nueva categoría"
+
+#: isitechdjango/templates/blog/ajouter_categorie.html:62
+msgid "Category Name"
+msgstr "Nombre de categoría"
+
+#: isitechdjango/templates/blog/ajouter_categorie.html:69
+msgid "Description"
+msgstr "Descripción"
+
+#: isitechdjango/templates/blog/ajouter_categorie.html:76
+msgid "Category Color"
+msgstr "Color de categoría"
+
+#: isitechdjango/templates/blog/ajouter_categorie.html:79
+msgid "Choose a color to visually identify this category"
+msgstr "Elija un color para identificar visualmente esta categoría"
+
+#: isitechdjango/templates/blog/ajouter_categorie.html:87
+msgid "Create Category"
+msgstr "Crear categoría"
+
+#: isitechdjango/templates/blog/analytics_dashboard.html:6
+#: isitechdjango/templates/blog/analytics_dashboard.html:53
+msgid "Analytics Dashboard"
+msgstr "Panel de analíticas"
+
+#: isitechdjango/templates/blog/analytics_dashboard.html:55
+msgid "Comprehensive insights into your blog performance"
+msgstr "Información completa sobre el rendimiento de su blog"
+
+#: isitechdjango/templates/blog/analytics_dashboard.html:65
+#: isitechdjango/templates/blog/categories.html:148
+msgid "Total Articles"
+msgstr "Total de artículos"
+
+#: isitechdjango/templates/blog/analytics_dashboard.html:66
+msgid "published"
+msgstr "publicados"
+
+#: isitechdjango/templates/blog/analytics_dashboard.html:66
+msgid "drafts"
+msgstr "borradores"
+
+#: isitechdjango/templates/blog/analytics_dashboard.html:73
+msgid "Across all articles"
+msgstr "En todos los artículos"
+
+#: isitechdjango/templates/blog/analytics_dashboard.html:79
+#: isitechdjango/templates/blog/dashboard.html:104
+msgid "Total Likes"
+msgstr "Total de me gusta"
+
+#: isitechdjango/templates/blog/analytics_dashboard.html:80
+#: isitechdjango/templates/blog/analytics_dashboard.html:87
+msgid "average per article"
+msgstr "promedio por artículo"
+
+#: isitechdjango/templates/blog/analytics_dashboard.html:97
+msgid "Registered Users"
+msgstr "Usuarios registrados"
+
+#: isitechdjango/templates/blog/analytics_dashboard.html:103
+msgid "Bookmarks"
+msgstr "Marcadores"
+
+#: isitechdjango/templates/blog/analytics_dashboard.html:109
+msgid "Articles This Month"
+msgstr "Artículos este mes"
+
+#: isitechdjango/templates/blog/analytics_dashboard.html:161
+msgid "Top Categories"
+msgstr "Categorías principales"
+
+#: isitechdjango/templates/blog/analytics_dashboard.html:198
+msgid "Top Authors"
+msgstr "Autores principales"
+
+#: isitechdjango/templates/blog/analytics_dashboard.html:207
+msgid "Avg Views"
+msgstr "Visualizaciones promedio"
+
+#: isitechdjango/templates/blog/analytics_dashboard.html:234
+msgid "Trending Tags"
+msgstr "Etiquetas en tendencia"
+
+#: isitechdjango/templates/blog/analytics_dashboard.html:242
+msgid "articles"
+msgstr "artículos"
+
+#: isitechdjango/templates/blog/analytics_dashboard.html:258
+msgid "Recent Activity"
+msgstr "Actividad reciente"
+
+#: isitechdjango/templates/blog/analytics_dashboard.html:278
+msgid "View"
+msgstr "Ver"
+
+#: isitechdjango/templates/blog/analytics_dashboard.html:296
+msgid "Monthly Article Trends"
+msgstr "Tendencias mensuales de artículos"
+
+#: isitechdjango/templates/blog/analytics_dashboard.html:302
+msgid "Month"
+msgstr "Mes"
+
+#: isitechdjango/templates/blog/analytics_dashboard.html:303
+msgid "Articles Published"
+msgstr "Artículos publicados"
+
+#: isitechdjango/templates/blog/analytics_dashboard.html:304
+msgid "Trend"
+msgstr "Tendencia"
+
+#: isitechdjango/templates/blog/article_detail.html:45
+#, fuzzy
+#| msgid "1 minute read"
+msgid "min read"
+msgstr "1 minuto de lectura"
+
+#: isitechdjango/templates/blog/article_detail.html:49
+#: isitechdjango/templates/blog/dashboard.html:171
+#, fuzzy
+#| msgid "Views"
+msgid "views"
+msgstr "Visualizaciones"
+
+#: isitechdjango/templates/blog/article_detail.html:84
+#: isitechdjango/templates/blog/search_results.html:130
+msgid "Tags"
+msgstr "Etiquetas"
+
+#: isitechdjango/templates/blog/article_detail.html:104
+#: isitechdjango/templates/blog/article_detail.html:1162
+#, fuzzy
+#| msgid "Likes"
+msgid "Liked"
+msgstr "Me gusta"
+
+#: isitechdjango/templates/blog/article_detail.html:104
+#: isitechdjango/templates/blog/article_detail.html:1172
+#, fuzzy
+#| msgid "Likes"
+msgid "Like"
+msgstr "Me gusta"
+
+#: isitechdjango/templates/blog/article_detail.html:110
+#: isitechdjango/templates/blog/article_detail.html:1214
+#, fuzzy
+#| msgid "Save"
+msgid "Saved"
+msgstr "Guardar"
+
+#: isitechdjango/templates/blog/article_detail.html:115
+msgid "Share"
+msgstr ""
+
+#: isitechdjango/templates/blog/article_detail.html:126
+msgid "Admin Actions"
+msgstr "Acciones de administrador"
+
+#: isitechdjango/templates/blog/article_detail.html:135
+#, fuzzy
+#| msgid "Delete this article"
+msgid "Delete Article"
+msgstr "Eliminar este artículo"
+
+#: isitechdjango/templates/blog/article_detail.html:150
+#, fuzzy
+#| msgid "Add a comment"
+msgid "Leave a Comment"
+msgstr "Agregar un comentario"
+
+#: isitechdjango/templates/blog/article_detail.html:157
+msgid "Name"
+msgstr "Nombre"
+
+#: isitechdjango/templates/blog/article_detail.html:164
+msgid "Email"
+msgstr "Correo electrónico"
+
+#: isitechdjango/templates/blog/article_detail.html:167
+msgid "Your email will not be published"
+msgstr "Su correo electrónico no será publicado"
+
+#: isitechdjango/templates/blog/article_detail.html:172
+msgid "Comment"
+msgstr "Comentario"
+
+#: isitechdjango/templates/blog/article_detail.html:179
+#, fuzzy
+#| msgid "Publish comment"
+msgid "Publish Comment"
+msgstr "Publicar comentario"
+
+#: isitechdjango/templates/blog/article_detail.html:193
+#, fuzzy, python-format
+#| msgid "💬 Comment (%(comments_count)s)"
+#| msgid_plural "💬 Comments (%(comments_count)s)"
+msgid "Comment (%(comments_count)s)"
+msgid_plural "Comments (%(comments_count)s)"
+msgstr[0] "💬 Comentario (%(comments_count)s)"
+msgstr[1] "💬 Comentarios (%(comments_count)s)"
+msgstr[2] "💬 Comentarios (%(comments_count)s)"
+
+#: isitechdjango/templates/blog/article_detail.html:216
+msgid "No comments yet. Be the first to comment!"
+msgstr "Aún no hay comentarios. ¡Sé el primero en comentar!"
+
+#: isitechdjango/templates/blog/article_detail.html:231
+msgid "You might also like"
+msgstr ""
+
+#: isitechdjango/templates/blog/article_detail.html:233
+msgid "Based on your interests and this article's content"
+msgstr "Basado en sus intereses y el contenido de este artículo"
+
+#: isitechdjango/templates/blog/article_detail.html:289
+msgid "Discover more articles in this category"
+msgstr "Descubra más artículos en esta categoría"
+
+#: isitechdjango/templates/blog/article_detail.html:1296
+msgid "Link copied to clipboard!"
+msgstr ""
+
+#: isitechdjango/templates/blog/article_detail.html:1316
+msgid "Copy this link to share:"
+msgstr ""
+
+#: isitechdjango/templates/blog/base.html:8
+msgid "Modern blog platform with advanced analytics and multi-language support"
+msgstr ""
+
+#: isitechdjango/templates/blog/base.html:54
+#: isitechdjango/templates/blog/comment_moderation.html:18
+msgid "Home"
+msgstr "Inicio"
+
+#: isitechdjango/templates/blog/base.html:59
+#: isitechdjango/templates/blog/categories.html:4
+#: isitechdjango/templates/blog/categories.html:17
+#: isitechdjango/templates/blog/home.html:327
+msgid "Categories"
+msgstr "Categorías"
+
+#: isitechdjango/templates/blog/base.html:65
+#: isitechdjango/templates/blog/base.html:118
+msgid "Admin"
+msgstr "Administrador"
+
+#: isitechdjango/templates/blog/base.html:69
+msgid "Add Article"
+msgstr "Agregar artículo"
+
+#: isitechdjango/templates/blog/base.html:72
+#: isitechdjango/templates/blog/categories.html:69
+msgid "Add Category"
+msgstr "Agregar categoría"
+
+#: isitechdjango/templates/blog/base.html:77
+#: isitechdjango/templates/blog/comment_moderation.html:5
+#: isitechdjango/templates/blog/comment_moderation.html:14
+#: isitechdjango/templates/blog/comment_moderation.html:19
+msgid "Comment Moderation"
+msgstr "Moderación de comentarios"
+
+#: isitechdjango/templates/blog/base.html:81
+#: isitechdjango/templates/blog/base.html:136
+#: isitechdjango/templates/blog/dashboard.html:90
+#: isitechdjango/templates/blog/home.html:333
+msgid "Analytics"
+msgstr "Analíticas"
+
+#: isitechdjango/templates/blog/base.html:94
+msgid "Search articles..."
+msgstr "Buscar artículos..."
+
+#: isitechdjango/templates/blog/base.html:106
+msgid "Toggle Theme"
+msgstr "Cambiar tema"
+
+#: isitechdjango/templates/blog/base.html:122
+msgid "Reader"
+msgstr "Lector"
+
+#: isitechdjango/templates/blog/base.html:127
+msgid "My Profile"
+msgstr "Mi perfil"
+
+#: isitechdjango/templates/blog/base.html:131
+#: isitechdjango/templates/blog/home.html:278
+msgid "Dashboard"
+msgstr "Panel de control"
+
+#: isitechdjango/templates/blog/base.html:141
+msgid "Logout"
+msgstr "Cerrar sesión"
+
+#: isitechdjango/templates/blog/base.html:146
+msgid "Login"
+msgstr "Iniciar sesión"
+
+#: isitechdjango/templates/blog/base.html:147
+msgid "Register"
+msgstr "Registrarse"
+
+#: isitechdjango/templates/blog/base.html:313
+msgid "Switch to Light Theme"
+msgstr "Cambiar a tema claro"
+
+#: isitechdjango/templates/blog/base.html:316
+msgid "Switch to Dark Theme"
+msgstr "Cambiar a tema oscuro"
+
+#: isitechdjango/templates/blog/categories.html:18
+msgid "Explore and organize content by categories"
+msgstr ""
+
+#: isitechdjango/templates/blog/categories.html:60
+#, python-format
+msgid "Category (%(categories_count)s)"
+msgid_plural "Categories (%(categories_count)s)"
+msgstr[0] "Categoría (%(categories_count)s)"
+msgstr[1] "Categorías (%(categories_count)s)"
+msgstr[2] "Categorías (%(categories_count)s)"
+
+#: isitechdjango/templates/blog/categories.html:62
+msgid "Browse articles by category to find exactly what you're looking for"
+msgstr ""
+
+#: isitechdjango/templates/blog/categories.html:93
+msgid "No description available for this category."
+msgstr ""
+
+#: isitechdjango/templates/blog/categories.html:116
+msgid "View Articles"
+msgstr "Ver artículos"
+
+#: isitechdjango/templates/blog/categories.html:124
+#, fuzzy
+#| msgid "Create Category"
+msgid "Delete Category"
+msgstr "Crear categoría"
+
+#: isitechdjango/templates/blog/categories.html:144
+#, fuzzy
+#| msgid "Top Categories"
+msgid "Total Categories"
+msgstr "Categorías principales"
+
+#: isitechdjango/templates/blog/categories.html:165
+#, fuzzy
+#| msgid "No categories yet"
+msgid "No Categories Yet"
+msgstr "Aún no hay categorías"
+
+#: isitechdjango/templates/blog/categories.html:168
+msgid ""
+"Start organizing your content by creating your first category. Categories "
+"help readers find related articles easily."
+msgstr ""
+
+#: isitechdjango/templates/blog/categories.html:170
+#, fuzzy
+#| msgid "No articles are available at the moment. Check back later!"
+msgid ""
+"No categories are available at the moment. Check back later for organized "
+"content."
+msgstr "No hay artículos disponibles en este momento. ¡Vuelva más tarde!"
+
+#: isitechdjango/templates/blog/categories.html:178
+#, fuzzy
+#| msgid "Create Category"
+msgid "Create First Category"
+msgstr "Crear categoría"
+
+#: isitechdjango/templates/blog/comment_moderation.html:35
+#: isitechdjango/templates/blog/comment_moderation.html:92
+msgid "Pending"
+msgstr "Pendiente"
+
+#: isitechdjango/templates/blog/comment_moderation.html:48
+#: isitechdjango/templates/blog/comment_moderation.html:93
+msgid "Approved"
+msgstr "Aprobado"
+
+#: isitechdjango/templates/blog/comment_moderation.html:61
+#: isitechdjango/templates/blog/comment_moderation.html:94
+msgid "Rejected"
+msgstr "Rechazado"
+
+#: isitechdjango/templates/blog/comment_moderation.html:74
+msgid "Total"
+msgstr "Total"
+
+#: isitechdjango/templates/blog/comment_moderation.html:89
+msgid "Status"
+msgstr "Estado"
+
+#: isitechdjango/templates/blog/comment_moderation.html:91
+msgid "All Statuses"
+msgstr "Todos los estados"
+
+#: isitechdjango/templates/blog/comment_moderation.html:100
+msgid "All Articles"
+msgstr "Todos los artículos"
+
+#: isitechdjango/templates/blog/comment_moderation.html:109
+msgid "Search"
+msgstr "Buscar"
+
+#: isitechdjango/templates/blog/comment_moderation.html:111
+msgid "Search comments..."
+msgstr "Buscar comentarios..."
+
+#: isitechdjango/templates/blog/comment_moderation.html:115
+#: isitechdjango/templates/blog/dashboard.html:128
+msgid "Filter"
+msgstr ""
+
+#: isitechdjango/templates/blog/comment_moderation.html:118
+msgid "Clear"
+msgstr "Limpiar"
+
+#: isitechdjango/templates/blog/comment_moderation.html:140
+msgid "Select All"
+msgstr "Seleccionar todo"
+
+#: isitechdjango/templates/blog/comment_moderation.html:147
+msgid "Approve selected comments?"
+msgstr "¿Aprobar comentarios seleccionados?"
+
+#: isitechdjango/templates/blog/comment_moderation.html:148
+msgid "Approve Selected"
+msgstr "Aprobar seleccionados"
+
+#: isitechdjango/templates/blog/comment_moderation.html:151
+msgid "Reject selected comments?"
+msgstr "¿Rechazar comentarios seleccionados?"
+
+#: isitechdjango/templates/blog/comment_moderation.html:152
+msgid "Reject Selected"
+msgstr "Rechazar seleccionados"
+
+#: isitechdjango/templates/blog/comment_moderation.html:155
+msgid "Delete selected comments? This action cannot be undone."
+msgstr "¿Eliminar comentarios seleccionados? Esta acción no se puede deshacer."
+
+#: isitechdjango/templates/blog/comment_moderation.html:156
+msgid "Delete Selected"
+msgstr "Eliminar seleccionados"
+
+#: isitechdjango/templates/blog/comment_moderation.html:209
+msgid "View Article"
+msgstr "Ver artículo"
+
+#: isitechdjango/templates/blog/comment_moderation.html:225
+msgid "Article:"
+msgstr "Artículo:"
+
+#: isitechdjango/templates/blog/comment_moderation.html:234
+msgid "Moderated by:"
+msgstr "Moderado por:"
+
+#: isitechdjango/templates/blog/comment_moderation.html:235
+msgid "Date:"
+msgstr "Fecha:"
+
+#: isitechdjango/templates/blog/comment_moderation.html:249
+msgid "Comments pagination"
+msgstr "Paginación de comentarios"
+
+#: isitechdjango/templates/blog/comment_moderation.html:286
+msgid "No comments found"
+msgstr "No se encontraron comentarios"
+
+#: isitechdjango/templates/blog/comment_moderation.html:287
+msgid "No comments match your current filters."
+msgstr "Ningún comentario coincide con sus filtros actuales."
+
+#: isitechdjango/templates/blog/comment_moderation.html:289
+msgid "View All Comments"
+msgstr "Ver todos los comentarios"
+
+#: isitechdjango/templates/blog/comment_moderation.html:329
+msgid "Are you sure you want to delete this comment?"
+msgstr "¿Está seguro de que desea eliminar este comentario?"
+
+#: isitechdjango/templates/blog/comment_moderation.html:361
+msgid "An error occurred"
+msgstr "Ocurrió un error"
+
+#: isitechdjango/templates/blog/dashboard.html:5
+#: isitechdjango/templates/blog/dashboard.html:18
+#, fuzzy
+#| msgid "Dashboard"
+msgid "Author Dashboard"
+msgstr "Panel de control"
+
+#: isitechdjango/templates/blog/dashboard.html:20
+msgid "Manage your content, track performance, and engage with your audience"
+msgstr ""
+
+#: isitechdjango/templates/blog/dashboard.html:36
+#, fuzzy
+#| msgid "Create First Article"
+msgid "Create New Article"
+msgstr "Crear primer artículo"
+
+#: isitechdjango/templates/blog/dashboard.html:53
+#, fuzzy
+#| msgid "View Articles"
+msgid "Published Articles"
+msgstr "Ver artículos"
+
+#: isitechdjango/templates/blog/dashboard.html:56
+#, fuzzy
+#| msgid "Active Today"
+msgid "Active"
+msgstr "Activos hoy"
+
+#: isitechdjango/templates/blog/dashboard.html:70
+#, fuzzy
+#| msgid "Articles"
+msgid "Draft Articles"
+msgstr "Artículos"
+
+#: isitechdjango/templates/blog/dashboard.html:73
+msgid "In Progress"
+msgstr ""
+
+#: isitechdjango/templates/blog/dashboard.html:107
+#, fuzzy
+#| msgid "Engagement Score"
+msgid "Engagement"
+msgstr "Puntuación de compromiso"
+
+#: isitechdjango/templates/blog/dashboard.html:123
+#, fuzzy
+#| msgid "Articles"
+msgid "My Articles"
+msgstr "Artículos"
+
+#: isitechdjango/templates/blog/dashboard.html:148
+#: isitechdjango/templates/blog/dashboard.html:1274
+#, fuzzy
+#| msgid "published"
+msgid "Published"
+msgstr "publicados"
+
+#: isitechdjango/templates/blog/dashboard.html:153
+#: isitechdjango/templates/blog/dashboard.html:1279
+#, fuzzy
+#| msgid "drafts"
+msgid "Draft"
+msgstr "borradores"
+
+#: isitechdjango/templates/blog/dashboard.html:158
+#: isitechdjango/templates/blog/dashboard.html:1284
+msgid "Archived"
+msgstr ""
+
+#: isitechdjango/templates/blog/dashboard.html:175
+#, fuzzy
+#| msgid "Likes"
+msgid "likes"
+msgstr "Me gusta"
+
+#: isitechdjango/templates/blog/dashboard.html:188
+#: isitechdjango/templates/blog/dashboard.html:1281
+#, fuzzy
+#| msgid "published"
+msgid "Publish"
+msgstr "publicados"
+
+#: isitechdjango/templates/blog/dashboard.html:188
+#: isitechdjango/templates/blog/dashboard.html:1276
+msgid "Set as Draft"
+msgstr ""
+
+#: isitechdjango/templates/blog/dashboard.html:199
+#, fuzzy
+#| msgid "Are you sure you want to delete this comment?"
+msgid "Are you sure you want to delete this article?"
+msgstr "¿Está seguro de que desea eliminar este comentario?"
+
+#: isitechdjango/templates/blog/dashboard.html:214
+#: isitechdjango/templates/blog/search_results.html:287
+msgid "Previous"
+msgstr "Anterior"
+
+#: isitechdjango/templates/blog/dashboard.html:230
+#: isitechdjango/templates/blog/search_results.html:305
+msgid "Next"
+msgstr "Siguiente"
+
+#: isitechdjango/templates/blog/dashboard.html:243
+#: isitechdjango/templates/blog/home.html:529
+#, fuzzy
+#| msgid "No articles yet"
+msgid "No Articles Yet"
+msgstr "Aún no hay artículos"
+
+#: isitechdjango/templates/blog/dashboard.html:244
+#, fuzzy
+#| msgid "Start sharing your thoughts by creating your first article!"
+msgid ""
+"Start sharing your thoughts and knowledge with the world by creating your "
+"first article."
+msgstr "¡Comience a compartir sus pensamientos creando su primer artículo!"
+
+#: isitechdjango/templates/blog/dashboard.html:247
+#: isitechdjango/templates/blog/home.html:534
+#, fuzzy
+#| msgid "Create First Article"
+msgid "Create Your First Article"
+msgstr "Crear primer artículo"
+
+#: isitechdjango/templates/blog/dashboard.html:260
+#, fuzzy
+#| msgid "Comments"
+msgid "Recent Comments"
+msgstr "Comentarios"
+
+#: isitechdjango/templates/blog/dashboard.html:286
+#, fuzzy
+#| msgid "Your comment"
+msgid "No recent comments"
+msgstr "Su comentario"
+
+#: isitechdjango/templates/blog/dashboard.html:296
+#: isitechdjango/templates/blog/home.html:321
+msgid "Quick Actions"
+msgstr "Acciones rápidas"
+
+#: isitechdjango/templates/blog/dashboard.html:302
+#, fuzzy
+#| msgid "View Article"
+msgid "New Article"
+msgstr "Ver artículo"
+
+#: isitechdjango/templates/blog/dashboard.html:306
+msgid "Manage Categories"
+msgstr "Gestionar categorías"
+
+#: isitechdjango/templates/blog/dashboard.html:310
+#, fuzzy
+#| msgid "My Profile"
+msgid "Public Profile"
+msgstr "Mi perfil"
+
+#: isitechdjango/templates/blog/dashboard.html:1294
+msgid "Article status updated successfully!"
+msgstr ""
+
+#: isitechdjango/templates/blog/dashboard.html:1303
+msgid "Error:"
+msgstr ""
+
+#: isitechdjango/templates/blog/dashboard.html:1309
+msgid "An error occurred while updating the article."
+msgstr ""
+
+#: isitechdjango/templates/blog/home.html:265
+msgid "Welcome to Isitech Blog"
+msgstr "Bienvenido al Blog Isitech"
+
+#: isitechdjango/templates/blog/home.html:268
+#, fuzzy, python-format
+#| msgid "Hello, %(user.username)s! Ready to share your thoughts?"
+msgid "Hello, %(username)s! Ready to share your thoughts with the world?"
+msgstr "¡Hola, %(user.username)s! ¿Listo para compartir sus pensamientos?"
+
+#: isitechdjango/templates/blog/home.html:272
+#, fuzzy
+#| msgid "Create First Article"
+msgid "Create Article"
+msgstr "Crear primer artículo"
+
+#: isitechdjango/templates/blog/home.html:275
+#: isitechdjango/templates/blog/home.html:330
+#: isitechdjango/templates/blog/home.html:537
+msgid "AI Generator"
+msgstr ""
+
+#: isitechdjango/templates/blog/home.html:283
+msgid ""
+"Discover amazing content, insights, and stories from our community of "
+"writers."
+msgstr ""
+
+#: isitechdjango/templates/blog/home.html:286
+msgid "Join the Community"
+msgstr ""
+
+#: isitechdjango/templates/blog/home.html:323
+msgid "Manage your blog content efficiently"
+msgstr ""
+
+#: isitechdjango/templates/blog/home.html:349
+#, fuzzy
+#| msgid "Filter by Category:"
+msgid "Explore by Category"
+msgstr "Filtrar por categoría:"
+
+#: isitechdjango/templates/blog/home.html:380
+#, python-format
+msgid "Search Results for \"%(query)s\""
+msgstr "Resultados de búsqueda para \"%(query)s\""
+
+#: isitechdjango/templates/blog/home.html:383
+#, fuzzy
+#| msgid "Create First Article"
+msgid "Latest Articles"
+msgstr "Crear primer artículo"
+
+#: isitechdjango/templates/blog/home.html:388
+#, fuzzy, python-format
+#| msgid "%(articles_count)s article"
+#| msgid_plural "%(articles_count)s articles"
+msgid "Found %(articles_count)s article"
+msgid_plural "Found %(articles_count)s articles"
+msgstr[0] "%(articles_count)s artículo"
+msgstr[1] "%(articles_count)s artículos"
+msgstr[2] "%(articles_count)s artículos"
+
+#: isitechdjango/templates/blog/home.html:390
+#, fuzzy, python-format
+#| msgid "%(articles_count)s article"
+#| msgid_plural "%(articles_count)s articles"
+msgid "%(articles_count)s article published"
+msgid_plural "%(articles_count)s articles published"
+msgstr[0] "%(articles_count)s artículo"
+msgstr[1] "%(articles_count)s artículos"
+msgstr[2] "%(articles_count)s artículos"
+
+#: isitechdjango/templates/blog/home.html:397
+msgid "Advanced Search"
+msgstr "Búsqueda avanzada"
+
+#: isitechdjango/templates/blog/home.html:422
+msgid "No image available"
+msgstr "No hay imagen disponible"
+
+#: isitechdjango/templates/blog/home.html:441
+#, fuzzy
+#| msgid "Add Article"
+msgid "Read Article"
+msgstr "Agregar artículo"
+
+#: isitechdjango/templates/blog/home.html:490
+msgid "Continue Reading"
+msgstr ""
+
+#: isitechdjango/templates/blog/home.html:494
+#, python-format
+msgid "%(comment_count)s comment"
+msgid_plural "%(comment_count)s comments"
+msgstr[0] "%(comment_count)s comentario"
+msgstr[1] "%(comment_count)s comentarios"
+msgstr[2] "%(comment_count)s comentarios"
+
+#: isitechdjango/templates/blog/home.html:504
+msgid "Edit"
+msgstr "Editar"
+
+#: isitechdjango/templates/blog/home.html:508
+msgid "Delete"
+msgstr "Eliminar"
+
+#: isitechdjango/templates/blog/home.html:531
+msgid ""
+"Ready to share your thoughts with the world? Create your first article and "
+"start building your blog!"
+msgstr ""
+
+#: isitechdjango/templates/blog/home.html:540
+#, fuzzy
+#| msgid "Top Categories"
+msgid "Set Up Categories"
+msgstr "Categorías principales"
+
+#: isitechdjango/templates/blog/home.html:544
+msgid ""
+"We're working on bringing you amazing content. Check back soon for fresh "
+"articles and insights!"
+msgstr ""
+
+#: isitechdjango/templates/blog/home.html:547
+msgid "Get Notified"
+msgstr ""
+
+#: isitechdjango/templates/blog/search_results.html:4
+#: isitechdjango/templates/blog/search_results.html:21
+msgid "Search Results"
+msgstr "Resultados de búsqueda"
+
+#: isitechdjango/templates/blog/search_results.html:23
+#, python-format
+msgid "for \"%(query)s\""
+msgstr "para \"%(query)s\""
+
+#: isitechdjango/templates/blog/search_results.html:28
+#, python-format
+msgid "%(total)s result found"
+msgid_plural "%(total)s results found"
+msgstr[0] "%(total)s resultado encontrado"
+msgstr[1] "%(total)s resultados encontrados"
+msgstr[2] "%(total)s resultados encontrados"
+
+#: isitechdjango/templates/blog/search_results.html:31
+msgid "Refine your search to find what you're looking for"
+msgstr ""
+
+#: isitechdjango/templates/blog/search_results.html:61
+#, fuzzy
+#| msgid "Advanced Search"
+msgid "Advanced Filters"
+msgstr "Búsqueda avanzada"
+
+#: isitechdjango/templates/blog/search_results.html:70
+#, fuzzy
+#| msgid "Clear"
+msgid "Clear All"
+msgstr "Limpiar"
+
+#: isitechdjango/templates/blog/search_results.html:101
+msgid "Sort by"
+msgstr "Ordenar por"
+
+#: isitechdjango/templates/blog/search_results.html:110
+msgid "From Date"
+msgstr "Desde fecha"
+
+#: isitechdjango/templates/blog/search_results.html:119
+msgid "To Date"
+msgstr "Hasta fecha"
+
+#: isitechdjango/templates/blog/search_results.html:150
+#, fuzzy
+#| msgid "Clear All Filters"
+msgid "Apply Filters"
+msgstr "Limpiar todos los filtros"
+
+#: isitechdjango/templates/blog/search_results.html:160
+#, fuzzy
+#| msgid "Active filters:"
+msgid "Active Filters"
+msgstr "Filtros activos:"
+
+#: isitechdjango/templates/blog/search_results.html:269
+msgid "Read More"
+msgstr "Leer más"
+
+#: isitechdjango/templates/blog/search_results.html:312
+#, python-format
+msgid "Page %(current)s of %(total)s"
+msgstr ""
+
+#: isitechdjango/templates/blog/search_results.html:330
+msgid "No results found"
+msgstr "No se encontraron resultados"
+
+#: isitechdjango/templates/blog/search_results.html:333
+#, python-format
+msgid ""
+"We couldn't find any articles matching \"%(query)s\". Try adjusting your "
+"search terms or filters."
+msgstr ""
+
+#: isitechdjango/templates/blog/search_results.html:335
+#, fuzzy
+#| msgid "Try adjusting your search criteria or removing some filters."
+msgid ""
+"Try adjusting your search criteria or removing some filters to find more "
+"content."
+msgstr "Intente ajustar sus criterios de búsqueda o eliminar algunos filtros."
+
+#: isitechdjango/templates/blog/search_results.html:342
+msgid "Try searching for:"
+msgstr ""
+
+#: isitechdjango/templates/blog/search_results.html:358
+#, fuzzy
+#| msgid "All Articles"
+msgid "Browse All Articles"
+msgstr "Todos los artículos"
+
+#: isitechdjango/templates/blog/search_results.html:362
+#, fuzzy
+#| msgid "Categories"
+msgid "View Categories"
+msgstr "Categorías"
+
+#: isitechdjango/templates/blog/user_profile.html:5
+#, fuzzy
+#| msgid "My Profile"
+msgid "Profil de"
+msgstr "Mi perfil"
+
+#: isitechdjango/templates/blog/user_profile.html:15
+msgid "Avatar de"
+msgstr ""
+
+#: isitechdjango/templates/blog/user_profile.html:41
+msgid "Site web"
+msgstr ""
+
+#: isitechdjango/templates/blog/user_profile.html:56
+#, fuzzy
+#| msgid "Dashboard"
+msgid "Mon Dashboard"
+msgstr "Panel de control"
+
+#: isitechdjango/templates/blog/user_profile.html:76
+#, fuzzy
+#| msgid "Status"
+msgid "Statistiques"
+msgstr "Estado"
+
+#: isitechdjango/templates/blog/user_profile.html:96
+msgid "Vues"
+msgstr ""
+
+#: isitechdjango/templates/blog/user_profile.html:118
+#, fuzzy
+#| msgid "Articles Published"
+msgid "Articles sauvegardés"
+msgstr "Artículos publicados"
+
+#: isitechdjango/templates/blog/user_profile.html:152
+#, fuzzy
+#| msgid "Articles"
+msgid "Articles de"
+msgstr "Artículos"
+
+#: isitechdjango/templates/blog/user_profile.html:156
+#, fuzzy
+#| msgid "articles"
+msgid "article"
+msgstr "artículos"
+
+#: isitechdjango/templates/blog/user_profile.html:172
+#, fuzzy
+#| msgid "View Article"
+msgid "Lire l'article"
+msgstr "Ver artículo"
+
+#: isitechdjango/templates/blog/user_profile.html:222
+msgid "Navigation des pages"
+msgstr ""
+
+#: isitechdjango/templates/blog/user_profile.html:228
+msgid "Précédent"
+msgstr ""
+
+#: isitechdjango/templates/blog/user_profile.html:248
+msgid "Suivant"
+msgstr ""
+
+#: isitechdjango/templates/blog/user_profile.html:266
+#, fuzzy
+#| msgid "Articles Published"
+msgid "Aucun article publié"
+msgstr "Artículos publicados"
+
+#: isitechdjango/templates/blog/user_profile.html:269
+msgid "n'a pas encore publié d'articles."
+msgstr ""
+
+#: isitechdjango/templates/blog/user_profile.html:275
+#, fuzzy
+#| msgid "average per article"
+msgid "Créer votre premier article"
+msgstr "promedio por artículo"
+
+#: isitechdjango/templates/registration/logged_out.html:106
+msgid "Successfully Logged Out!"
+msgstr "¡Sesión cerrada exitosamente!"
+
+#: isitechdjango/templates/registration/logged_out.html:108
+msgid ""
+"Thank you for using our platform. You have been safely logged out of your "
+"account."
+msgstr ""
+"Gracias por usar nuestra plataforma. Ha cerrado sesión de forma segura de su "
+"cuenta."
+
+#: isitechdjango/templates/registration/logged_out.html:111
+msgid "Sign In Again"
+msgstr "Iniciar sesión nuevamente"
+
+#: isitechdjango/templates/registration/login.html:379
+msgid "Welcome Back!"
+msgstr "¡Bienvenido de nuevo!"
+
+#: isitechdjango/templates/registration/login.html:380
+msgid "Please sign in to your account to continue"
+msgstr "Por favor inicie sesión en su cuenta para continuar"
+
+#: isitechdjango/templates/registration/login.html:397
+#: isitechdjango/templates/registration/register.html:398
+msgid "Username"
+msgstr "Nombre de usuario"
+
+#: isitechdjango/templates/registration/login.html:410
+#: isitechdjango/templates/registration/register.html:437
+msgid "Password"
+msgstr "Contraseña"
+
+#: isitechdjango/templates/registration/login.html:421
+msgid "Forgot Password?"
+msgstr "¿Olvidó su contraseña?"
+
+#: isitechdjango/templates/registration/login.html:435
+#: isitechdjango/templates/registration/login.html:482
+msgid "Sign In"
+msgstr "Iniciar sesión"
+
+#: isitechdjango/templates/registration/login.html:440
+msgid "Don't have an account?"
+msgstr "¿No tiene una cuenta?"
+
+#: isitechdjango/templates/registration/login.html:445
+msgid "Create new account"
+msgstr "Crear nueva cuenta"
+
+#: isitechdjango/templates/registration/login.html:477
+msgid "Signing In..."
+msgstr "Iniciando sesión..."
+
+#: isitechdjango/templates/registration/password_reset_complete.html:330
+msgid "Password Reset Complete!"
+msgstr "¡Restablecimiento de contraseña completado!"
+
+#: isitechdjango/templates/registration/password_reset_complete.html:332
+msgid ""
+"Your password has been successfully reset. You can now sign in with your new "
+"password."
+msgstr ""
+"Su contraseña se ha restablecido exitosamente. Ahora puede iniciar sesión "
+"con su nueva contraseña."
+
+#: isitechdjango/templates/registration/password_reset_complete.html:337
+msgid ""
+"Your account is now secure with your new password. You can continue using "
+"all features of your account."
+msgstr ""
+"Su cuenta ahora está segura con su nueva contraseña. Puede continuar usando "
+"todas las características de su cuenta."
+
+#: isitechdjango/templates/registration/password_reset_complete.html:342
+msgid "Sign In Now"
+msgstr "Iniciar sesión ahora"
+
+#: isitechdjango/templates/registration/password_reset_complete.html:348
+msgid "Security Tips:"
+msgstr "Consejos de seguridad:"
+
+#: isitechdjango/templates/registration/password_reset_complete.html:350
+msgid "Keep your password secure and don't share it with anyone"
+msgstr "Mantenga su contraseña segura y no la comparta con nadie"
+
+#: isitechdjango/templates/registration/password_reset_complete.html:351
+msgid "Use a unique password that you don't use elsewhere"
+msgstr "Use una contraseña única que no use en otros sitios"
+
+#: isitechdjango/templates/registration/password_reset_complete.html:352
+msgid "Consider using a password manager for better security"
+msgstr "Considere usar un administrador de contraseñas para mayor seguridad"
+
+#: isitechdjango/templates/registration/password_reset_complete.html:353
+msgid "If you didn't request this change, contact support immediately"
+msgstr "Si no solicitó este cambio, contacte al soporte inmediatamente"
+
+#: isitechdjango/templates/registration/password_reset_confirm.html:375
+msgid "Set New Password"
+msgstr "Establecer nueva contraseña"
+
+#: isitechdjango/templates/registration/password_reset_confirm.html:376
+msgid "Enter your new password below to complete the reset process"
+msgstr ""
+"Ingrese su nueva contraseña a continuación para completar el proceso de "
+"restablecimiento"
+
+#: isitechdjango/templates/registration/password_reset_confirm.html:384
+msgid "New Password"
+msgstr "Nueva contraseña"
+
+#: isitechdjango/templates/registration/password_reset_confirm.html:403
+msgid "Confirm New Password"
+msgstr "Confirmar nueva contraseña"
+
+#: isitechdjango/templates/registration/password_reset_confirm.html:423
+#: isitechdjango/templates/registration/password_reset_confirm.html:573
+msgid "Reset Password"
+msgstr "Restablecer contraseña"
+
+#: isitechdjango/templates/registration/password_reset_confirm.html:431
+msgid "Invalid Reset Link"
+msgstr "Enlace de restablecimiento inválido"
+
+#: isitechdjango/templates/registration/password_reset_confirm.html:432
+msgid "This password reset link is invalid or has expired"
+msgstr ""
+"Este enlace de restablecimiento de contraseña es inválido o ha expirado"
+
+#: isitechdjango/templates/registration/password_reset_confirm.html:437
+msgid ""
+"The password reset link you clicked is either invalid or has already been "
+"used. Please request a new password reset."
+msgstr ""
+"El enlace de restablecimiento de contraseña que hizo clic es inválido o ya "
+"se ha usado. Por favor solicite un nuevo restablecimiento de contraseña."
+
+#: isitechdjango/templates/registration/password_reset_confirm.html:444
+#: isitechdjango/templates/registration/password_reset_done.html:310
+#: isitechdjango/templates/registration/password_reset_form.html:407
+msgid "Back to Sign In"
+msgstr "Volver a iniciar sesión"
+
+#: isitechdjango/templates/registration/password_reset_confirm.html:448
+msgid "Request New Reset Link"
+msgstr "Solicitar nuevo enlace de restablecimiento"
+
+#: isitechdjango/templates/registration/password_reset_confirm.html:470
+#: isitechdjango/templates/registration/register.html:507
+msgid "at least 8 characters"
+msgstr "al menos 8 caracteres"
+
+#: isitechdjango/templates/registration/password_reset_confirm.html:473
+#: isitechdjango/templates/registration/register.html:510
+msgid "lowercase letters"
+msgstr "letras minúsculas"
+
+#: isitechdjango/templates/registration/password_reset_confirm.html:476
+#: isitechdjango/templates/registration/register.html:513
+msgid "uppercase letters"
+msgstr "letras mayúsculas"
+
+#: isitechdjango/templates/registration/password_reset_confirm.html:479
+#: isitechdjango/templates/registration/register.html:516
+msgid "numbers"
+msgstr "números"
+
+#: isitechdjango/templates/registration/password_reset_confirm.html:482
+#: isitechdjango/templates/registration/register.html:519
+msgid "special characters"
+msgstr "caracteres especiales"
+
+#: isitechdjango/templates/registration/password_reset_confirm.html:484
+#: isitechdjango/templates/registration/register.html:521
+msgid "Very Weak"
+msgstr "Muy débil"
+
+#: isitechdjango/templates/registration/password_reset_confirm.html:484
+#: isitechdjango/templates/registration/register.html:521
+msgid "Weak"
+msgstr "Débil"
+
+#: isitechdjango/templates/registration/password_reset_confirm.html:484
+#: isitechdjango/templates/registration/register.html:521
+msgid "Fair"
+msgstr "Regular"
+
+#: isitechdjango/templates/registration/password_reset_confirm.html:484
+#: isitechdjango/templates/registration/register.html:521
+msgid "Good"
+msgstr "Buena"
+
+#: isitechdjango/templates/registration/password_reset_confirm.html:484
+#: isitechdjango/templates/registration/register.html:521
+msgid "Strong"
+msgstr "Fuerte"
+
+#: isitechdjango/templates/registration/password_reset_confirm.html:514
+#: isitechdjango/templates/registration/register.html:551
+msgid "Missing"
+msgstr "Faltante"
+
+#: isitechdjango/templates/registration/password_reset_confirm.html:517
+#: isitechdjango/templates/registration/register.html:554
+msgid "password"
+msgstr "contraseña"
+
+#: isitechdjango/templates/registration/password_reset_confirm.html:568
+msgid "Resetting Password..."
+msgstr "Restableciendo contraseña..."
+
+#: isitechdjango/templates/registration/password_reset_done.html:298
+msgid "Check Your Email!"
+msgstr "¡Revise su correo electrónico!"
+
+#: isitechdjango/templates/registration/password_reset_done.html:300
+msgid "We've sent a password reset link to your email address"
+msgstr ""
+"Hemos enviado un enlace de restablecimiento de contraseña a su dirección de "
+"correo electrónico"
+
+#: isitechdjango/templates/registration/password_reset_done.html:305
+msgid ""
+"If an account with that email address exists, you'll receive an email with "
+"instructions on how to reset your password within the next few minutes."
+msgstr ""
+"Si existe una cuenta con esa dirección de correo electrónico, recibirá un "
+"correo electrónico con instrucciones sobre cómo restablecer su contraseña en "
+"los próximos minutos."
+
+#: isitechdjango/templates/registration/password_reset_done.html:313
+msgid "Send Another Email"
+msgstr "Enviar otro correo electrónico"
+
+#: isitechdjango/templates/registration/password_reset_done.html:319
+msgid ""
+"Don't see the email? Check your spam folder or try again with a different "
+"email address."
+msgstr ""
+"¿No ve el correo electrónico? Revise su carpeta de spam o intente nuevamente "
+"con una dirección de correo electrónico diferente."
+
+#: isitechdjango/templates/registration/password_reset_email.html:2
+msgid "Hello"
+msgstr "Hola"
+
+#: isitechdjango/templates/registration/password_reset_email.html:4
+msgid ""
+"You're receiving this email because you requested a password reset for your "
+"account at Isitech Blog."
+msgstr ""
+"Está recibiendo este correo electrónico porque solicitó un restablecimiento "
+"de contraseña para su cuenta en Isitech Blog."
+
+#: isitechdjango/templates/registration/password_reset_email.html:6
+msgid "Please go to the following page and choose a new password:"
+msgstr "Por favor vaya a la siguiente página y elija una nueva contraseña:"
+
+#: isitechdjango/templates/registration/password_reset_email.html:9
+msgid "Your username, in case you've forgotten:"
+msgstr "Su nombre de usuario, en caso de que lo haya olvidado:"
+
+#: isitechdjango/templates/registration/password_reset_email.html:11
+msgid ""
+"If you didn't request this password reset, please ignore this email. Your "
+"password won't be changed."
+msgstr ""
+"Si no solicitó este restablecimiento de contraseña, por favor ignore este "
+"correo electrónico. Su contraseña no será cambiada."
+
+#: isitechdjango/templates/registration/password_reset_email.html:13
+msgid "Thanks for using our site!"
+msgstr "¡Gracias por usar nuestro sitio!"
+
+#: isitechdjango/templates/registration/password_reset_email.html:15
+msgid "The Isitech Blog Team"
+msgstr "El equipo de Isitech Blog"
+
+#: isitechdjango/templates/registration/password_reset_form.html:359
+msgid "Reset Your Password"
+msgstr "Restablecer su contraseña"
+
+#: isitechdjango/templates/registration/password_reset_form.html:360
+msgid ""
+"Enter your email address and we'll send you a link to reset your password"
+msgstr ""
+"Ingrese su dirección de correo electrónico y le enviaremos un enlace para "
+"restablecer su contraseña"
+
+#: isitechdjango/templates/registration/password_reset_form.html:377
+#: isitechdjango/templates/registration/register.html:411
+msgid "Email Address"
+msgstr "Dirección de correo electrónico"
+
+#: isitechdjango/templates/registration/password_reset_form.html:397
+#: isitechdjango/templates/registration/password_reset_form.html:429
+msgid "Send Reset Email"
+msgstr "Enviar correo de restablecimiento"
+
+#: isitechdjango/templates/registration/password_reset_form.html:402
+msgid "Remember your password?"
+msgstr "¿Recuerda su contraseña?"
+
+#: isitechdjango/templates/registration/password_reset_form.html:424
+msgid "Sending Email..."
+msgstr "Enviando correo electrónico..."
+
+#: isitechdjango/templates/registration/password_reset_subject.txt:2
+msgid "Password Reset for Isitech Blog"
+msgstr "Restablecimiento de contraseña para Isitech Blog"
+
+#: isitechdjango/templates/registration/register.html:424
+msgid "User Role"
+msgstr "Rol de usuario"
+
+#: isitechdjango/templates/registration/register.html:456
+msgid "Confirm Password"
+msgstr "Confirmar contraseña"
+
+#: isitechdjango/templates/registration/register.html:476
+#: isitechdjango/templates/registration/register.html:571
+msgid "Create Account"
+msgstr "Crear cuenta"
+
+#: isitechdjango/templates/registration/register.html:481
+msgid "Already have an account?"
+msgstr "¿Ya tiene una cuenta?"
+
+#: isitechdjango/templates/registration/register.html:486
+msgid "Sign in here"
+msgstr "Inicie sesión aquí"
+
+#: isitechdjango/templates/registration/register.html:566
+msgid "Creating Account..."
+msgstr "Creando cuenta..."
+
+#: isitechdjango/templatetags/date_filters.py:26
+msgid "in the future"
+msgstr "en el futuro"
+
+#: isitechdjango/templatetags/date_filters.py:30
+msgid "just now"
+msgstr "ahora mismo"
+
+#: isitechdjango/templatetags/date_filters.py:36
+msgid "1 minute ago"
+msgstr "hace 1 minuto"
+
+#: isitechdjango/templatetags/date_filters.py:37
+msgid "{} minutes ago"
+msgstr "hace {} minutos"
+
+#: isitechdjango/templatetags/date_filters.py:43
+msgid "1 hour ago"
+msgstr "hace 1 hora"
+
+#: isitechdjango/templatetags/date_filters.py:44
+msgid "{} hours ago"
+msgstr "hace {} horas"
+
+#: isitechdjango/templatetags/date_filters.py:48
+msgid "yesterday"
+msgstr "ayer"
+
+#: isitechdjango/templatetags/date_filters.py:52
+msgid "{} days ago"
+msgstr "hace {} días"
+
+#: isitechdjango/templatetags/date_filters.py:58
+msgid "1 week ago"
+msgstr "hace 1 semana"
+
+#: isitechdjango/templatetags/date_filters.py:59
+msgid "{} weeks ago"
+msgstr "hace {} semanas"
+
+#: isitechdjango/templatetags/date_filters.py:65
+msgid "1 month ago"
+msgstr "hace 1 mes"
+
+#: isitechdjango/templatetags/date_filters.py:66
+msgid "{} months ago"
+msgstr "hace {} meses"
+
+#: isitechdjango/templatetags/date_filters.py:71
+msgid "1 year ago"
+msgstr "hace 1 año"
+
+#: isitechdjango/templatetags/date_filters.py:72
+msgid "{} years ago"
+msgstr "hace {} años"
+
+#: isitechdjango/templatetags/date_filters.py:93
+msgid "1 minute read"
+msgstr "1 minuto de lectura"
+
+#: isitechdjango/templatetags/date_filters.py:95
+msgid "{} minutes read"
+msgstr "{} minutos de lectura"
+
+#: isitechdjango/templatetags/date_filters.py:100
+msgid "1 hour read"
+msgstr "1 hora de lectura"
+
+#: isitechdjango/templatetags/date_filters.py:102
+msgid "1 hour {} minutes read"
+msgstr "1 hora {} minutos de lectura"
+
+#: isitechdjango/templatetags/date_filters.py:104
+msgid "{} hours read"
+msgstr "{} horas de lectura"
+
+#: isitechdjango/templatetags/date_filters.py:106
+msgid "{} hours {} minutes read"
+msgstr "{} horas {} minutos de lectura"
+
+#: isitechdjango/views.py:202
+msgid ""
+"Impossible de supprimer la catégorie \"{}\" car elle contient des articles."
+msgstr "Imposible eliminar la categoría \"{}\" porque contiene artículos."
+
+#: isitechdjango/views.py:414
+msgid "Vous n'avez pas les permissions pour accéder au dashboard auteur."
+msgstr "No tiene permisos para acceder al panel de autor."
+
+#: isitechdjango/views.py:818
+msgid "Vous n'avez pas les permissions pour générer des articles."
+msgstr "No tiene permisos para generar artículos."
+
+#: isitechdjango/views.py:833
+msgid "Clé API Gemini non configurée. Veuillez contacter l'administrateur."
+msgstr ""
+"Clave API de Gemini no configurada. Por favor contacte al administrador."
+
+#: isitechdjango/views.py:967
+msgid "Article généré avec succès!"
+msgstr "¡Artículo generado con éxito!"
+
+#: isitechdjango/views.py:969
+msgid "Erreur lors du parsing de la réponse. Contenu généré incomplet."
+msgstr "Error al analizar la respuesta. Contenido generado incompleto."
+
+#: isitechdjango/views.py:971
+msgid "Aucune réponse reçue de l'API Gemini."
+msgstr "No se recibió respuesta de la API de Gemini."
+
+#: isitechdjango/views.py:976
+msgid "Clé API Gemini invalide. Veuillez vérifier la configuration."
+msgstr "Clave API de Gemini inválida. Por favor verifique la configuración."
+
+#: isitechdjango/views.py:978
+msgid "Quota API dépassé. Veuillez réessayer plus tard."
+msgstr "Cuota de API excedida. Por favor intente más tarde."
+
+#: isitechdjango/views.py:980
+msgid ""
+"Le contenu a été bloqué par les filtres de sécurité. Essayez avec un sujet "
+"différent."
+msgstr ""
+"El contenido fue bloqueado por los filtros de seguridad. Intente con un tema "
+"diferente."
+
+#: isitechdjango/views.py:982
+msgid "Erreur API Gemini: {}"
+msgstr "Error de API Gemini: {}"
+
+#: isitechdjango/views.py:985
+msgid "Veuillez saisir un sujet pour l'article."
+msgstr "Por favor ingrese un tema para el artículo."
+
+#: isitechdjango/views.py:999
+#, fuzzy
+#| msgid "Titre et contenu sont requis pour publier l'article."
+msgid "Le titre est requis pour publier l'article."
+msgstr "El título y el contenido son requeridos para publicar el artículo."
+
+#: isitechdjango/views.py:1002
+#, fuzzy
+#| msgid "Titre et contenu sont requis pour publier l'article."
+msgid "Le contenu est requis pour publier l'article."
+msgstr "El título y el contenido son requeridos para publicar el artículo."
+
+#: isitechdjango/views.py:1026
+msgid "Catégorie sélectionnée non trouvée."
+msgstr ""
+
+#: isitechdjango/views.py:1029
+msgid "ID de catégorie invalide: {}"
+msgstr ""
+
+#: isitechdjango/views.py:1034
+msgid "Article '{}' publié avec succès!"
+msgstr "¡Artículo '{}' publicado con éxito!"
+
+#: isitechdjango/views.py:1042
+msgid "Erreur lors de la publication: {}"
+msgstr "Error durante la publicación: {}"
+
+#~ msgid "Article Details"
+#~ msgstr "Detalles del artículo"
+
+#~ msgid "Explore the full content of the article."
+#~ msgstr "Explore el contenido completo del artículo."
+
+#~ msgid "No image for this article"
+#~ msgstr "No hay imagen para este artículo"
+
+#, python-format
+#~ msgid "By %(author_name)s"
+#~ msgstr "Por %(author_name)s"
+
+#~ msgid "Edit this article"
+#~ msgstr "Editar este artículo"
+
+#~ msgid "Toggle navigation"
+#~ msgstr "Alternar navegación"
+
+#~ msgid "Category Management"
+#~ msgstr "Gestión de categorías"
+
+#~ msgid "No description"
+#~ msgstr "Sin descripción"
+
+#~ msgid "Start by"
+#~ msgstr "Comience por"
+
+#~ msgid "adding your first category"
+#~ msgstr "agregar su primera categoría"
+
+#~ msgid "No categories are available at the moment."
+#~ msgstr "No hay categorías disponibles en este momento."
+
+#, python-format
+#~ msgid "Article (%(articles_count)s)"
+#~ msgid_plural "Articles (%(articles_count)s)"
+#~ msgstr[0] "Artículo (%(articles_count)s)"
+#~ msgstr[1] "Artículos (%(articles_count)s)"
+#~ msgstr[2] "Artículos (%(articles_count)s)"
+
+#~ msgid "Search:"
+#~ msgstr "Búsqueda:"
+
+#~ msgid "Category filter active"
+#~ msgstr "Filtro de categoría activo"
+
+#~ msgid "Author filter active"
+#~ msgstr "Filtro de autor activo"
+
+#~ msgid "Suggestions:"
+#~ msgstr "Sugerencias:"

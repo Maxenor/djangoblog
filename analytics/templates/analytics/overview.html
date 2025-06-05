@@ -1,0 +1,285 @@
+{% extends 'blog/base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block title %}{% trans "Analytics Overview" %} - {% trans "Mon Blog Django" %}{% endblock %}
+
+{% block content %}
+<style>
+    /* Fix navbar overlap */
+    body {
+        padding-top: 70px;
+    }
+    
+    .analytics-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 15px;
+        padding: 20px;
+        text-align: center;
+        transition: transform 0.3s ease;
+        margin-bottom: 20px;
+    }
+    .analytics-card:hover {
+        transform: translateY(-5px);
+    }
+    .analytics-number {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+    .chart-container {
+        background: white;
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+    }
+    .metric-card {
+        background: #f8f9fa;
+        border-left: 4px solid #667eea;
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 5px;
+    }
+</style>
+
+<!-- Main Header -->
+<header class="main-header py-5 text-white text-center" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; margin-bottom: 30px;">
+    <div class="container">
+        <h1 class="display-4">
+            <i class="fas fa-chart-line me-3"></i>
+            {% trans "Analytics Overview" %}
+        </h1>
+        <p class="lead">{% trans "Comprehensive website traffic and engagement analytics" %}</p>
+    </div>
+</header>
+
+<div class="container-fluid">
+    <!-- Navigation Pills -->
+    <ul class="nav nav-pills mb-4">
+        <li class="nav-item">
+            <a class="nav-link active" href="{% url 'analytics:overview' %}">
+                <i class="fas fa-tachometer-alt"></i> {% trans "Overview" %}
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'analytics:articles' %}">
+                <i class="fas fa-newspaper"></i> {% trans "Articles" %}
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'analytics:users' %}">
+                <i class="fas fa-users"></i> {% trans "Users" %}
+            </a>
+        </li>
+        <li class="nav-item ms-auto">
+            <div class="dropdown">
+                <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                    <i class="fas fa-download"></i> {% trans "Export" %}
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="{% url 'analytics:export' %}?type=page_views">{% trans "Page Views" %}</a></li>
+                    <li><a class="dropdown-item" href="{% url 'analytics:export' %}?type=article_views">{% trans "Article Views" %}</a></li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+
+    <!-- Key Metrics Row -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="analytics-card">
+                <div class="analytics-number">{{ total_page_views|floatformat:0 }}</div>
+                <div>{% trans "Total Page Views" %}</div>
+                <small>{{ weekly_page_views }} {% trans "this week" %}</small>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="analytics-card" style="background: linear-gradient(135deg, #fa7c91 0%, #c471f5 100%);">
+                <div class="analytics-number">{{ total_article_views|floatformat:0 }}</div>
+                <div>{% trans "Article Views" %}</div>
+                <small>{{ average_reading_time|floatformat:0 }}s {% trans "avg reading time" %}</small>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="analytics-card" style="background: linear-gradient(135deg, #43e695 0%, #3bb2b8 100%);">
+                <div class="analytics-number">{{ unique_visitors_monthly }}</div>
+                <div>{% trans "Unique Visitors" %}</div>
+                <small>{% trans "This month" %}</small>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="analytics-card" style="background: linear-gradient(135deg, #ffb347 0%, #ffcc33 100%); color: #2d3436;">
+                <div class="analytics-number">{{ registered_users_monthly }}</div>
+                <div>{% trans "New Users" %}</div>
+                <small>{% trans "This month" %}</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts and Data -->
+    <div class="row">
+        <!-- Most Popular Pages -->
+        <div class="col-md-6 mb-4">
+            <div class="chart-container">
+                <h4 class="mb-3">
+                    <i class="fas fa-fire text-danger me-2"></i>
+                    {% trans "Most Popular Pages" %}
+                </h4>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>{% trans "Page" %}</th>
+                                <th>{% trans "Views" %}</th>
+                                <th>{% trans "Percentage" %}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for page in popular_pages %}
+                            <tr>
+                                <td>
+                                    <code>{{ page.path|truncatechars:40 }}</code>
+                                </td>
+                                <td>
+                                    <span class="badge bg-primary">{{ page.view_count }}</span>
+                                </td>
+                                <td>
+                                    <div class="progress" style="height: 10px;">
+                                        <div class="progress-bar bg-success" 
+                                             style="width: {% widthratio page.view_count total_page_views 100 %}%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Traffic Sources -->
+        <div class="col-md-6 mb-4">
+            <div class="chart-container">
+                <h4 class="mb-3">
+                    <i class="fas fa-external-link-alt text-info me-2"></i>
+                    {% trans "Top Traffic Sources" %}
+                </h4>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>{% trans "Source" %}</th>
+                                <th>{% trans "Visits" %}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for referrer in referrer_stats %}
+                            <tr>
+                                <td>
+                                    <small>{{ referrer.referrer|truncatechars:50 }}</small>
+                                </td>
+                                <td>
+                                    <span class="badge bg-info">{{ referrer.count }}</span>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="2" class="text-center text-muted">
+                                    {% trans "No referrer data available" %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Browser Statistics -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="chart-container">
+                <h4 class="mb-3">
+                    <i class="fas fa-globe text-primary me-2"></i>
+                    {% trans "Browser Usage Statistics" %}
+                </h4>
+                <div class="row">
+                    {% for browser in browser_stats %}
+                    <div class="col-md-6 mb-3">
+                        <div class="metric-card">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>{% trans "Browser" %}</strong>
+                                    <br>
+                                    <small class="text-muted">{{ browser.user_agent|truncatechars:60 }}</small>
+                                </div>
+                                <span class="badge bg-secondary">{{ browser.count }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Real-time Chart Placeholder -->
+    <div class="row">
+        <div class="col-12">
+            <div class="chart-container">
+                <h4 class="mb-3">
+                    <i class="fas fa-chart-bar text-success me-2"></i>
+                    {% trans "Page Views Today" %}
+                </h4>
+                <canvas id="pageViewsChart" height="100"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Chart.js and Custom Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Fetch today's page views data
+    fetch('{% url "analytics:api_data" %}?type=page_views_today')
+        .then(response => response.json())
+        .then(data => {
+            const ctx = document.getElementById('pageViewsChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: data.labels,
+                    datasets: [{
+                        label: '{% trans "Page Views" %}',
+                        data: data.data,
+                        borderColor: 'rgb(75, 192, 192)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        tension: 0.1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        })
+        .catch(error => {
+            console.error('Error loading chart data:', error);
+            document.getElementById('pageViewsChart').style.display = 'none';
+        });
+
+    // Auto-refresh every 5 minutes
+    setInterval(function() {
+        location.reload();
+    }, 300000);
+});
+</script>
+{% endblock %}

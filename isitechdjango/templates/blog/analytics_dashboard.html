@@ -1,0 +1,342 @@
+{% extends 'blog/base.html' %}
+{% load i18n %}
+{% load date_filters %}
+{% load math_filters %}
+
+{% block title %}{% trans "Analytics Dashboard" %} - {% trans "Mon Blog Django" %}{% endblock %}
+
+{% block content %}
+<style>
+    /* Fix navbar overlap */
+    body {
+        padding-top: 70px;
+    }
+    
+    .analytics-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 15px;
+        padding: 20px;
+        text-align: center;
+        transition: transform 0.3s ease;
+    }
+    .analytics-card:hover {
+        transform: translateY(-5px);
+    }
+    .analytics-number {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+    .chart-container {
+        background: white;
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+    }
+    .activity-item {
+        border-left: 4px solid #667eea;
+        padding-left: 15px;
+        margin-bottom: 15px;
+    }
+    .trend-up { color: #28a745; }
+    .trend-down { color: #dc3545; }
+    .trend-stable { color: #6c757d; }
+</style>
+
+<!-- Main Header -->
+<header class="main-header py-5 text-white text-center" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; margin-bottom: 30px;">
+    <div class="container">
+        <h1 class="display-4">
+            <i class="fas fa-chart-line me-3"></i>
+            {% trans "Analytics Dashboard" %}
+        </h1>
+        <p class="lead">{% trans "Comprehensive insights into your blog performance" %}</p>
+    </div>
+</header>
+
+<div class="container-fluid">
+    <!-- Key Metrics Row -->
+    <div class="row mb-4">
+        <div class="col-md-3 mb-3">
+            <div class="analytics-card">
+                <div class="analytics-number">{{ total_articles }}</div>
+                <div>{% trans "Total Articles" %}</div>
+                <small>{{ published_articles }} {% trans "published" %}, {{ draft_articles }} {% trans "drafts" %}</small>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="analytics-card">
+                <div class="analytics-number">{{ total_views|floatformat:0 }}</div>
+                <div>{% trans "Total Views" %}</div>
+                <small>{% trans "Across all articles" %}</small>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="analytics-card">
+                <div class="analytics-number">{{ total_likes }}</div>
+                <div>{% trans "Total Likes" %}</div>
+                <small>{{ avg_likes_per_article }} {% trans "average per article" %}</small>
+            </div>
+        </div>
+        <div class="col-md-3 mb-3">
+            <div class="analytics-card">
+                <div class="analytics-number">{{ total_comments }}</div>
+                <div>{% trans "Comments" %}</div>
+                <small>{{ avg_comments_per_article }} {% trans "average per article" %}</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Secondary Metrics -->
+    <div class="row mb-4">
+        <div class="col-md-4 mb-3">
+            <div class="analytics-card" style="background: linear-gradient(135deg, #ffeaa7 0%, #fab1a0 100%); color: #2d3436;">
+                <div class="analytics-number">{{ total_users }}</div>
+                <div>{% trans "Registered Users" %}</div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="analytics-card" style="background: linear-gradient(135deg, #fd79a8 0%, #e84393 100%);">
+                <div class="analytics-number">{{ total_bookmarks }}</div>
+                <div>{% trans "Bookmarks" %}</div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="analytics-card" style="background: linear-gradient(135deg, #00b894 0%, #00a085 100%);">
+                <div class="analytics-number">{{ recent_articles }}</div>
+                <div>{% trans "Articles This Month" %}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Performance -->
+    <div class="row">
+        <!-- Top Articles -->
+        <div class="col-md-6 mb-4">
+            <div class="chart-container">
+                <h4 class="mb-3">
+                    <i class="fas fa-trophy text-warning me-2"></i>
+                    {% trans "Top Performing Articles" %}
+                </h4>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>{% trans "Article" %}</th>
+                                <th>{% trans "Views" %}</th>
+                                <th>{% trans "Likes" %}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for article in top_articles %}
+                            <tr>
+                                <td>
+                                    <a href="{% url 'article_detail' article.id %}" class="text-decoration-none">
+                                        {{ article.titre|truncatechars:40 }}
+                                    </a>
+                                    <br>
+                                    <small class="text-muted">{{ article.date_creation|humanize_date }}</small>
+                                </td>
+                                <td>
+                                    <span class="badge bg-primary">{{ article.vues }}</span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-danger">{{ article.likes_count }}</span>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Categories -->
+        <div class="col-md-6 mb-4">
+            <div class="chart-container">
+                <h4 class="mb-3">
+                    <i class="fas fa-folder-open text-info me-2"></i>
+                    {% trans "Top Categories" %}
+                </h4>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>{% trans "Category" %}</th>
+                                <th>{% trans "Articles" %}</th>
+                                <th>{% trans "Total Views" %}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for category in top_categories %}
+                            <tr>
+                                <td>
+                                    <span class="badge" style="background-color: {{ category.couleur }};">
+                                        {{ category.nom }}
+                                    </span>
+                                </td>
+                                <td>{{ category.article_count }}</td>
+                                <td>{{ category.total_views|default:0 }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Author Performance and Trending Tags -->
+    <div class="row">
+        <!-- Top Authors -->
+        <div class="col-md-6 mb-4">
+            <div class="chart-container">
+                <h4 class="mb-3">
+                    <i class="fas fa-users text-success me-2"></i>
+                    {% trans "Top Authors" %}
+                </h4>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>{% trans "Author" %}</th>
+                                <th>{% trans "Articles" %}</th>
+                                <th>{% trans "Total Views" %}</th>
+                                <th>{% trans "Avg Views" %}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for author in top_authors %}
+                            <tr>
+                                <td>
+                                    <a href="{% url 'user_profile' author.username %}" class="text-decoration-none">
+                                        {{ author.get_full_name|default:author.username }}
+                                    </a>
+                                </td>
+                                <td>{{ author.article_count }}</td>
+                                <td>{{ author.total_views|default:0 }}</td>
+                                <td>{{ author.avg_views|floatformat:0|default:0 }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Trending Tags -->
+        <div class="col-md-6 mb-4">
+            <div class="chart-container">
+                <h4 class="mb-3">
+                    <i class="fas fa-tags text-warning me-2"></i>
+                    {% trans "Trending Tags" %}
+                </h4>
+                <div class="row">
+                    {% for tag in trending_tags %}
+                    <div class="col-md-6 mb-2">
+                        <div class="d-flex justify-content-between align-items-center p-2 border rounded">
+                            <span class="badge bg-secondary">{{ tag.nom }}</span>
+                            <small class="text-muted">
+                                {{ tag.get_article_count }} {% trans "articles" %}
+                            </small>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity Timeline -->
+    <div class="row">
+        <div class="col-12">
+            <div class="chart-container">
+                <h4 class="mb-3">
+                    <i class="fas fa-clock text-primary me-2"></i>
+                    {% trans "Recent Activity" %}
+                </h4>
+                <div class="row">
+                    {% for activity in recent_activity %}
+                    <div class="col-md-6 mb-3">
+                        <div class="activity-item">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    {% if activity.type == 'article' %}
+                                        <i class="fas fa-file-alt text-primary me-2"></i>
+                                    {% else %}
+                                        <i class="fas fa-comment text-info me-2"></i>
+                                    {% endif %}
+                                    <strong>{{ activity.title|truncatechars:50 }}</strong>
+                                    <br>
+                                    <small class="text-muted">
+                                        {% trans "by" %} {{ activity.author }} • {{ activity.date|humanize_date }}
+                                    </small>
+                                </div>
+                                <a href="{{ activity.url }}" class="btn btn-sm btn-outline-primary">
+                                    {% trans "View" %}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Monthly Trends Chart (Simple Implementation) -->
+    {% if monthly_data %}
+    <div class="row">
+        <div class="col-12">
+            <div class="chart-container">
+                <h4 class="mb-3">
+                    <i class="fas fa-chart-bar text-info me-2"></i>
+                    {% trans "Monthly Article Trends" %}
+                </h4>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>{% trans "Month" %}</th>
+                                <th>{% trans "Articles Published" %}</th>
+                                <th>{% trans "Trend" %}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for data in monthly_data %}
+                            <tr>
+                                <td>{{ data.month|date:"F Y" }}</td>
+                                <td>{{ data.count }}</td>
+                                <td>
+                                    <div class="progress" style="height: 10px;">
+                                        <div class="progress-bar bg-primary" 
+                                             style="width: {{ data.count|mul:10 }}%"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Include Chart.js for future advanced charts -->
+<script>
+    // Analytics Dashboard JavaScript
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add any interactive features here
+        console.log('Analytics Dashboard Loaded');
+        
+        // Auto-refresh data every 5 minutes
+        setInterval(function() {
+            // You can implement AJAX refresh here if needed
+        }, 300000);
+    });
+</script>
+{% endblock %}

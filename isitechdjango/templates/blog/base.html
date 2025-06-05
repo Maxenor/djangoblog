@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load i18n %}
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{% trans 'Modern blog platform with advanced analytics and multi-language support' %}">
+    <meta name="theme-color" content="#667eea">
+    
+    <title>{% block title %}{% trans "Isitech Blog" %}{% endblock %}</title>
+    
+    <!-- Preload critical resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Modern CSS Framework -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Custom Modern UI -->
+    <link href="{% static 'css/modern-ui.css' %}" rel="stylesheet">
+    
+    <!-- Block for additional CSS -->
+    {% block extra_css %}{% endblock %}
+</head>
+<body data-theme="light">
+    <!-- Modern Navigation Header -->
+    <header class="navbar-modern fixed-top">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid px-4">
+                <!-- Brand Logo -->
+                {% if user.is_authenticated %}
+                    <a class="navbar-brand navbar-brand-modern fw-bold" href="{% url 'home' %}">
+                        <i class="fas fa-blog me-2"></i>{% trans "Isitech Blog" %}
+                    </a>
+                {% else %}
+                    <span class="navbar-brand navbar-brand-modern fw-bold">
+                        <i class="fas fa-blog me-2"></i>{% trans "Isitech Blog" %}
+                    </span>
+                {% endif %}
+
+                <!-- Mobile Toggle -->
+                <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarContent">
+                    <!-- Main Navigation -->
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        {% if user.is_authenticated %}
+                            <li class="nav-item">
+                                <a class="nav-link nav-link-modern" href="{% url 'home' %}">
+                                    <i class="fas fa-home me-1"></i>{% trans "Home" %}
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link nav-link-modern" href="{% url 'categories' %}">
+                                    <i class="fas fa-tags me-1"></i>{% trans "Categories" %}
+                                </a>
+                            </li>
+                            {% if user.profile.is_superadmin %}
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link nav-link-modern dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown">
+                                        <i class="fas fa-cog me-1"></i>{% trans "Admin" %}
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-modern">
+                                        <li><a class="dropdown-item dropdown-item-modern" href="{% url 'ajouter_article' %}">
+                                            <i class="fas fa-plus-circle me-2"></i>{% trans "Add Article" %}
+                                        </a></li>
+                                        <li><a class="dropdown-item dropdown-item-modern" href="{% url 'ajouter_categorie' %}">
+                                            <i class="fas fa-folder-plus me-2"></i>{% trans "Add Category" %}
+                                        </a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        {% if user.profile.is_editor %}
+                                        <li><a class="dropdown-item dropdown-item-modern" href="{% url 'comment_moderation' %}">
+                                            <i class="fas fa-shield-alt me-2"></i>{% trans "Comment Moderation" %}
+                                        </a></li>
+                                        {% endif %}
+                                        <li><a class="dropdown-item dropdown-item-modern" href="{% url 'analytics_dashboard' %}">
+                                            <i class="fas fa-chart-line me-2"></i>{% trans "Analytics" %}
+                                        </a></li>
+                                    </ul>
+                                </li>
+                            {% endif %}
+                        {% endif %}
+                    </ul>
+
+                    <!-- Search Bar -->
+                    {% if user.is_authenticated %}
+                        <div class="d-flex me-3">
+                            <form method="get" action="{% url 'search_results' %}" class="d-flex">
+                                <input type="text" name="search" class="form-control form-control-sm me-2" 
+                                       placeholder="{% trans 'Search articles...' %}" 
+                                       value="{{ request.GET.search }}"
+                                       style="min-width: 200px;">
+                                <button type="submit" class="btn btn-outline-light btn-sm">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </form>
+                        </div>
+                    {% endif %}
+                    
+                    <!-- Theme Toggle -->
+                    <div class="d-flex me-3">
+                        <button id="theme-toggle" class="btn btn-outline-light btn-sm" title="{% trans 'Toggle Theme' %}">
+                            <i id="theme-icon" class="fas fa-moon"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Navbar Right Side -->
+                    <div class="navbar-nav ms-auto">
+                        {% if user.is_authenticated %}
+                            <div class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarUserDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fas fa-user me-1"></i>{{ user.username }}
+                                    {% if user.profile.is_superadmin %}
+                                        <span class="badge bg-warning text-dark ms-1">{% trans "Admin" %}</span>
+                                    {% elif user.profile.is_author %}
+                                        <span class="badge bg-success ms-1">{% trans "Author" %}</span>
+                                    {% else %}
+                                        <span class="badge bg-info ms-1">{% trans "Reader" %}</span>
+                                    {% endif %}
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarUserDropdown">
+                                    <li><a class="dropdown-item" href="{% url 'user_profile' user.username %}">
+                                        <i class="fas fa-user me-2"></i>{% trans "My Profile" %}
+                                    </a></li>
+                                    {% if user.profile.is_author %}
+                                        <li><a class="dropdown-item" href="{% url 'dashboard' %}">
+                                            <i class="fas fa-tachometer-alt me-2"></i>{% trans "Dashboard" %}
+                                        </a></li>
+                                    {% endif %}
+                                    {% if user.profile.is_superadmin %}
+                                        <li><a class="dropdown-item" href="{% url 'analytics:overview' %}">
+                                            <i class="fas fa-chart-line me-2"></i>{% trans "Analytics" %}
+                                        </a></li>
+                                    {% endif %}
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="{% url 'logout' %}">
+                                        <i class="fas fa-sign-out-alt me-2"></i>{% trans "Logout" %}
+                                    </a></li>
+                                </ul>
+                            </div>
+                        {% else %}
+                            <a class="nav-item nav-link" href="{% url 'login' %}">{% trans "Login" %}</a>
+                            <a class="nav-item nav-link" href="{% url 'register' %}">{% trans "Register" %}</a>
+                        {% endif %}
+                    </div>
+                    <div class="navbar-nav">
+                        <form action="{% url 'set_language' %}" method="post" class="d-flex">
+                            {% csrf_token %}
+                            <input name="next" type="hidden" value="{{ request.get_full_path }}">
+                            <select name="language" class="form-select form-select-sm me-2" onchange="this.form.submit()">
+                                {% get_current_language as LANGUAGE_CODE %}
+                                {% get_available_languages as LANGUAGES %}
+                                {% for lang_code, lang_name in LANGUAGES %}
+                                    <option value="{{ lang_code }}" {% if lang_code == LANGUAGE_CODE %}selected{% endif %}>
+                                        {{ lang_name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main role="main" class="container-fluid p-0">
+        {% block content %}{% endblock %}
+    </main>
+    
+    <!-- Dark/Light Theme CSS -->
+    <style>
+        /* Light theme (default) */
+        :root {
+            --bg-color: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%, #f8fafc 100%);
+            --text-color: #212529;
+            --text-secondary: #6c757d;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --card-border: rgba(226, 232, 240, 0.8);
+            --navbar-bg: #343a40;
+            --btn-bg: #007bff;
+            --primary-color: #6366f1;
+            --primary-dark: #4f46e5;
+            --input-bg: rgba(255, 255, 255, 0.9);
+            --input-border: #ced4da;
+            --link-color: #007bff;
+            --muted-color: #6c757d;
+        }
+        
+        /* Dark theme */
+        [data-theme="dark"] {
+            --bg-color: linear-gradient(135deg, #0f172a 0%, #1e293b 25%, #334155 50%, #1e293b 75%, #0f172a 100%);
+            --text-color: #e0e0e0;
+            --text-secondary: #adb5bd;
+            --card-bg: rgba(30, 30, 30, 0.85);
+            --card-border: rgba(255,255,255,0.125);
+            --navbar-bg: #000000;
+            --btn-bg: #0d6efd;
+            --primary-color: #6366f1;
+            --primary-dark: #4f46e5;
+            --input-bg: rgba(45, 45, 45, 0.9);
+            --input-border: #495057;
+            --link-color: #66b3ff;
+            --muted-color: #adb5bd;
+        }
+        
+        /* Apply theme variables */
+        body {
+            background: var(--bg-color) !important;
+            background-attachment: fixed;
+            color: var(--text-color) !important;
+            transition: background 0.3s ease, color 0.3s ease;
+            position: relative;
+            min-height: 100vh;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(102, 126, 234, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(118, 75, 162, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 50% 100%, rgba(16, 185, 129, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        [data-theme="dark"] body::before {
+            background-image: 
+                radial-gradient(circle at 25% 25%, rgba(102, 126, 234, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 75% 75%, rgba(118, 75, 162, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 50% 100%, rgba(16, 185, 129, 0.05) 0%, transparent 50%);
+        }
+        
+        .card {
+            background: var(--card-bg) !important;
+            border-color: var(--card-border) !important;
+            color: var(--text-color) !important;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+            border-radius: 15px !important;
+        }
+        
+        .card-header {
+            background: var(--card-bg) !important;
+            border-color: var(--card-border) !important;
+            backdrop-filter: blur(10px);
+        }
+        
+        .form-control {
+            background-color: var(--input-bg) !important;
+            border-color: var(--input-border) !important;
+            color: var(--text-color) !important;
+        }
+        
+        .form-control:focus {
+            background-color: var(--input-bg) !important;
+            color: var(--text-color) !important;
+        }
+        
+        .navbar-dark {
+            background-color: var(--navbar-bg) !important;
+        }
+        
+        .text-muted {
+            color: var(--muted-color) !important;
+        }
+        
+        .btn-outline-primary {
+            color: var(--link-color) !important;
+            border-color: var(--link-color) !important;
+        }
+        
+        a {
+            color: var(--link-color) !important;
+        }
+        
+        /* Theme transition */
+        * {
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+    </style>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"></script>
+    
+    <!-- Theme Toggle JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const themeToggle = document.getElementById('theme-toggle');
+            const themeIcon = document.getElementById('theme-icon');
+            const body = document.body;
+            
+            // Check for saved theme preference or default to 'light'
+            const currentTheme = localStorage.getItem('theme') || 'light';
+            body.setAttribute('data-theme', currentTheme);
+            
+            // Update icon based on current theme
+            updateThemeIcon(currentTheme);
+            
+            // Theme toggle functionality
+            themeToggle.addEventListener('click', function() {
+                const currentTheme = body.getAttribute('data-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                
+                body.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+                updateThemeIcon(newTheme);
+            });
+            
+            function updateThemeIcon(theme) {
+                if (theme === 'dark') {
+                    themeIcon.className = 'fas fa-sun';
+                    themeToggle.title = '{% trans "Switch to Light Theme" %}';
+                } else {
+                    themeIcon.className = 'fas fa-moon';
+                    themeToggle.title = '{% trans "Switch to Dark Theme" %}';
+                }
+            }
+            
+            // Initialize Feather icons
+            if (typeof feather !== 'undefined') {
+                feather.replace();
+            }
+        });
+    </script>
+</body>
+</html>

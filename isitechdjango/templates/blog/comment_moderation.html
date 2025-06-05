@@ -1,0 +1,533 @@
+{% extends 'blog/base.html' %}
+{% load i18n %}
+{% load widget_tweaks %}
+
+{% block title %}{% trans "Comment Moderation" %}{% endblock %}
+
+{% block content %}
+<div class="moderation-hero">
+    <div class="container">
+        <div class="hero-content text-center text-white">
+            <div class="hero-icon">
+                <i data-feather="shield" class="floating-icon"></i>
+            </div>
+            <h1 class="hero-title">{% trans "Comment Moderation" %}</h1>
+            <p class="hero-subtitle">{% trans "Manage and moderate user comments with advanced filtering and bulk actions" %}</p>
+            <nav aria-label="breadcrumb" class="hero-breadcrumb">
+                <ol class="breadcrumb justify-content-center">
+                    <li class="breadcrumb-item"><a href="{% url 'home' %}" class="text-white-50">{% trans "Home" %}</a></li>
+                    <li class="breadcrumb-item active text-white">{% trans "Comment Moderation" %}</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="hero-decoration">
+            <div class="floating-dot dot-1"></div>
+            <div class="floating-dot dot-2"></div>
+            <div class="floating-dot dot-3"></div>
+        </div>
+    </div>
+</div>
+
+<div class="container moderation-container mt-5">
+
+    <!-- Statistics Cards -->
+    <div class="stats-section mb-5">
+        <div class="row">
+            <div class="col-md-3 mb-3">
+                <div class="stat-card pending-card stagger-animation" data-delay="0">
+                    <div class="stat-content">
+                        <div class="stat-icon">
+                            <i data-feather="clock" class="stat-icon-svg"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 class="stat-number">{{ pending_count }}</h3>
+                            <p class="stat-label">{% trans "Pending" %}</p>
+                        </div>
+                    </div>
+                    <div class="stat-progress">
+                        <div class="progress-bar pending-progress" style="width: {% if total_count %}{{ pending_count|floatformat:0|mul:100|div:total_count }}%{% else %}0%{% endif %}"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="stat-card approved-card stagger-animation" data-delay="100">
+                    <div class="stat-content">
+                        <div class="stat-icon">
+                            <i data-feather="check-circle" class="stat-icon-svg"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 class="stat-number">{{ approved_count }}</h3>
+                            <p class="stat-label">{% trans "Approved" %}</p>
+                        </div>
+                    </div>
+                    <div class="stat-progress">
+                        <div class="progress-bar approved-progress" style="width: {% if total_count %}{{ approved_count|floatformat:0|mul:100|div:total_count }}%{% else %}0%{% endif %}"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="stat-card rejected-card stagger-animation" data-delay="200">
+                    <div class="stat-content">
+                        <div class="stat-icon">
+                            <i data-feather="x-circle" class="stat-icon-svg"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 class="stat-number">{{ rejected_count }}</h3>
+                            <p class="stat-label">{% trans "Rejected" %}</p>
+                        </div>
+                    </div>
+                    <div class="stat-progress">
+                        <div class="progress-bar rejected-progress" style="width: {% if total_count %}{{ rejected_count|floatformat:0|mul:100|div:total_count }}%{% else %}0%{% endif %}"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="stat-card total-card stagger-animation" data-delay="300">
+                    <div class="stat-content">
+                        <div class="stat-icon">
+                            <i data-feather="message-circle" class="stat-icon-svg"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 class="stat-number">{{ total_count }}</h3>
+                            <p class="stat-label">{% trans "Total" %}</p>
+                        </div>
+                    </div>
+                    <div class="stat-progress">
+                        <div class="progress-bar total-progress" style="width: 100%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Advanced Filter Panel -->
+    <div class="filter-section mb-5">
+        <div class="filter-card">
+            <div class="filter-header" onclick="toggleFilters()">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <h5 class="mb-0">
+                            <i data-feather="filter" class="me-2"></i>{% trans "Advanced Filters" %}
+                        </h5>
+                        <small class="text-muted">{% trans "Refine your comment search" %}</small>
+                    </div>
+                    <i data-feather="chevron-down" id="filter-toggle-icon" class="filter-toggle-icon"></i>
+                </div>
+            </div>
+            <div class="filter-body" id="filter-panel">
+                <form method="GET" class="row g-3">
+                    <div class="col-md-3">
+                        <label for="status" class="form-label">
+                            <i data-feather="eye" class="me-1"></i>{% trans "Status" %}
+                        </label>
+                        <select name="status" id="status" class="form-select modern-select">
+                            <option value="">{% trans "All Statuses" %}</option>
+                            <option value="pending" {% if request.GET.status == 'pending' %}selected{% endif %}>{% trans "Pending" %}</option>
+                            <option value="approved" {% if request.GET.status == 'approved' %}selected{% endif %}>{% trans "Approved" %}</option>
+                            <option value="rejected" {% if request.GET.status == 'rejected' %}selected{% endif %}>{% trans "Rejected" %}</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="article" class="form-label">
+                            <i data-feather="file-text" class="me-1"></i>{% trans "Article" %}
+                        </label>
+                        <select name="article" id="article" class="form-select modern-select">
+                            <option value="">{% trans "All Articles" %}</option>
+                            {% for article in all_articles %}
+                                <option value="{{ article.id }}" {% if request.GET.article == article.id|stringformat:"s" %}selected{% endif %}>
+                                    {{ article.titre|truncatechars:50 }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="search" class="form-label">
+                            <i data-feather="search" class="me-1"></i>{% trans "Search" %}
+                        </label>
+                        <div class="search-input-group">
+                            <input type="text" name="search" id="search" class="form-control modern-input" 
+                                   value="{{ request.GET.search }}" placeholder="{% trans 'Search comments...' %}">
+                            <div class="search-icon">
+                                <i data-feather="search"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                        <div class="filter-actions w-100">
+                            <button type="submit" class="btn btn-primary w-100 mb-2 modern-btn">
+                                <i data-feather="filter" class="me-1"></i>{% trans "Apply" %}
+                            </button>
+                            <a href="{% url 'comment_moderation' %}" class="btn btn-outline-secondary w-100 modern-btn">
+                                <i data-feather="x" class="me-1"></i>{% trans "Clear" %}
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bulk Actions Form -->
+    {% if comments %}
+    <form id="bulk-actions-form" method="POST" action="{% url 'bulk_moderate_comments' %}">
+        {% csrf_token %}
+        
+        <!-- Bulk Actions Bar -->
+        <div class="bulk-actions-bar mb-4">
+            <div class="bulk-actions-content">
+                <div class="bulk-selection">
+                    <div class="modern-checkbox">
+                        <input class="form-check-input" type="checkbox" id="select-all">
+                        <label class="form-check-label" for="select-all">
+                            <span class="checkbox-text">{% trans "Select All" %}</span>
+                            <span class="selection-count" id="selection-count">(0 {% trans "selected" %})</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="bulk-actions" id="bulk-actions">
+                    <button type="submit" name="action" value="approve" class="btn btn-success modern-action-btn" 
+                            onclick="return confirm('{% trans "Approve selected comments?" %}')">
+                        <i data-feather="check" class="me-1"></i>{% trans "Approve" %}
+                    </button>
+                    <button type="submit" name="action" value="reject" class="btn btn-danger modern-action-btn"
+                            onclick="return confirm('{% trans "Reject selected comments?" %}')">
+                        <i data-feather="x" class="me-1"></i>{% trans "Reject" %}
+                    </button>
+                    <button type="submit" name="action" value="delete" class="btn btn-outline-danger modern-action-btn"
+                            onclick="return confirm('{% trans "Delete selected comments? This action cannot be undone." %}')">
+                        <i data-feather="trash-2" class="me-1"></i>{% trans "Delete" %}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comments List -->
+        <div class="comments-grid">
+            {% for comment in comments %}
+            <div class="comment-item stagger-animation" data-delay="{{ forloop.counter0|mul:50 }}">
+                <div class="modern-comment-card status-{{ comment.statut }}">
+                    <div class="comment-checkbox-area">
+                        <div class="modern-checkbox">
+                            <input type="checkbox" name="comment_ids" value="{{ comment.id }}" 
+                                   class="form-check-input comment-checkbox" id="comment-{{ comment.id }}">
+                            <label for="comment-{{ comment.id }}" class="checkbox-label"></label>
+                        </div>
+                    </div>
+                    
+                    <div class="comment-header">
+                        <div class="comment-author">
+                            <div class="author-avatar">
+                                {% if comment.author %}
+                                    <i data-feather="user" class="avatar-icon"></i>
+                                {% else %}
+                                    <i data-feather="user-x" class="avatar-icon guest"></i>
+                                {% endif %}
+                            </div>
+                            <div class="author-info">
+                                <h6 class="author-name">
+                                    {% if comment.author %}
+                                        {{ comment.author.get_full_name|default:comment.author.username }}
+                                    {% else %}
+                                        {{ comment.nom }}
+                                    {% endif %}
+                                </h6>
+                                <div class="author-details">
+                                    <span class="author-email">
+                                        {% if comment.author %}{{ comment.author.email }}{% else %}{{ comment.email }}{% endif %}
+                                    </span>
+                                    <span class="comment-date">
+                                        <i data-feather="clock" class="me-1"></i>{{ comment.date_creation|date:"d/m/Y H:i" }}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="comment-status">
+                            <span class="status-badge status-{{ comment.statut }}">
+                                {% if comment.statut == 'pending' %}<i data-feather="clock"></i>
+                                {% elif comment.statut == 'approved' %}<i data-feather="check-circle"></i>
+                                {% else %}<i data-feather="x-circle"></i>{% endif %}
+                                {{ comment.get_statut_display }}
+                            </span>
+                        </div>
+                    </div>
+                    
+                    <div class="comment-content">
+                        <p class="comment-text">{{ comment.contenu|linebreaks }}</p>
+                        <div class="comment-article">
+                            <i data-feather="file-text" class="me-1"></i>
+                            <strong>{% trans "Article:" %}</strong>
+                            <a href="{% url 'article_detail' comment.article.id %}" target="_blank" class="article-link">
+                                {{ comment.article.titre }}
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="comment-actions">
+                        <div class="action-buttons">
+                            {% if comment.statut != 'approved' %}
+                                <button type="button" class="action-btn approve-btn" data-comment-id="{{ comment.id }}" title="{% trans 'Approve' %}">
+                                    <i data-feather="check"></i>
+                                </button>
+                            {% endif %}
+                            {% if comment.statut != 'rejected' %}
+                                <button type="button" class="action-btn reject-btn" data-comment-id="{{ comment.id }}" title="{% trans 'Reject' %}">
+                                    <i data-feather="x"></i>
+                                </button>
+                            {% endif %}
+                            <a href="{% url 'article_detail' comment.article.id %}" class="action-btn view-btn" target="_blank" title="{% trans 'View Article' %}">
+                                <i data-feather="external-link"></i>
+                            </a>
+                            <button type="button" class="action-btn delete-btn" data-comment-id="{{ comment.id }}" title="{% trans 'Delete' %}">
+                                <i data-feather="trash-2"></i>
+                            </button>
+                        </div>
+                        
+                        {% if comment.moderateur %}
+                        <div class="moderation-info">
+                            <small class="text-muted">
+                                <i data-feather="shield" class="me-1"></i>
+                                <strong>{% trans "Moderated by:" %}</strong> {{ comment.moderateur.get_full_name|default:comment.moderateur.username }}
+                                <br>
+                                <strong>{% trans "Date:" %}</strong> {{ comment.date_moderation|date:"d/m/Y H:i" }}
+                            </small>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </form>
+
+    <!-- Pagination -->
+    {% if comments.has_other_pages %}
+    <nav aria-label="{% trans 'Comments pagination' %}">
+        <ul class="pagination justify-content-center">
+            {% if comments.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ comments.previous_page_number }}">
+                        <i class="fas fa-chevron-left"></i>
+                    </a>
+                </li>
+            {% endif %}
+            
+            {% for num in comments.paginator.page_range %}
+                {% if comments.number == num %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ num }}</span>
+                    </li>
+                {% elif num > comments.number|add:'-3' and num < comments.number|add:'3' %}
+                    <li class="page-item">
+                        <a class="page-link" href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ num }}">{{ num }}</a>
+                    </li>
+                {% endif %}
+            {% endfor %}
+            
+            {% if comments.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}page={{ comments.next_page_number }}">
+                        <i class="fas fa-chevron-right"></i>
+                    </a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+
+    {% else %}
+    <!-- Empty State -->
+    <div class="empty-state">
+        <div class="empty-illustration">
+            <div class="empty-icon">
+                <i data-feather="message-circle" class="floating-icon"></i>
+            </div>
+            <div class="floating-elements">
+                <div class="floating-dot dot-1"></div>
+                <div class="floating-dot dot-2"></div>
+                <div class="floating-dot dot-3"></div>
+            </div>
+        </div>
+        <h4 class="empty-title">{% trans "No comments found" %}</h4>
+        <p class="empty-description">{% trans "No comments match your current filters. Try adjusting your search criteria or view all comments." %}</p>
+        <div class="empty-actions">
+            <a href="{% url 'comment_moderation' %}" class="btn btn-primary modern-btn">
+                <i data-feather="refresh-cw" class="me-1"></i>{% trans "View All Comments" %}
+            </a>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Success/Error Messages Toast -->
+<div id="toast-container" class="position-fixed top-0 end-0 p-3" style="z-index: 1055;"></div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize Feather icons
+    feather.replace();
+    
+    // Initialize stagger animations
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const delay = entry.target.dataset.delay || 0;
+                setTimeout(() => {
+                    entry.target.classList.add('animate-in');
+                }, delay);
+                observer.unobserve(entry.target);
+            }
+        });
+    });
+    
+    document.querySelectorAll('.stagger-animation').forEach(el => {
+        observer.observe(el);
+    });
+    
+    // Filter toggle functionality
+    window.toggleFilters = function() {
+        const panel = document.getElementById('filter-panel');
+        const icon = document.getElementById('filter-toggle-icon');
+        
+        if (panel.classList.contains('show')) {
+            panel.classList.remove('show');
+            icon.setAttribute('data-feather', 'chevron-down');
+        } else {
+            panel.classList.add('show');
+            icon.setAttribute('data-feather', 'chevron-up');
+        }
+        feather.replace();
+    }
+    
+    // Select All functionality with counter
+    const selectAllCheckbox = document.getElementById('select-all');
+    const commentCheckboxes = document.querySelectorAll('.comment-checkbox');
+    const selectionCount = document.getElementById('selection-count');
+    const bulkActions = document.getElementById('bulk-actions');
+    
+    function updateSelectionCount() {
+        const selectedCount = document.querySelectorAll('.comment-checkbox:checked').length;
+        selectionCount.textContent = `(${selectedCount} {% trans "selected" %})`;
+        
+        if (selectedCount > 0) {
+            bulkActions.classList.add('active');
+        } else {
+            bulkActions.classList.remove('active');
+        }
+    }
+    
+    if (selectAllCheckbox) {
+        selectAllCheckbox.addEventListener('change', function() {
+            commentCheckboxes.forEach(checkbox => {
+                checkbox.checked = this.checked;
+            });
+            updateSelectionCount();
+        });
+    }
+    
+    commentCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', updateSelectionCount);
+    });
+    
+    // Individual comment actions
+    document.querySelectorAll('.approve-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const commentId = this.dataset.commentId;
+            moderateComment(commentId, 'approve');
+        });
+    });
+    
+    document.querySelectorAll('.reject-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const commentId = this.dataset.commentId;
+            moderateComment(commentId, 'reject');
+        });
+    });
+    
+    document.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            if (confirm('{% trans "Are you sure you want to delete this comment?" %}')) {
+                const commentId = this.dataset.commentId;
+                moderateComment(commentId, 'delete');
+            }
+        });
+    });
+    
+    // Individual comment moderation via AJAX
+    function moderateComment(commentId, action) {
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        
+        fetch(`/moderate-comment/${commentId}/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken
+            },
+            body: JSON.stringify({ action: action })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                showToast(data.message, 'success');
+                // Refresh page after a short delay
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500);
+            } else {
+                showToast(data.message, 'error');
+            }
+        })
+        .catch(error => {
+            showToast('{% trans "An error occurred" %}', 'error');
+        });
+    }
+    
+    // Toast notification function
+    function showToast(message, type) {
+        const toastContainer = document.getElementById('toast-container');
+        const toastId = 'toast-' + Date.now();
+        
+        const toastHtml = `
+            <div id="${toastId}" class="toast align-items-center text-white bg-${type === 'success' ? 'success' : 'danger'} border-0" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="d-flex">
+                    <div class="toast-body">
+                        ${message}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            </div>
+        `;
+        
+        toastContainer.insertAdjacentHTML('beforeend', toastHtml);
+        
+        const toastElement = document.getElementById(toastId);
+        const toast = new bootstrap.Toast(toastElement);
+        toast.show();
+        
+        // Remove toast element after it's hidden
+        toastElement.addEventListener('hidden.bs.toast', function() {
+            this.remove();
+        });
+    }
+});
+</script>
+
+<style>
+.comment-card {
+    transition: all 0.3s ease;
+}
+
+.comment-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.comment-checkbox {
+    transform: scale(1.2);
+}
+
+.toast {
+    min-width: 300px;
+}
+</style>
+{% endblock %}

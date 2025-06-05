@@ -1,0 +1,1558 @@
+{% extends 'blog/base.html' %}
+{% load i18n %}
+
+{% block title %}{% trans "Search Results" %} - {% trans "Mon Blog Django" %}{% endblock %}
+
+{% block content %}
+
+<!-- Hero Section -->
+<div class="search-hero-section">
+    <div class="hero-background">
+        <div class="search-pattern"></div>
+    </div>
+    <div class="hero-content">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8 text-center">
+                    <div class="hero-icon">
+                        <i data-feather="search" class="hero-search-icon"></i>
+                    </div>
+                    <h1 class="hero-title">
+                        {% trans "Search Results" %}
+                        {% if search_filter.query %}
+                            <span class="search-query">{% blocktrans with query=search_filter.query %}for "{{ query }}"{% endblocktrans %}</span>
+                        {% endif %}
+                    </h1>
+                    {% if total_results %}
+                        <p class="hero-subtitle">
+                            {% blocktrans count total=total_results %}{{ total }} result found{% plural %}{{ total }} results found{% endblocktrans %}
+                        </p>
+                    {% else %}
+                        <p class="hero-subtitle">{% trans "Refine your search to find what you're looking for" %}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Search Controls -->
+<div class="search-container">
+    <div class="search-controls">
+        <form method="get" action="{% url 'search_results' %}" id="search-form" class="modern-search-form">
+            <!-- Main Search Section -->
+            <div class="main-search-section">
+                <div class="search-input-wrapper">
+                    <div class="search-input-container">
+                        <i data-feather="search" class="search-input-icon"></i>
+                        {{ search_form.search }}
+                        <div class="autocomplete-suggestions" id="autocomplete"></div>
+                    </div>
+                    <button type="submit" class="search-submit-btn">
+                        <i data-feather="arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Advanced Filters Toggle -->
+            <div class="filters-toggle-section">
+                <button type="button" class="filters-toggle-btn" id="filtersToggle">
+                    <i data-feather="sliders"></i>
+                    {% trans "Advanced Filters" %}
+                    <i data-feather="chevron-down" class="toggle-icon"></i>
+                </button>
+                
+                {% if search_filter.has_active_filters %}
+                <div class="active-filters-indicator">
+                    <span class="filters-count">{{ search_filter.active_filters_count }}</span>
+                    <a href="{% url 'search_results' %}" class="clear-all-btn">
+                        <i data-feather="x"></i>
+                        {% trans "Clear All" %}
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+            
+            <!-- Advanced Filters Panel -->
+            <div class="advanced-filters-panel" id="advancedFilters">
+                <div class="filters-grid">
+                    <!-- Category Filter -->
+                    <div class="filter-group">
+                        <label class="filter-label">
+                            <i data-feather="folder"></i>
+                            {% trans "Category" %}
+                        </label>
+                        {{ search_form.categorie }}
+                    </div>
+                    
+                    <!-- Author Filter -->
+                    <div class="filter-group">
+                        <label class="filter-label">
+                            <i data-feather="user"></i>
+                            {% trans "Author" %}
+                        </label>
+                        {{ search_form.author }}
+                    </div>
+                    
+                    <!-- Sort Filter -->
+                    <div class="filter-group">
+                        <label class="filter-label">
+                            <i data-feather="filter"></i>
+                            {% trans "Sort by" %}
+                        </label>
+                        {{ search_form.sort }}
+                    </div>
+                    
+                    <!-- Date From -->
+                    <div class="filter-group">
+                        <label class="filter-label">
+                            <i data-feather="calendar"></i>
+                            {% trans "From Date" %}
+                        </label>
+                        {{ search_form.date_from }}
+                    </div>
+                    
+                    <!-- Date To -->
+                    <div class="filter-group">
+                        <label class="filter-label">
+                            <i data-feather="calendar"></i>
+                            {% trans "To Date" %}
+                        </label>
+                        {{ search_form.date_to }}
+                    </div>
+                </div>
+                
+                <!-- Tags Filter -->
+                {% if search_form.tags.field.queryset %}
+                <div class="tags-filter-section">
+                    <label class="filter-label">
+                        <i data-feather="tag"></i>
+                        {% trans "Tags" %}
+                    </label>
+                    <div class="tags-grid">
+                        {% for tag in search_form.tags.field.queryset %}
+                            <div class="tag-checkbox">
+                                <input class="tag-input" type="checkbox" name="tags" value="{{ tag.id }}" 
+                                       id="tag_{{ tag.id }}" {% if tag.id|stringformat:"s" in request.GET.tags %}checked{% endif %}>
+                                <label class="tag-label" for="tag_{{ tag.id }}">
+                                    #{{ tag.nom }}
+                                </label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                
+                <!-- Apply Filters Button -->
+                <div class="filters-actions">
+                    <button type="submit" class="apply-filters-btn">
+                        <i data-feather="check"></i>
+                        {% trans "Apply Filters" %}
+                    </button>
+                </div>
+            </div>
+        </form>
+        
+        <!-- Active Filters Display -->
+        {% if search_filter.has_active_filters %}
+        <div class="active-filters-display">
+            <div class="active-filters-header">
+                <span class="active-filters-title">{% trans "Active Filters" %}</span>
+            </div>
+            <div class="active-filters-list">
+                {% if search_filter.query %}
+                    <div class="active-filter-tag search-filter">
+                        <i data-feather="search"></i>
+                        <span>"{{ search_filter.query }}"</span>
+                        <a href="{{ search_filter.clear_search_url }}" class="remove-filter">
+                            <i data-feather="x"></i>
+                        </a>
+                    </div>
+                {% endif %}
+                
+                {% if search_filter.category_id %}
+                    <div class="active-filter-tag category-filter">
+                        <i data-feather="folder"></i>
+                        <span>{% trans "Category" %}</span>
+                        <a href="{{ search_filter.clear_category_url }}" class="remove-filter">
+                            <i data-feather="x"></i>
+                        </a>
+                    </div>
+                {% endif %}
+                
+                {% if search_filter.author_id %}
+                    <div class="active-filter-tag author-filter">
+                        <i data-feather="user"></i>
+                        <span>{% trans "Author" %}</span>
+                        <a href="{{ search_filter.clear_author_url }}" class="remove-filter">
+                            <i data-feather="x"></i>
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Search Results -->
+<div class="search-results-container">
+    {% if articles %}
+        <div class="results-grid">
+            {% for article in articles %}
+                <article class="result-card">
+                    <div class="result-card-inner">
+                        <!-- Article Image -->
+                        <div class="result-image">
+                            {% if article.image %}
+                                <img src="{{ article.image.url }}" alt="{{ article.titre }}" class="result-img">
+                            {% else %}
+                                <div class="result-placeholder">
+                                    <i data-feather="file-text"></i>
+                                </div>
+                            {% endif %}
+                            
+                            <!-- Category Badge -->
+                            {% if article.categorie %}
+                                <div class="result-category" style="--category-color: {{ article.categorie.couleur }};">
+                                    {{ article.categorie.nom }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Article Content -->
+                        <div class="result-content">
+                            <h3 class="result-title">
+                                <a href="{% url 'article_detail' article.id %}">
+                                    {% if article.highlighted_title %}
+                                        {{ article.highlighted_title|safe }}
+                                    {% else %}
+                                        {{ article.titre }}
+                                    {% endif %}
+                                </a>
+                            </h3>
+                            
+                            <div class="result-meta">
+                                <div class="meta-item">
+                                    <i data-feather="user"></i>
+                                    <span>{{ article.auteur.get_full_name|default:article.auteur.username }}</span>
+                                </div>
+                                <div class="meta-item">
+                                    <i data-feather="calendar"></i>
+                                    <span>{{ article.date_creation|date:"d M Y" }}</span>
+                                </div>
+                                <div class="meta-item">
+                                    <i data-feather="eye"></i>
+                                    <span>{{ article.vues }}</span>
+                                </div>
+                                <div class="meta-item">
+                                    <i data-feather="heart"></i>
+                                    <span>{{ article.likes_count }}</span>
+                                </div>
+                            </div>
+                            
+                            <p class="result-excerpt">
+                                {% if article.highlighted_excerpt %}
+                                    {{ article.highlighted_excerpt|safe }}
+                                {% else %}
+                                    {{ article.extrait|default:article.contenu|truncatechars:180 }}
+                                {% endif %}
+                            </p>
+                            
+                            <div class="result-footer">
+                                <div class="result-tags">
+                                    {% for tag in article.tags.all %}
+                                        <span class="result-tag">#{{ tag.nom }}</span>
+                                    {% endfor %}
+                                </div>
+                                <a href="{% url 'article_detail' article.id %}" class="read-more-btn">
+                                    <span>{% trans "Read More" %}</span>
+                                    <i data-feather="arrow-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+        
+        <!-- Modern Pagination -->
+        {% if articles.has_other_pages %}
+        <div class="pagination-container">
+            <nav class="modern-pagination" aria-label="Search results pagination">
+                {% if articles.has_previous %}
+                    <a href="?{{ search_filter.filter_params_string }}{% if search_filter.filter_params_string %}&{% endif %}page={{ articles.previous_page_number }}" 
+                       class="pagination-btn prev-btn">
+                        <i data-feather="chevron-left"></i>
+                        <span>{% trans "Previous" %}</span>
+                    </a>
+                {% endif %}
+                
+                <div class="pagination-pages">
+                    {% for num in articles.paginator.page_range %}
+                        {% if articles.number == num %}
+                            <span class="pagination-page active">{{ num }}</span>
+                        {% elif num > articles.number|add:'-3' and num < articles.number|add:'3' %}
+                            <a href="?{{ search_filter.filter_params_string }}{% if search_filter.filter_params_string %}&{% endif %}page={{ num }}" 
+                               class="pagination-page">{{ num }}</a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                
+                {% if articles.has_next %}
+                    <a href="?{{ search_filter.filter_params_string }}{% if search_filter.filter_params_string %}&{% endif %}page={{ articles.next_page_number }}" 
+                       class="pagination-btn next-btn">
+                        <span>{% trans "Next" %}</span>
+                        <i data-feather="chevron-right"></i>
+                    </a>
+                {% endif %}
+            </nav>
+            
+            <div class="pagination-info">
+                <span>{% blocktrans with current=articles.number total=articles.paginator.num_pages %}Page {{ current }} of {{ total }}{% endblocktrans %}</span>
+            </div>
+        </div>
+        {% endif %}
+        
+    {% else %}
+        <!-- Enhanced No Results -->
+        <div class="no-results-state">
+            <div class="no-results-content">
+                <div class="no-results-icon">
+                    <i data-feather="search" class="search-icon-large"></i>
+                    <div class="search-lines">
+                        <div class="search-line"></div>
+                        <div class="search-line"></div>
+                        <div class="search-line"></div>
+                    </div>
+                </div>
+                
+                <h3 class="no-results-title">{% trans "No results found" %}</h3>
+                <p class="no-results-description">
+                    {% if search_filter.query %}
+                        {% blocktrans with query=search_filter.query %}We couldn't find any articles matching "{{ query }}". Try adjusting your search terms or filters.{% endblocktrans %}
+                    {% else %}
+                        {% trans "Try adjusting your search criteria or removing some filters to find more content." %}
+                    {% endif %}
+                </p>
+                
+                <!-- Search Suggestions -->
+                {% if suggestions %}
+                <div class="search-suggestions">
+                    <h4 class="suggestions-title">{% trans "Try searching for:" %}</h4>
+                    <div class="suggestions-grid">
+                        {% for suggestion in suggestions %}
+                            <a href="?search={{ suggestion }}" class="suggestion-chip">
+                                <i data-feather="search"></i>
+                                {{ suggestion }}
+                            </a>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+                
+                <!-- Quick Actions -->
+                <div class="no-results-actions">
+                    <a href="{% url 'home' %}" class="action-btn primary">
+                        <i data-feather="home"></i>
+                        {% trans "Browse All Articles" %}
+                    </a>
+                    <a href="{% url 'categories' %}" class="action-btn secondary">
+                        <i data-feather="folder"></i>
+                        {% trans "View Categories" %}
+                    </a>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+<!-- Search Results Page Styles -->
+<style>
+/* Hero Section */
+.search-hero-section {
+    position: relative;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+    padding: 3rem 0;
+    margin-bottom: 2rem;
+    overflow: hidden;
+}
+
+.hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+.search-pattern {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(circle at 20% 20%, rgba(255,255,255,0.1) 1px, transparent 1px),
+        radial-gradient(circle at 80% 80%, rgba(255,255,255,0.1) 1px, transparent 1px),
+        radial-gradient(circle at 40% 40%, rgba(255,255,255,0.05) 1px, transparent 1px);
+    background-size: 50px 50px, 30px 30px, 20px 20px;
+    animation: patternMove 20s ease-in-out infinite;
+}
+
+@keyframes patternMove {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(-10px, -10px); }
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+}
+
+.hero-icon {
+    margin-bottom: 1.5rem;
+}
+
+.hero-search-icon {
+    width: 64px;
+    height: 64px;
+    color: rgba(255, 255, 255, 0.9);
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+}
+
+.hero-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 1rem;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.search-query {
+    display: block;
+    font-size: 1.8rem;
+    font-weight: 500;
+    opacity: 0.9;
+    margin-top: 0.5rem;
+}
+
+.hero-subtitle {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0;
+}
+
+/* Search Container */
+.search-container {
+    max-width: 1200px;
+    margin: 0 auto 3rem;
+    padding: 0 1rem;
+}
+
+.search-controls {
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+/* Main Search Section */
+.main-search-section {
+    margin-bottom: 2rem;
+}
+
+.search-input-wrapper {
+    display: flex;
+    gap: 1rem;
+    align-items: stretch;
+}
+
+.search-input-container {
+    position: relative;
+    flex: 1;
+}
+
+.search-input-icon {
+    position: absolute;
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    color: var(--text-secondary);
+    z-index: 2;
+}
+
+.search-input-container input {
+    width: 100%;
+    padding: 1rem 1rem 1rem 3rem;
+    border: 2px solid var(--border-color);
+    border-radius: 15px;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    background: var(--surface-color);
+}
+
+.search-input-container input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    background: white;
+}
+
+.search-submit-btn {
+    padding: 1rem 2rem;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 15px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+}
+
+.search-submit-btn:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+}
+
+.search-submit-btn i {
+    width: 20px;
+    height: 20px;
+}
+
+/* Filters Toggle */
+.filters-toggle-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.filters-toggle-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    font-weight: 500;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filters-toggle-btn:hover {
+    background: var(--hover-color);
+    border-color: var(--primary-color);
+}
+
+.filters-toggle-btn.active {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.filters-toggle-btn i {
+    width: 18px;
+    height: 18px;
+}
+
+.toggle-icon {
+    transition: transform 0.3s ease;
+}
+
+.filters-toggle-btn.active .toggle-icon {
+    transform: rotate(180deg);
+}
+
+.active-filters-indicator {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.filters-count {
+    background: var(--accent-color);
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+.clear-all-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.9rem;
+    padding: 0.5rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.clear-all-btn:hover {
+    color: var(--primary-color);
+    background: var(--surface-color);
+}
+
+.clear-all-btn i {
+    width: 16px;
+    height: 16px;
+}
+
+/* Advanced Filters Panel */
+.advanced-filters-panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+}
+
+.advanced-filters-panel.active {
+    max-height: 1000px;
+}
+
+.filters-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.filter-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 0.75rem;
+}
+
+.filter-label i {
+    width: 16px;
+    height: 16px;
+    color: var(--primary-color);
+}
+
+.filter-group select,
+.filter-group input[type="date"] {
+    padding: 0.75rem;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    background: var(--surface-color);
+    transition: all 0.3s ease;
+}
+
+.filter-group select:focus,
+.filter-group input[type="date"]:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+}
+
+/* Tags Filter */
+.tags-filter-section {
+    margin-bottom: 2rem;
+}
+
+.tags-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.75rem;
+}
+
+.tag-checkbox {
+    position: relative;
+}
+
+.tag-input {
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.tag-label {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    background: var(--surface-color);
+    border: 2px solid var(--border-color);
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.tag-input:checked + .tag-label {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.tag-label:hover {
+    border-color: var(--primary-color);
+    transform: translateY(-1px);
+}
+
+/* Filter Actions */
+.filters-actions {
+    text-align: center;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.apply-filters-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--accent-color);
+    color: white;
+    padding: 0.75rem 2rem;
+    border: none;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.apply-filters-btn:hover {
+    background: var(--accent-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(167, 139, 250, 0.3);
+}
+
+.apply-filters-btn i {
+    width: 18px;
+    height: 18px;
+}
+
+/* Active Filters Display */
+.active-filters-display {
+    background: var(--surface-color);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-top: 1rem;
+}
+
+.active-filters-header {
+    margin-bottom: 1rem;
+}
+
+.active-filters-title {
+    font-weight: 600;
+    color: var(--text-color);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.active-filters-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.active-filter-tag {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: white;
+    border: 1px solid var(--border-color);
+    padding: 0.5rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    transition: all 0.3s ease;
+}
+
+.active-filter-tag.search-filter {
+    border-color: var(--primary-color);
+    background: rgba(99, 102, 241, 0.1);
+}
+
+.active-filter-tag.category-filter {
+    border-color: var(--accent-color);
+    background: rgba(167, 139, 250, 0.1);
+}
+
+.active-filter-tag.author-filter {
+    border-color: #10b981;
+    background: rgba(16, 185, 129, 0.1);
+}
+
+.active-filter-tag i {
+    width: 14px;
+    height: 14px;
+}
+
+.remove-filter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.remove-filter:hover {
+    background: #ef4444;
+    color: white;
+}
+
+.remove-filter i {
+    width: 12px;
+    height: 12px;
+}
+
+/* Autocomplete */
+.autocomplete-suggestions {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid var(--border-color);
+    border-top: none;
+    border-radius: 0 0 15px 15px;
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 1000;
+    display: none;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.autocomplete-suggestion {
+    padding: 1rem 1.5rem;
+    cursor: pointer;
+    border-bottom: 1px solid var(--border-color);
+    transition: all 0.3s ease;
+}
+
+.autocomplete-suggestion:hover,
+.autocomplete-suggestion.active {
+    background: var(--surface-color);
+    color: var(--primary-color);
+}
+
+.autocomplete-suggestion:last-child {
+    border-bottom: none;
+}
+
+/* Search Results */
+.search-results-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.results-grid {
+    display: grid;
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.result-card {
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    transition: all 0.4s ease;
+    border: 1px solid var(--border-color);
+    animation: fadeInUp 0.6s ease forwards;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.result-card:nth-child(1) { animation-delay: 0.1s; }
+.result-card:nth-child(2) { animation-delay: 0.2s; }
+.result-card:nth-child(3) { animation-delay: 0.3s; }
+.result-card:nth-child(4) { animation-delay: 0.4s; }
+.result-card:nth-child(5) { animation-delay: 0.5s; }
+
+.result-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+    border-color: var(--primary-color);
+}
+
+.result-card-inner {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    gap: 0;
+    height: 100%;
+}
+
+.result-image {
+    position: relative;
+    overflow: hidden;
+}
+
+.result-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.result-card:hover .result-img {
+    transform: scale(1.05);
+}
+
+.result-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.result-placeholder i {
+    width: 48px;
+    height: 48px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.result-category {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    background: var(--category-color, var(--accent-color));
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.result-content {
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.result-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    line-height: 1.3;
+}
+
+.result-title a {
+    color: var(--text-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.result-title a:hover {
+    color: var(--primary-color);
+}
+
+.result-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.meta-item i {
+    width: 16px;
+    height: 16px;
+}
+
+.result-excerpt {
+    color: var(--text-color);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    flex: 1;
+}
+
+.result-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+}
+
+.result-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.result-tag {
+    background: var(--surface-color);
+    color: var(--primary-color);
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.read-more-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--primary-color);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.read-more-btn:hover {
+    background: var(--primary-dark);
+    color: white;
+    transform: translateX(5px);
+}
+
+.read-more-btn i {
+    width: 16px;
+    height: 16px;
+}
+
+/* Search Highlighting */
+.search-highlight {
+    background: linear-gradient(120deg, #fef3cd 0%, #fed7aa 100%);
+    padding: 0.125rem 0.25rem;
+    border-radius: 4px;
+    font-weight: 600;
+    color: #92400e;
+}
+
+/* Pagination */
+.pagination-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 3rem;
+}
+
+.modern-pagination {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.pagination-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: white;
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    color: var(--text-color);
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.pagination-btn:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    transform: translateY(-2px);
+}
+
+.pagination-btn i {
+    width: 16px;
+    height: 16px;
+}
+
+.pagination-pages {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.pagination-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    text-decoration: none;
+    color: var(--text-color);
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+.pagination-page:hover {
+    background: var(--surface-color);
+    color: var(--primary-color);
+}
+
+.pagination-page.active {
+    background: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.pagination-info {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+/* No Results State */
+.no-results-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: var(--surface-color);
+    border-radius: 20px;
+    margin: 2rem 0;
+}
+
+.no-results-content {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.no-results-icon {
+    position: relative;
+    margin-bottom: 2rem;
+}
+
+.search-icon-large {
+    width: 80px;
+    height: 80px;
+    color: var(--text-secondary);
+    opacity: 0.5;
+}
+
+.search-lines {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.search-line {
+    width: 40px;
+    height: 2px;
+    background: var(--text-secondary);
+    margin: 4px 0;
+    opacity: 0.3;
+    animation: searchPulse 2s ease-in-out infinite;
+}
+
+.search-line:nth-child(2) { animation-delay: 0.3s; }
+.search-line:nth-child(3) { animation-delay: 0.6s; }
+
+@keyframes searchPulse {
+    0%, 100% { opacity: 0.3; transform: scaleX(1); }
+    50% { opacity: 0.6; transform: scaleX(1.2); }
+}
+
+.no-results-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-color);
+    margin-bottom: 1rem;
+}
+
+.no-results-description {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+.search-suggestions {
+    margin-bottom: 2rem;
+}
+
+.suggestions-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-color);
+    margin-bottom: 1rem;
+}
+
+.suggestions-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    justify-content: center;
+}
+
+.suggestion-chip {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: white;
+    color: var(--primary-color);
+    padding: 0.5rem 1rem;
+    border: 2px solid var(--primary-color);
+    border-radius: 20px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.suggestion-chip:hover {
+    background: var(--primary-color);
+    color: white;
+    transform: translateY(-2px);
+}
+
+.suggestion-chip i {
+    width: 14px;
+    height: 14px;
+}
+
+.no-results-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 2rem;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.action-btn.primary {
+    background: var(--primary-color);
+    color: white;
+}
+
+.action-btn.primary:hover {
+    background: var(--primary-dark);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+}
+
+.action-btn.secondary {
+    background: white;
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+}
+
+.action-btn.secondary:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+.action-btn i {
+    width: 18px;
+    height: 18px;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    .search-query {
+        font-size: 1.5rem;
+    }
+    
+    .search-input-wrapper {
+        flex-direction: column;
+    }
+    
+    .filters-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .result-card-inner {
+        grid-template-columns: 1fr;
+    }
+    
+    .result-image {
+        height: 200px;
+    }
+    
+    .result-footer {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+    }
+    
+    .modern-pagination {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .no-results-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+@media (max-width: 576px) {
+    .search-hero-section {
+        padding: 2rem 0;
+    }
+    
+    .hero-title {
+        font-size: 1.75rem;
+    }
+    
+    .search-controls {
+        padding: 1.5rem;
+    }
+    
+    .result-content {
+        padding: 1.5rem;
+    }
+    
+    .meta-item {
+        font-size: 0.8rem;
+    }
+    
+    .suggestions-grid {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+</style>
+
+<!-- Enhanced JavaScript for Search -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize Feather icons
+    if (typeof feather !== 'undefined') {
+        feather.replace();
+    }
+    
+    // Advanced Filters Toggle
+    const filtersToggle = document.getElementById('filtersToggle');
+    const advancedFilters = document.getElementById('advancedFilters');
+    
+    if (filtersToggle && advancedFilters) {
+        filtersToggle.addEventListener('click', function() {
+            const isActive = this.classList.contains('active');
+            
+            if (isActive) {
+                this.classList.remove('active');
+                advancedFilters.classList.remove('active');
+            } else {
+                this.classList.add('active');
+                advancedFilters.classList.add('active');
+            }
+        });
+        
+        // Auto-open filters if any are active
+        const hasActiveFilters = document.querySelector('.active-filters-indicator');
+        if (hasActiveFilters) {
+            filtersToggle.classList.add('active');
+            advancedFilters.classList.add('active');
+        }
+    }
+    
+    // Enhanced Search Input
+    const searchInput = document.querySelector('#search-form input[name="search"]');
+    const autocomplete = document.getElementById('autocomplete');
+    let currentRequest = null;
+    let selectedIndex = -1;
+    
+    if (searchInput) {
+        // Autocomplete functionality
+        searchInput.addEventListener('input', function() {
+            const query = this.value.trim();
+            selectedIndex = -1;
+            
+            if (query.length < 2) {
+                autocomplete.style.display = 'none';
+                return;
+            }
+            
+            // Cancel previous request
+            if (currentRequest) {
+                currentRequest.abort();
+            }
+            
+            // Make new request (if search suggestions endpoint exists)
+            if (typeof searchSuggestionsUrl !== 'undefined') {
+                currentRequest = fetch(`${searchSuggestionsUrl}?q=${encodeURIComponent(query)}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        displaySuggestions(data.suggestions);
+                    })
+                    .catch(error => {
+                        if (error.name !== 'AbortError') {
+                            console.error('Error fetching suggestions:', error);
+                        }
+                    });
+            }
+        });
+        
+        // Keyboard navigation
+        searchInput.addEventListener('keydown', function(e) {
+            const suggestions = autocomplete.querySelectorAll('.autocomplete-suggestion');
+            
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                selectedIndex = Math.min(selectedIndex + 1, suggestions.length - 1);
+                updateSelection(suggestions);
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                selectedIndex = Math.max(selectedIndex - 1, -1);
+                updateSelection(suggestions);
+            } else if (e.key === 'Enter' && selectedIndex >= 0) {
+                e.preventDefault();
+                suggestions[selectedIndex].click();
+            } else if (e.key === 'Escape') {
+                autocomplete.style.display = 'none';
+                selectedIndex = -1;
+            }
+        });
+        
+        // Hide suggestions when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!searchInput.contains(e.target) && !autocomplete.contains(e.target)) {
+                autocomplete.style.display = 'none';
+            }
+        });
+    }
+    
+    function displaySuggestions(suggestions) {
+        if (!autocomplete) return;
+        
+        autocomplete.innerHTML = '';
+        
+        if (suggestions.length === 0) {
+            autocomplete.style.display = 'none';
+            return;
+        }
+        
+        suggestions.forEach((suggestion, index) => {
+            const div = document.createElement('div');
+            div.className = 'autocomplete-suggestion';
+            div.textContent = suggestion;
+            div.addEventListener('click', function() {
+                searchInput.value = suggestion;
+                autocomplete.style.display = 'none';
+                document.getElementById('search-form').submit();
+            });
+            autocomplete.appendChild(div);
+        });
+        
+        autocomplete.style.display = 'block';
+    }
+    
+    function updateSelection(suggestions) {
+        suggestions.forEach((suggestion, index) => {
+            suggestion.classList.toggle('active', index === selectedIndex);
+        });
+        
+        if (selectedIndex >= 0) {
+            searchInput.value = suggestions[selectedIndex].textContent;
+        }
+    }
+    
+    // Auto-submit form when filters change
+    const filterSelects = document.querySelectorAll('#search-form select');
+    filterSelects.forEach(select => {
+        select.addEventListener('change', function() {
+            // Small delay to allow for multiple rapid changes
+            setTimeout(() => {
+                document.getElementById('search-form').submit();
+            }, 300);
+        });
+    });
+    
+    // Animate result cards on scroll
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+                entry.target.style.animationPlayState = 'running';
+                observer.unobserve(entry.target);
+            }
+        });
+    }, observerOptions);
+    
+    // Observe all result cards
+    document.querySelectorAll('.result-card').forEach(card => {
+        card.style.animationPlayState = 'paused';
+        observer.observe(card);
+    });
+    
+    // Enhanced form interactions
+    const form = document.getElementById('search-form');
+    if (form) {
+        // Prevent double submission
+        let submitting = false;
+        form.addEventListener('submit', function(e) {
+            if (submitting) {
+                e.preventDefault();
+                return;
+            }
+            submitting = true;
+            
+            // Re-enable after 2 seconds
+            setTimeout(() => {
+                submitting = false;
+            }, 2000);
+        });
+    }
+    
+    // Smooth scroll to results when page loads with results
+    const resultsContainer = document.querySelector('.search-results-container');
+    if (resultsContainer && window.location.search) {
+        setTimeout(() => {
+            resultsContainer.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'start' 
+            });
+        }, 500);
+    }
+});
+</script>
+
+{% endblock %}
